@@ -37,6 +37,7 @@
         .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(201,169,110,0.4); }
         .btn-outline { background: white; border: 2px solid var(--border); color: #6b5b45; }
         .btn-outline:hover { background: #faf7f0; }
+        .btn-small { padding: 6px 12px; font-size: 0.8em; }
 
         /* ГОСТЕВАЯ СТРАНИЦА */
         .guest-page {
@@ -59,9 +60,22 @@
             box-shadow: 0 30px 70px rgba(0,0,0,0.3);
             position: relative;
             overflow: hidden;
-            animation: fadeIn 0.8s ease-out;
+            animation: cardFadeIn 0.8s ease-out;
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes cardFadeIn { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        /* Анимированные элементы */
+        .guest-card .anim-item {
+            opacity: 0;
+            animation: fadeInUp 0.7s ease forwards;
+        }
+        .guest-card .anim-item:nth-child(1) { animation-delay: 0.2s; }
+        .guest-card .anim-item:nth-child(2) { animation-delay: 0.4s; }
+        .guest-card .anim-item:nth-child(3) { animation-delay: 0.6s; }
+        .guest-card .anim-item:nth-child(4) { animation-delay: 0.8s; }
+        .guest-card .anim-item:nth-child(5) { animation-delay: 1.0s; }
+        .guest-card .anim-item:nth-child(6) { animation-delay: 1.2s; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .guest-card .bg-image {
             position: absolute;
@@ -81,10 +95,19 @@
             z-index: 3;
         }
 
+        /* Рамки */
+        .border-none { border: none; }
+        .border-classic { border: 3px solid #d4c5a9; }
+        .border-gold { border: 4px double #c9a96e; }
+        .border-elegant { border: 2px solid #b0a089; box-shadow: 0 0 0 6px #fdf8f0, 0 0 0 8px #b0a089; }
+        .border-floral { border: 3px dashed #d4837a; }
+        .border-rustic { border: 4px solid #8b7355; border-radius: 0; }
+
         .guest-card .ornament { font-size: 1.6em; margin: 10px 0; letter-spacing: 5px; }
         .guest-card h2 { font-weight: 300; font-size: 2em; margin: 15px 0; letter-spacing: 1px; }
         .guest-card .divider { margin: 15px 0; font-size: 1em; }
-        .guest-card .names { font-size: 2.8em; font-weight: bold; margin: 20px 0; line-height: 1.3; }
+        .guest-card .names { font-size: 2em; font-weight: bold; margin: 20px 0; line-height: 1.3; }
+        .guest-card .names .name-row { margin: 5px 0; }
         .guest-card .date { font-size: 1.5em; font-weight: 600; margin: 18px 0; }
         .guest-card .info { margin: 18px 0; line-height: 2.3; font-size: 1.05em; }
         .guest-card .message { margin: 18px 0; padding: 18px 0; font-style: italic; font-size: 1.1em; border-top: 1.5px solid rgba(0,0,0,0.12); border-bottom: 1.5px solid rgba(0,0,0,0.12); }
@@ -234,7 +257,7 @@
         .preview-card .ornament { font-size: 1.4em; margin: 8px 0; }
         .preview-card h2 { font-weight: 300; font-size: 1.6em; margin: 10px 0; }
         .preview-card .divider { margin: 10px 0; }
-        .preview-card .names { font-size: 2.3em; font-weight: bold; margin: 16px 0; line-height: 1.3; }
+        .preview-card .names { font-size: 2em; font-weight: bold; margin: 16px 0; line-height: 1.3; }
         .preview-card .date { font-size: 1.3em; font-weight: 600; margin: 12px 0; }
         .preview-card .info { margin: 12px 0; line-height: 2; }
         .preview-card .message { margin: 12px 0; padding: 12px 0; font-style: italic; border-top: 1px solid rgba(0,0,0,0.1); border-bottom: 1px solid rgba(0,0,0,0.1); }
@@ -303,14 +326,14 @@
     <div class="constructor-page" id="constructorView">
         <div class="header">
             <h1>💍 Свадебное приглашение</h1>
-            <p>Короткие ссылки для телефонов • Лучшие функции</p>
+            <p>Гибкие настройки • Рамки • Анимации</p>
             <button class="btn btn-outline" style="width:auto; display:inline-block; padding:8px 20px; margin-top:10px;" onclick="previewAsGuest()">👁 Предпросмотр</button>
         </div>
 
         <div class="main-grid">
             <div class="editor">
                 <div class="section">
-                    <h3>🎨 Стиль (8 тем)</h3>
+                    <h3>🎨 Стиль</h3>
                     <div class="style-grid">
                         <button class="style-btn active" onclick="setStyle('classic', this)">🌸 Классика</button>
                         <button class="style-btn" onclick="setStyle('romance', this)">💕 Романтика</button>
@@ -324,25 +347,30 @@
                 </div>
 
                 <div class="section">
-                    <h3>🖼️ Фото</h3>
-                    <div class="upload-zone" onclick="document.getElementById('photoFile').click()">
-                        <p>📸 Загрузить фото (сильно сожмётся для короткой ссылки)</p>
-                        <small>JPG, PNG — до 5MB</small>
+                    <h3>🖼️ Окантовка</h3>
+                    <div class="style-grid">
+                        <button class="style-btn active" onclick="setBorder('none', this)">Без рамки</button>
+                        <button class="style-btn" onclick="setBorder('classic', this)">Классическая</button>
+                        <button class="style-btn" onclick="setBorder('gold', this)">Золотая</button>
+                        <button class="style-btn" onclick="setBorder('elegant', this)">Элегантная</button>
+                        <button class="style-btn" onclick="setBorder('floral', this)">Цветочная</button>
+                        <button class="style-btn" onclick="setBorder('rustic', this)">Рустик</button>
                     </div>
-                    <input type="file" id="photoFile" accept="image/*" style="display:none" onchange="handlePhoto(event)">
-                    <div class="field" style="margin-top:10px;">
-                        <label>Или вставьте URL фото (рекомендуется для короткой ссылки)</label>
-                        <input type="text" id="photoUrl" placeholder="https://example.com/photo.jpg" oninput="refresh()">
-                    </div>
-                    <button class="btn btn-outline" style="padding:8px; margin-top:6px;" onclick="removePhoto()">✕ Удалить фото</button>
                 </div>
 
                 <div class="section">
-                    <h3>👰🤵 Молодожёны</h3>
-                    <div class="row">
-                        <div class="field"><label>Жених</label><input type="text" id="groom" placeholder="Александр" oninput="refresh()"></div>
-                        <div class="field"><label>Невеста</label><input type="text" id="bride" placeholder="Екатерина" oninput="refresh()"></div>
+                    <h3>👥 Имена</h3>
+                    <div id="namesContainer">
+                        <div class="row name-entry">
+                            <div class="field"><label>Роль</label><input type="text" class="name-label" placeholder="Жених" value="Жених"></div>
+                            <div class="field"><label>Имя</label><input type="text" class="name-value" placeholder="Александр" oninput="refresh()"></div>
+                        </div>
+                        <div class="row name-entry">
+                            <div class="field"><label>Роль</label><input type="text" class="name-label" placeholder="Невеста" value="Невеста"></div>
+                            <div class="field"><label>Имя</label><input type="text" class="name-value" placeholder="Екатерина" oninput="refresh()"></div>
+                        </div>
                     </div>
+                    <button class="btn btn-outline btn-small" onclick="addNameRow()">➕ Добавить имя</button>
                 </div>
 
                 <div class="section">
@@ -379,7 +407,7 @@
 
             <div class="preview-box">
                 <h3 style="text-align:center; margin-bottom:15px;">Предпросмотр</h3>
-                <div class="preview-card" id="previewCard" style="background: linear-gradient(160deg, #fef9f1, #fdf3e4);">
+                <div class="preview-card border-classic" id="previewCard" style="background: linear-gradient(160deg, #fef9f1, #fdf3e4);">
                     <div class="overlay" style="background: rgba(255,255,255,0.3);"></div>
                     <div class="inner">
                         <div class="ornament">🌸 🌸 🌸</div>
@@ -387,9 +415,7 @@
                         <div class="divider">━━━ ❤ ━━━</div>
                         <p>С радостью приглашаем</p>
                         <p id="prevGuest" style="font-weight:500;">Дорогой друг!</p>
-                        <div class="names" id="prevNames" style="color:#c9a96e;">
-                            <span id="prevGroom">Александр</span><br>&<br><span id="prevBride">Екатерина</span>
-                        </div>
+                        <div class="names" id="prevNames" style="color:#c9a96e;"></div>
                         <p>на торжество в честь бракосочетания!</p>
                         <div class="date" id="prevDate">15 июня 2024</div>
                         <div class="info">
@@ -413,7 +439,7 @@
             <div class="link-display" id="linkBox" style="display:none;"></div>
             <button class="btn btn-gold" id="copyBtn" style="display:none;" onclick="copyLink()">📋 Копировать ссылку</button>
             <button class="btn btn-outline" onclick="closeModal()">Закрыть</button>
-            <div class="note">💡 Совет: чтобы ссылка была максимально короткой, загрузите фото на любой хостинг и вставьте прямую ссылку в поле выше.</div>
+            <div class="note">💡 Совет: чтобы ссылка была максимально короткой, используйте URL фото вместо загрузки.</div>
         </div>
     </div>
 
@@ -430,10 +456,38 @@
         };
 
         let currentStyle = 'classic';
+        let currentBorder = 'classic';
         let currentColor = '#c9a96e';
-        let currentPhoto = null; // base64 или URL
+        let currentPhoto = null;
         let currentLink = '';
 
+        // --- Управление именами ---
+        function addNameRow() {
+            const container = document.getElementById('namesContainer');
+            const row = document.createElement('div');
+            row.className = 'row name-entry';
+            row.innerHTML = `
+                <div class="field"><label>Роль</label><input type="text" class="name-label" placeholder="Свидетель"></div>
+                <div class="field"><label>Имя</label><input type="text" class="name-value" placeholder="Имя" oninput="refresh()"></div>
+            `;
+            container.appendChild(row);
+            refresh();
+        }
+
+        function getNamesArray() {
+            const entries = document.querySelectorAll('.name-entry');
+            const names = [];
+            entries.forEach(entry => {
+                const label = entry.querySelector('.name-label')?.value.trim();
+                const value = entry.querySelector('.name-value')?.value.trim();
+                if (label || value) {
+                    names.push({ label: label || '', name: value || '' });
+                }
+            });
+            return names;
+        }
+
+        // --- Стили и рамки ---
         function setStyle(style, btn) {
             currentStyle = style;
             document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
@@ -441,20 +495,33 @@
             updatePreviewBg();
         }
 
+        function setBorder(border, btn) {
+            currentBorder = border;
+            document.querySelectorAll('.section:nth-child(2) .style-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            applyBorderToPreview();
+        }
+
+        function applyBorderToPreview() {
+            const card = document.getElementById('previewCard');
+            card.className = 'preview-card border-' + currentBorder;
+            updatePreviewBg(); // чтобы не потерять фон
+        }
+
         function setColor(color, dot) {
             currentColor = color;
             document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
             dot.classList.add('active');
-            document.getElementById('prevNames').style.color = color;
+            refresh();
         }
 
-        // Сжатие фото до 100px
+        // --- Фото ---
         function compressImageHard(base64) {
             return new Promise((resolve) => {
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const maxSize = 100; // очень маленький размер
+                    const maxSize = 100;
                     let w = img.width, h = img.height;
                     if (w > h) {
                         if (w > maxSize) { h = (maxSize / w) * h; w = maxSize; }
@@ -465,7 +532,7 @@
                     canvas.height = Math.round(h);
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    resolve(canvas.toDataURL('image/jpeg', 0.3)); // качество 30%
+                    resolve(canvas.toDataURL('image/jpeg', 0.3));
                 };
                 img.src = base64;
             });
@@ -482,20 +549,11 @@
             const reader = new FileReader();
             reader.onload = async function(ev) {
                 const base64 = ev.target.result;
-                // Сразу сжимаем до 100px
                 currentPhoto = await compressImageHard(base64);
-                document.getElementById('photoUrl').value = ''; // очищаем url
+                document.getElementById('photoUrl').value = '';
                 updatePreviewBg();
-                showPhotoSize();
             };
             reader.readAsDataURL(file);
-        }
-
-        function showPhotoSize() {
-            if (currentPhoto && currentPhoto.startsWith('data:')) {
-                const sizeKB = Math.round(currentPhoto.length / 1024);
-                console.log('Фото сжато до ' + sizeKB + ' КБ');
-            }
         }
 
         function removePhoto() {
@@ -507,7 +565,7 @@
 
         function updatePreviewBg() {
             const card = document.getElementById('previewCard');
-            const url = document.getElementById('photoUrl').value.trim();
+            const url = document.getElementById('photoUrl')?.value.trim();
             if (url) {
                 card.style.backgroundImage = `url(${url})`;
                 card.style.backgroundSize = 'cover';
@@ -522,9 +580,16 @@
             }
         }
 
+        // --- Обновление предпросмотра ---
         function refresh() {
-            document.getElementById('prevGroom').textContent = document.getElementById('groom').value.trim() || 'Александр';
-            document.getElementById('prevBride').textContent = document.getElementById('bride').value.trim() || 'Екатерина';
+            const names = getNamesArray();
+            let namesHtml = '';
+            names.forEach(n => {
+                namesHtml += `<div class="name-row"><strong>${escHtml(n.label)}</strong> ${escHtml(n.name)}</div>`;
+            });
+            document.getElementById('prevNames').innerHTML = namesHtml || '<div class="name-row">Александр & Екатерина</div>';
+            document.getElementById('prevNames').style.color = currentColor;
+
             document.getElementById('prevGuest').textContent = document.getElementById('guest').value.trim() || 'Дорогой друг!';
             document.getElementById('prevVenue').textContent = document.getElementById('venue').value.trim() || 'Ресторан';
             document.getElementById('prevAddress').textContent = document.getElementById('address').value.trim() || '';
@@ -535,17 +600,22 @@
                 const d = new Date(dateVal);
                 document.getElementById('prevDate').textContent = d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
             }
-            updatePreviewBg();
+        }
+
+        function escHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         function getData() {
-            const url = document.getElementById('photoUrl').value.trim();
+            const url = document.getElementById('photoUrl')?.value.trim();
             return {
                 s: currentStyle,
+                b: currentBorder,
                 c: currentColor,
-                p: url || currentPhoto, // url приоритетнее
-                g: document.getElementById('groom').value.trim(),
-                b: document.getElementById('bride').value.trim(),
+                p: url || currentPhoto,
+                names: getNamesArray(),
                 d: document.getElementById('date').value,
                 t: document.getElementById('time').value,
                 v: document.getElementById('venue').value.trim(),
@@ -555,6 +625,7 @@
             };
         }
 
+        // --- Генерация ссылки ---
         async function generateLink() {
             refresh();
             document.getElementById('linkModal').classList.add('show');
@@ -565,7 +636,6 @@
             document.getElementById('copyBtn').style.display = 'none';
 
             const data = getData();
-            // Если фото — base64, убедимся что оно сжато
             if (data.p && data.p.startsWith('data:')) {
                 data.p = await compressImageHard(data.p);
             }
@@ -577,10 +647,10 @@
             const linkLength = currentLink.length;
             document.getElementById('modalTitle').textContent = '✅ Готово!';
             if (linkLength > 1500) {
-                document.getElementById('modalStatus').textContent = '⚠️ Ссылка довольно длинная, но должна работать. Чтобы сократить, используйте URL фото.';
+                document.getElementById('modalStatus').textContent = '⚠️ Ссылка довольно длинная, но должна работать.';
                 document.getElementById('modalStatus').className = 'status-msg status-info';
             } else {
-                document.getElementById('modalStatus').textContent = 'Отличная короткая ссылка! Отправляйте гостям.';
+                document.getElementById('modalStatus').textContent = 'Отличная короткая ссылка!';
                 document.getElementById('modalStatus').className = 'status-msg status-success';
             }
             document.getElementById('linkBox').textContent = currentLink;
@@ -607,6 +677,7 @@
 
         function closeModal() { document.getElementById('linkModal').classList.remove('show'); }
 
+        // --- Гостевая страница ---
         function previewAsGuest() {
             refresh();
             showGuestPage(getData());
@@ -629,36 +700,45 @@
                 const diff = wedding - now;
                 if (diff > 0) {
                     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                    countdownHtml = `<div class="countdown">⏳ ${days} ${getDaysWord(days)} до свадьбы</div>`;
+                    countdownHtml = `<div class="countdown anim-item">⏳ ${days} ${getDaysWord(days)} до свадьбы</div>`;
                 } else if (diff > -86400000) {
-                    countdownHtml = '<div class="countdown">🎉 Свадьба сегодня!</div>';
+                    countdownHtml = '<div class="countdown anim-item">🎉 Свадьба сегодня!</div>';
                 }
             }
 
-            const esc = s => { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; };
             const isNavy = data.s === 'navy';
             const bgStyle = data.p ? `background-image:url(${data.p}); background-size:cover; background-position:center;` : `background:${backgrounds[data.s] || backgrounds.classic};`;
+
+            let namesHtml = '';
+            (data.names || []).forEach(n => {
+                namesHtml += `<div class="name-row"><strong>${escHtml(n.label)}</strong> ${escHtml(n.name)}</div>`;
+            });
+            if (!namesHtml) namesHtml = '<div class="name-row">Александр & Екатерина</div>';
+
+            const borderClass = 'border-' + (data.b || 'classic');
 
             let html = '';
             html += `<div class="bg-image" style="${bgStyle}"></div>`;
             html += `<div class="bg-overlay"></div>`;
-            html += `<div class="content" style="${isNavy ? 'color:#f0e6d8' : ''}">`;
-            html += '<div class="ornament">🌸 🌸 🌸</div>';
-            html += '<h2>Приглашение на свадьбу</h2>';
-            html += '<div class="divider">━━━ ❤ ━━━</div>';
-            html += '<p>С радостью приглашаем</p>';
-            html += `<p style="font-weight:500;">${esc(data.gn) || 'Дорогой друг!'}</p>`;
-            html += `<div class="names" style="color:${data.c || '#c9a96e'}">${esc(data.g) || 'Александр'}<br>&<br>${esc(data.b) || 'Екатерина'}</div>`;
-            html += '<p>на торжество в честь бракосочетания!</p>';
-            html += `<div class="date">${dateStr}</div>`;
-            html += `<div class="info"><div>🕐 ${esc(data.t) || '15:00'}</div><div>📍 ${esc(data.v) || ''}</div>${data.a ? `<div>🏠 ${esc(data.a)}</div>` : ''}</div>`;
-            html += `<div class="message" style="${isNavy ? 'border-color:rgba(240,230,216,0.3)' : ''}">${esc(data.m) || ''}</div>`;
+            html += `<div class="content">`;
+            html += `<div class="ornament anim-item">🌸 🌸 🌸</div>`;
+            html += `<h2 class="anim-item">Приглашение на свадьбу</h2>`;
+            html += `<div class="divider anim-item">━━━ ❤ ━━━</div>`;
+            html += `<p class="anim-item">С радостью приглашаем</p>`;
+            html += `<p class="anim-item" style="font-weight:500;">${escHtml(data.gn) || 'Дорогой друг!'}</p>`;
+            html += `<div class="names anim-item" style="color:${data.c || '#c9a96e'}">${namesHtml}</div>`;
+            html += `<p class="anim-item">на торжество в честь бракосочетания!</p>`;
+            html += `<div class="date anim-item">${dateStr}</div>`;
+            html += `<div class="info anim-item"><div>🕐 ${escHtml(data.t) || '15:00'}</div><div>📍 ${escHtml(data.v) || ''}</div>${data.a ? `<div>🏠 ${escHtml(data.a)}</div>` : ''}</div>`;
+            html += `<div class="message anim-item" style="${isNavy ? 'border-color:rgba(240,230,216,0.3)' : ''}">${escHtml(data.m) || ''}</div>`;
             html += countdownHtml;
-            html += '<div class="ornament">🌸 🌸 🌸</div>';
-            html += '<p class="footer-text">Пожалуйста, подтвердите ваше присутствие</p>';
-            html += '</div>';
+            html += `<div class="ornament anim-item">🌸 🌸 🌸</div>`;
+            html += `<p class="footer-text anim-item">Пожалуйста, подтвердите ваше присутствие</p>`;
+            html += `</div>`;
 
-            document.getElementById('guestCard').innerHTML = html;
+            const card = document.getElementById('guestCard');
+            card.innerHTML = html;
+            card.className = 'guest-card ' + borderClass;
         }
 
         function getDaysWord(days) {
@@ -683,8 +763,6 @@
             if (!saved) return;
             try {
                 const data = JSON.parse(saved);
-                document.getElementById('groom').value = data.g || '';
-                document.getElementById('bride').value = data.b || '';
                 document.getElementById('date').value = data.d || '';
                 document.getElementById('time').value = data.t || '15:00';
                 document.getElementById('venue').value = data.v || '';
@@ -692,6 +770,7 @@
                 document.getElementById('guest').value = data.gn || '';
                 document.getElementById('message').value = data.m || '';
                 if (data.s) setStyle(data.s, document.querySelector(`.style-btn[onclick*="${data.s}"]`));
+                if (data.b) setBorder(data.b, document.querySelector(`.section:nth-child(2) .style-btn[onclick*="${data.b}"]`));
                 if (data.c) setColor(data.c, document.querySelector(`.color-dot[style*="${data.c}"]`));
                 if (data.p) {
                     if (data.p.startsWith('http')) {
@@ -700,6 +779,20 @@
                         currentPhoto = data.p;
                     }
                     updatePreviewBg();
+                }
+                // Восстановление имён
+                if (data.names && data.names.length > 0) {
+                    const container = document.getElementById('namesContainer');
+                    container.innerHTML = '';
+                    data.names.forEach(n => {
+                        const row = document.createElement('div');
+                        row.className = 'row name-entry';
+                        row.innerHTML = `
+                            <div class="field"><label>Роль</label><input type="text" class="name-label" value="${escHtml(n.label)}"></div>
+                            <div class="field"><label>Имя</label><input type="text" class="name-value" value="${escHtml(n.name)}" oninput="refresh()"></div>
+                        `;
+                        container.appendChild(row);
+                    });
                 }
                 refresh();
             } catch (e) {}
@@ -732,6 +825,7 @@
                 document.getElementById('date').value = nm.toISOString().split('T')[0];
                 loadDraft();
                 refresh();
+                applyBorderToPreview();
             }
         });
 
