@@ -47,8 +47,39 @@
             padding: 20px;
             justify-content: center;
             align-items: center;
+            position: relative;
+            overflow: hidden;
         }
         .guest-page.active { display: flex; }
+
+        /* Падающие лепестки */
+        @keyframes petalFall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+        .petal {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 200, 200, 0.6);
+            border-radius: 50% 0 50% 50%;
+            animation: petalFall linear infinite;
+            z-index: 0;
+        }
+
+        /* Фейерверк */
+        @keyframes firework {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        .firework-particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: gold;
+            border-radius: 50%;
+            animation: firework 1.5s ease-out infinite;
+        }
 
         .guest-card {
             background: white;
@@ -61,25 +92,79 @@
             position: relative;
             overflow: hidden;
             animation: cardFadeIn 0.8s ease-out;
+            z-index: 1;
         }
         @keyframes cardFadeIn { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-        /* Анимации элементов */
-        .guest-card .anim-item {
+        /* Базовые анимации для выбора */
+        .anim-slide-left {
             opacity: 0;
-            animation: fadeInUp 0.7s ease forwards;
+            animation: slideInLeft 0.7s ease forwards;
         }
-        .guest-card .anim-item:nth-child(1) { animation-delay: 0.2s; }
-        .guest-card .anim-item:nth-child(2) { animation-delay: 0.4s; }
-        .guest-card .anim-item:nth-child(3) { animation-delay: 0.6s; }
-        .guest-card .anim-item:nth-child(4) { animation-delay: 0.8s; }
-        .guest-card .anim-item:nth-child(5) { animation-delay: 1.0s; }
-        .guest-card .anim-item:nth-child(6) { animation-delay: 1.2s; }
-        .guest-card .anim-item:nth-child(7) { animation-delay: 1.4s; }
-        .guest-card .anim-item:nth-child(8) { animation-delay: 1.6s; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .anim-slide-right {
+            opacity: 0;
+            animation: slideInRight 0.7s ease forwards;
+        }
+        .anim-slide-up {
+            opacity: 0;
+            animation: slideInUp 0.7s ease forwards;
+        }
+        .anim-fade {
+            opacity: 0;
+            animation: fadeIn 0.7s ease forwards;
+        }
+        .anim-scale {
+            opacity: 0;
+            animation: scaleIn 0.7s ease forwards;
+        }
+        .anim-rotate {
+            opacity: 0;
+            animation: rotateIn 0.7s ease forwards;
+        }
+        .anim-bounce {
+            opacity: 0;
+            animation: bounceIn 0.7s ease forwards;
+        }
+        .anim-flip {
+            opacity: 0;
+            animation: flipIn 0.7s ease forwards;
+        }
+        .anim-glow-pulse {
+            opacity: 0;
+            animation: glowPulse 0.7s ease forwards, glow 2s infinite;
+        }
 
-        /* Параллакс фон */
+        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        @keyframes rotateIn { from { opacity: 0; transform: rotate(-10deg) scale(0.9); } to { opacity: 1; transform: rotate(0) scale(1); } }
+        @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.3); } 50% { opacity: 1; transform: scale(1.05); } 70% { transform: scale(0.9); } 100% { transform: scale(1); } }
+        @keyframes flipIn { from { opacity: 0; transform: perspective(400px) rotateY(90deg); } to { opacity: 1; transform: perspective(400px) rotateY(0); } }
+        @keyframes glowPulse { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+        @keyframes shimmer {
+            0% { opacity: 0.6; filter: brightness(1); }
+            50% { opacity: 1; filter: brightness(1.2); }
+            100% { opacity: 0.6; filter: brightness(1); }
+        }
+        .shimmer { animation: shimmer 2s infinite; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.07); }
+            100% { transform: scale(1); }
+        }
+        .pulse { animation: pulse 2s infinite; }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px rgba(201,169,110,0.5); }
+            50% { text-shadow: 0 0 20px rgba(201,169,110,0.8); }
+            100% { text-shadow: 0 0 5px rgba(201,169,110,0.5); }
+        }
+        .glow { animation: glow 2s infinite; }
+
         .guest-card .bg-image {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -99,17 +184,6 @@
             z-index: 3;
         }
 
-        /* Мерцание */
-        @keyframes shimmer {
-            0% { opacity: 0.7; }
-            50% { opacity: 1; }
-            100% { opacity: 0.7; }
-        }
-        .shimmer {
-            animation: shimmer 2s infinite;
-        }
-
-        /* Рамки */
         .border-none { border: none; }
         .border-classic { border: 3px solid #d4c5a9; }
         .border-gold { border: 4px double #c9a96e; }
@@ -356,6 +430,10 @@
                         <button class="style-btn" onclick="setBackground('texture1', this)">Ткань</button>
                         <button class="style-btn" onclick="setBackground('texture2', this)">Мрамор</button>
                     </div>
+                    <div class="field" style="margin-top:10px;">
+                        <label>Или вставьте URL своего фона</label>
+                        <input type="text" id="customBgUrl" placeholder="https://example.com/background.jpg" oninput="updatePreviewBg()">
+                    </div>
                 </div>
 
                 <div class="section">
@@ -367,6 +445,21 @@
                         <button class="style-btn" onclick="setBorder('elegant', this)">Элегантная</button>
                         <button class="style-btn" onclick="setBorder('floral', this)">Цветочная</button>
                         <button class="style-btn" onclick="setBorder('rustic', this)">Рустик</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>✨ Анимация элементов</h3>
+                    <div class="style-grid" id="animGrid">
+                        <button class="style-btn active" onclick="setAnimation('slide-left', this)">Слайд влево</button>
+                        <button class="style-btn" onclick="setAnimation('slide-right', this)">Слайд вправо</button>
+                        <button class="style-btn" onclick="setAnimation('slide-up', this)">Слайд вверх</button>
+                        <button class="style-btn" onclick="setAnimation('fade', this)">Плавное появление</button>
+                        <button class="style-btn" onclick="setAnimation('scale', this)">Масштаб</button>
+                        <button class="style-btn" onclick="setAnimation('rotate', this)">Вращение</button>
+                        <button class="style-btn" onclick="setAnimation('bounce', this)">Прыжок</button>
+                        <button class="style-btn" onclick="setAnimation('flip', this)">Переворот</button>
+                        <button class="style-btn" onclick="setAnimation('glow-pulse', this)">Свечение + пульс</button>
                     </div>
                 </div>
 
@@ -468,9 +561,41 @@
 
         let currentBg = 'gradient1';
         let currentBorder = 'classic';
+        let currentAnimation = 'slide-left';
         let currentColor = '#c9a96e';
         let currentPhoto = null;
         let currentLink = '';
+
+        // --- Падающие лепестки ---
+        function createPetals() {
+            const container = document.getElementById('guestView');
+            if (!container) return;
+            container.querySelectorAll('.petal').forEach(p => p.remove());
+            for (let i = 0; i < 25; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                petal.style.left = Math.random() * 100 + '%';
+                petal.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                petal.style.animationDelay = Math.random() * 5 + 's';
+                petal.style.width = (Math.random() * 15 + 10) + 'px';
+                petal.style.height = (Math.random() * 15 + 10) + 'px';
+                container.appendChild(petal);
+            }
+        }
+
+        // --- Фейерверк ---
+        function createFireworks() {
+            const container = document.getElementById('guestView');
+            if (!container) return;
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'firework-particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(particle);
+            }
+        }
 
         // --- Управление именами ---
         function addNameRow() {
@@ -498,20 +623,25 @@
             return names;
         }
 
-        // --- Фон ---
         function setBackground(bg, btn) {
             currentBg = bg;
             document.querySelectorAll('#bgGrid .style-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            document.getElementById('customBgUrl').value = '';
             updatePreviewBg();
         }
 
-        // --- Рамка ---
         function setBorder(border, btn) {
             currentBorder = border;
             document.querySelectorAll('#borderGrid .style-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             applyBorderToPreview();
+        }
+
+        function setAnimation(anim, btn) {
+            currentAnimation = anim;
+            document.querySelectorAll('#animGrid .style-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
         }
 
         function applyBorderToPreview() {
@@ -527,7 +657,6 @@
             refresh();
         }
 
-        // --- Фото ---
         function compressImageHard(base64) {
             return new Promise((resolve) => {
                 const img = new Image();
@@ -577,13 +706,19 @@
 
         function updatePreviewBg() {
             const card = document.getElementById('previewCard');
-            const url = document.getElementById('photoUrl')?.value.trim();
-            if (url) {
-                card.style.backgroundImage = `url(${url})`;
+            const customUrl = document.getElementById('customBgUrl')?.value.trim();
+            const photoUrl = document.getElementById('photoUrl')?.value.trim();
+
+            if (photoUrl) {
+                card.style.backgroundImage = `url(${photoUrl})`;
                 card.style.backgroundSize = 'cover';
                 card.style.backgroundPosition = 'center';
             } else if (currentPhoto) {
                 card.style.backgroundImage = `url(${currentPhoto})`;
+                card.style.backgroundSize = 'cover';
+                card.style.backgroundPosition = 'center';
+            } else if (customUrl) {
+                card.style.backgroundImage = `url(${customUrl})`;
                 card.style.backgroundSize = 'cover';
                 card.style.backgroundPosition = 'center';
             } else {
@@ -592,7 +727,6 @@
             }
         }
 
-        // --- Обновление предпросмотра ---
         function refresh() {
             const names = getNamesArray();
             let namesHtml = '';
@@ -621,12 +755,15 @@
         }
 
         function getData() {
-            const url = document.getElementById('photoUrl')?.value.trim();
+            const photoUrl = document.getElementById('photoUrl')?.value.trim();
+            const customBgUrl = document.getElementById('customBgUrl')?.value.trim();
             return {
                 bg: currentBg,
+                customBg: customBgUrl || null,
                 b: currentBorder,
+                anim: currentAnimation,
                 c: currentColor,
-                p: url || currentPhoto,
+                p: photoUrl || currentPhoto,
                 names: getNamesArray(),
                 d: document.getElementById('date').value,
                 t: document.getElementById('time').value,
@@ -637,7 +774,6 @@
             };
         }
 
-        // --- Генерация ссылки ---
         async function generateLink() {
             refresh();
             document.getElementById('linkModal').classList.add('show');
@@ -689,7 +825,6 @@
 
         function closeModal() { document.getElementById('linkModal').classList.remove('show'); }
 
-        // --- Гостевая страница ---
         function previewAsGuest() {
             refresh();
             showGuestPage(getData());
@@ -712,13 +847,20 @@
                 const diff = wedding - now;
                 if (diff > 0) {
                     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                    countdownHtml = `<div class="countdown anim-item">⏳ ${days} ${getDaysWord(days)} до свадьбы</div>`;
+                    countdownHtml = `<div class="countdown anim-${data.anim || 'slide-up'}">⏳ ${days} ${getDaysWord(days)} до свадьбы</div>`;
                 } else if (diff > -86400000) {
-                    countdownHtml = '<div class="countdown anim-item">🎉 Свадьба сегодня!</div>';
+                    countdownHtml = `<div class="countdown anim-${data.anim || 'slide-up'}">🎉 Свадьба сегодня!</div>`;
                 }
             }
 
-            const bgStyle = data.p ? `background-image:url(${data.p}); background-size:cover; background-position:center;` : `background:${backgrounds[data.bg] || backgrounds.gradient1};`;
+            let bgStyle = '';
+            if (data.p) {
+                bgStyle = `background-image:url(${data.p}); background-size:cover; background-position:center;`;
+            } else if (data.customBg) {
+                bgStyle = `background-image:url(${data.customBg}); background-size:cover; background-position:center;`;
+            } else {
+                bgStyle = `background:${backgrounds[data.bg] || backgrounds.gradient1};`;
+            }
 
             let namesHtml = '';
             (data.names || []).forEach(n => {
@@ -727,24 +869,25 @@
             if (!namesHtml) namesHtml = '<div class="name-row">Александр & Екатерина</div>';
 
             const borderClass = 'border-' + (data.b || 'classic');
+            const animClass = 'anim-' + (data.anim || 'slide-left');
 
             let html = '';
             html += `<div class="bg-image" style="${bgStyle}"></div>`;
             html += `<div class="bg-overlay"></div>`;
             html += `<div class="content">`;
-            html += `<div class="ornament anim-item shimmer">🌸 🌸 🌸</div>`;
-            html += `<h2 class="anim-item">Приглашение на свадьбу</h2>`;
-            html += `<div class="divider anim-item">━━━ ❤ ━━━</div>`;
-            html += `<p class="anim-item">С радостью приглашаем</p>`;
-            html += `<p class="anim-item" style="font-weight:500;">${escHtml(data.gn) || 'Дорогой друг!'}</p>`;
-            html += `<div class="names anim-item" style="color:${data.c || '#c9a96e'}">${namesHtml}</div>`;
-            html += `<p class="anim-item">на торжество в честь бракосочетания!</p>`;
-            html += `<div class="date anim-item">${dateStr}</div>`;
-            html += `<div class="info anim-item"><div>🕐 ${escHtml(data.t) || '15:00'}</div><div>📍 ${escHtml(data.v) || ''}</div>${data.a ? `<div>🏠 ${escHtml(data.a)}</div>` : ''}</div>`;
-            html += `<div class="message anim-item">${escHtml(data.m) || ''}</div>`;
+            html += `<div class="ornament ${animClass} shimmer pulse">🌸 🌸 🌸</div>`;
+            html += `<h2 class="${animClass}">Приглашение на свадьбу</h2>`;
+            html += `<div class="divider ${animClass}">━━━ ❤ ━━━</div>`;
+            html += `<p class="${animClass}">С радостью приглашаем</p>`;
+            html += `<p class="${animClass}" style="font-weight:500;">${escHtml(data.gn) || 'Дорогой друг!'}</p>`;
+            html += `<div class="names ${animClass}" style="color:${data.c || '#c9a96e'}">${namesHtml}</div>`;
+            html += `<p class="${animClass}">на торжество в честь бракосочетания!</p>`;
+            html += `<div class="date ${animClass} glow">${dateStr}</div>`;
+            html += `<div class="info ${animClass}"><div>🕐 ${escHtml(data.t) || '15:00'}</div><div>📍 ${escHtml(data.v) || ''}</div>${data.a ? `<div>🏠 ${escHtml(data.a)}</div>` : ''}</div>`;
+            html += `<div class="message ${animClass}">${escHtml(data.m) || ''}</div>`;
             html += countdownHtml;
-            html += `<div class="ornament anim-item shimmer">🌸 🌸 🌸</div>`;
-            html += `<p class="footer-text anim-item">Пожалуйста, подтвердите ваше присутствие</p>`;
+            html += `<div class="ornament ${animClass} shimmer pulse">🌸 🌸 🌸</div>`;
+            html += `<p class="footer-text ${animClass}">Пожалуйста, подтвердите ваше присутствие</p>`;
             html += `</div>`;
 
             const card = document.getElementById('guestCard');
@@ -766,6 +909,9 @@
                     bgImage.style.transform = 'translate(0, 0)';
                 });
             }
+
+            createPetals();
+            createFireworks();
         }
 
         function getDaysWord(days) {
@@ -797,7 +943,9 @@
                 document.getElementById('guest').value = data.gn || '';
                 document.getElementById('message').value = data.m || '';
                 if (data.bg) setBackground(data.bg, document.querySelector(`#bgGrid .style-btn[onclick*="${data.bg}"]`));
+                if (data.customBg) document.getElementById('customBgUrl').value = data.customBg;
                 if (data.b) setBorder(data.b, document.querySelector(`#borderGrid .style-btn[onclick*="${data.b}"]`));
+                if (data.anim) setAnimation(data.anim, document.querySelector(`#animGrid .style-btn[onclick*="${data.anim}"]`));
                 if (data.c) setColor(data.c, document.querySelector(`.color-dot[style*="${data.c}"]`));
                 if (data.p) {
                     if (data.p.startsWith('http')) {
