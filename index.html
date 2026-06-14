@@ -17,8 +17,7 @@
             min-height: 100vh;
         }
 
-        /* Конструктор */
-        .constructor {
+        .constructor-container {
             max-width: 900px;
             margin: 0 auto;
             padding: 20px;
@@ -64,8 +63,6 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            position: sticky;
-            top: 20px;
         }
 
         .form-section {
@@ -96,20 +93,17 @@
         }
 
         .form-group input,
-        .form-group textarea,
-        .form-group select {
+        .form-group textarea {
             width: 100%;
             padding: 10px 12px;
             border: 2px solid #e8e8e8;
             border-radius: 8px;
             font-size: 14px;
             font-family: inherit;
-            transition: border-color 0.3s;
         }
 
         .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
+        .form-group textarea:focus {
             outline: none;
             border-color: #764ba2;
         }
@@ -125,13 +119,13 @@
             gap: 10px;
         }
 
-        .style-options {
+        .style-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
         }
 
-        .style-option {
+        .style-btn {
             padding: 10px 5px;
             border: 2px solid #e8e8e8;
             border-radius: 10px;
@@ -142,11 +136,11 @@
             background: white;
         }
 
-        .style-option:hover {
+        .style-btn:hover {
             border-color: #764ba2;
         }
 
-        .style-option.active {
+        .style-btn.active {
             border-color: #667eea;
             background: #f0edff;
             font-weight: 600;
@@ -197,7 +191,6 @@
             flex: 1;
         }
 
-        /* Превью карточка */
         .invitation-card {
             width: 100%;
             max-width: 380px;
@@ -206,7 +199,6 @@
             border-radius: 20px;
             text-align: center;
             box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-            transition: all 0.5s;
         }
 
         .invitation-card .top-deco {
@@ -256,7 +248,6 @@
             margin-top: 15px;
         }
 
-        /* Стили карточек */
         .theme-classic { background: linear-gradient(135deg, #ffecd2, #fcb69f); color: #4a3728; }
         .theme-modern { background: linear-gradient(135deg, #a8edea, #fed6e3); color: #2d3436; }
         .theme-romantic { background: linear-gradient(135deg, #fce4ec, #f8bbd0); color: #4a1a2e; }
@@ -264,7 +255,6 @@
         .theme-night { background: linear-gradient(135deg, #2c3e50, #3498db); color: #fff; }
         .theme-gold { background: linear-gradient(135deg, #f5e6d3, #d4a574); color: #5c3a21; border: 3px solid #c9a96e; }
 
-        /* Страница гостя */
         .guest-view {
             display: none;
             min-height: 100vh;
@@ -289,14 +279,8 @@
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .guest-card .g-top-deco {
@@ -363,7 +347,6 @@
             opacity: 0.8;
         }
 
-        /* Модальное окно */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -391,10 +374,6 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.3);
         }
 
-        .modal-dialog h3 {
-            margin-bottom: 15px;
-        }
-
         .link-box {
             background: #f5f5f5;
             padding: 15px;
@@ -408,23 +387,9 @@
             text-align: left;
         }
 
-        .success-badge {
-            display: inline-block;
-            background: #4CAF50;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            margin-top: 10px;
-        }
-
         @media (max-width: 768px) {
             .content-wrapper {
                 grid-template-columns: 1fr;
-            }
-            
-            .preview {
-                position: static;
             }
             
             .invitation-card {
@@ -444,23 +409,23 @@
 <body>
     <!-- КОНСТРУКТОР -->
     <div id="constructorView">
-        <div class="constructor">
+        <div class="constructor-container">
             <div class="header">
-                <h1>💍 Свадебное приглашение</h1>
+                <h1>💍 Конструктор свадебных приглашений</h1>
                 <p>Создайте приглашение и отправьте ссылку гостям</p>
             </div>
 
             <div class="content-wrapper">
                 <div class="editor">
                     <div class="form-section">
-                        <h3>🎨 Стиль</h3>
-                        <div class="style-options">
-                            <div class="style-option active" onclick="setStyle('classic', this)">🌸 Классика</div>
-                            <div class="style-option" onclick="setStyle('modern', this)">✨ Модерн</div>
-                            <div class="style-option" onclick="setStyle('romantic', this)">💕 Романтика</div>
-                            <div class="style-option" onclick="setStyle('elegant', this)">💎 Элегант</div>
-                            <div class="style-option" onclick="setStyle('night', this)">🌙 Ночь</div>
-                            <div class="style-option" onclick="setStyle('gold', this)">👑 Золото</div>
+                        <h3>🎨 Стиль приглашения</h3>
+                        <div class="style-grid">
+                            <div class="style-btn active" onclick="changeStyle('classic', this)">🌸 Классика</div>
+                            <div class="style-btn" onclick="changeStyle('modern', this)">✨ Модерн</div>
+                            <div class="style-btn" onclick="changeStyle('romantic', this)">💕 Романтика</div>
+                            <div class="style-btn" onclick="changeStyle('elegant', this)">💎 Элегант</div>
+                            <div class="style-btn" onclick="changeStyle('night', this)">🌙 Ночь</div>
+                            <div class="style-btn" onclick="changeStyle('gold', this)">👑 Золото</div>
                         </div>
                     </div>
 
@@ -468,60 +433,57 @@
                         <h3>👰🤵 Молодожёны</h3>
                         <div class="row">
                             <div class="form-group">
-                                <label>Жених</label>
-                                <input type="text" id="groomInput" placeholder="Александр" oninput="refreshPreview()">
+                                <label>Имя жениха</label>
+                                <input type="text" id="groomInput" placeholder="Александр" oninput="updatePreview()">
                             </div>
                             <div class="form-group">
-                                <label>Невеста</label>
-                                <input type="text" id="brideInput" placeholder="Екатерина" oninput="refreshPreview()">
+                                <label>Имя невесты</label>
+                                <input type="text" id="brideInput" placeholder="Екатерина" oninput="updatePreview()">
                             </div>
                         </div>
                     </div>
 
                     <div class="form-section">
-                        <h3>📅 Событие</h3>
+                        <h3>📅 Дата и место</h3>
                         <div class="row">
                             <div class="form-group">
-                                <label>Дата</label>
-                                <input type="date" id="dateInput" oninput="refreshPreview()">
+                                <label>Дата свадьбы</label>
+                                <input type="date" id="dateInput" oninput="updatePreview()">
                             </div>
                             <div class="form-group">
                                 <label>Время</label>
-                                <input type="time" id="timeInput" value="15:00" oninput="refreshPreview()">
+                                <input type="time" id="timeInput" value="15:00" oninput="updatePreview()">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Место</label>
-                            <input type="text" id="venueInput" placeholder="Ресторан 'Райский сад'" oninput="refreshPreview()">
+                            <label>Место проведения</label>
+                            <input type="text" id="venueInput" placeholder="Ресторан 'Райский сад'" oninput="updatePreview()">
                         </div>
                         <div class="form-group">
                             <label>Адрес</label>
-                            <input type="text" id="addressInput" placeholder="ул. Цветочная, 15" oninput="refreshPreview()">
+                            <input type="text" id="addressInput" placeholder="ул. Цветочная, д. 15" oninput="updatePreview()">
                         </div>
                     </div>
 
                     <div class="form-section">
-                        <h3>💌 Детали</h3>
+                        <h3>💌 Детали приглашения</h3>
                         <div class="form-group">
-                            <label>Дорогой гость</label>
-                            <input type="text" id="guestInput" placeholder="Дорогой друг!" oninput="refreshPreview()">
+                            <label>Имя гостя</label>
+                            <input type="text" id="guestInput" placeholder="Дорогой друг!" oninput="updatePreview()">
                         </div>
                         <div class="form-group">
-                            <label>Сообщение</label>
-                            <textarea id="messageInput" placeholder="Будем рады видеть вас!" oninput="refreshPreview()">Будем рады видеть вас на нашем празднике!</textarea>
+                            <label>Личное сообщение</label>
+                            <textarea id="messageInput" placeholder="Будем рады видеть вас!" oninput="updatePreview()">Будем рады видеть вас на нашем празднике!</textarea>
                         </div>
                     </div>
 
-                    <button class="btn btn-primary" onclick="createInvitationLink()">
+                    <button class="btn btn-primary" onclick="createLink()">
                         🔗 Создать приглашение и получить ссылку
                     </button>
                     <div class="btn-group">
-                        <button class="btn btn-secondary" onclick="previewAsGuest()">👁 Предпросмотр</button>
-                        <button class="btn btn-outline" onclick="resetAll()">🔄 Сброс</button>
+                        <button class="btn btn-secondary" onclick="previewGuest()">👁 Предпросмотр</button>
+                        <button class="btn btn-outline" onclick="resetForm()">🔄 Сброс</button>
                     </div>
-                    <p style="text-align:center; margin-top:15px; font-size:0.85em; color:#888;">
-                        Ссылка работает на любых устройствах
-                    </p>
                 </div>
 
                 <div class="preview">
@@ -539,134 +501,153 @@
                         <div class="event-details">
                             <div>🕐 <span id="prevTime">15:00</span></div>
                             <div>📍 <span id="prevVenue">Ресторан 'Райский сад'</span></div>
-                            <div>🏠 <span id="prevAddress">ул. Цветочная, 15</span></div>
+                            <div>🏠 <span id="prevAddress">ул. Цветочная, д. 15</span></div>
                         </div>
                         <div class="personal-message" id="prevMessage">Будем рады видеть вас на нашем празднике!</div>
                         <div class="bottom-deco">🌸 🌸 🌸</div>
-                        <p style="margin-top:15px; font-size:0.85em; opacity:0.7;">Ждём вас!</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ГОСТЕВАЯ СТРАНИЦА -->
+    <!-- СТРАНИЦА ГОСТЯ -->
     <div class="guest-view" id="guestView">
         <div class="guest-card" id="guestCard"></div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО -->
+    <!-- МОДАЛЬНОЕ ОКНО СО ССЫЛКОЙ -->
     <div class="modal-overlay" id="linkModal">
         <div class="modal-dialog">
             <h3>✅ Приглашение создано!</h3>
-            <p style="color:#666;">Скопируйте ссылку и отправьте гостям:</p>
+            <p style="color:#666; margin:10px 0;">Скопируйте ссылку и отправьте гостям:</p>
             <div class="link-box" id="linkBox"></div>
-            <button class="btn btn-primary" onclick="copyLinkToClipboard()">📋 Копировать</button>
-            <button class="btn btn-outline" onclick="closeLinkModal()" style="margin-top:10px;">Закрыть</button>
-            <span class="success-badge" id="copiedBadge" style="display:none;">Скопировано!</span>
-            <p style="font-size:0.8em; color:#999; margin-top:15px;">Открывается на телефоне, планшете и компьютере</p>
+            <button class="btn btn-primary" onclick="copyLink()">📋 Копировать ссылку</button>
+            <button class="btn btn-outline" onclick="closeModal()" style="margin-top:10px;">Закрыть</button>
+            <p id="copyStatus" style="color:#4CAF50; margin-top:10px; display:none;">✅ Ссылка скопирована!</p>
+            <p style="font-size:0.8em; color:#999; margin-top:15px;">Работает на телефонах, планшетах и компьютерах</p>
         </div>
     </div>
 
     <script>
-        // Текущий стиль
-        let currentTheme = 'classic';
-        let generatedLink = '';
+        // Версия для отладки
+        console.log('Скрипт загружен! Версия 2.0');
+        
+        let currentStyle = 'classic';
+        let currentLink = '';
 
-        // Смена стиля
-        function setStyle(theme, element) {
-            currentTheme = theme;
-            document.querySelectorAll('.style-option').forEach(el => el.classList.remove('active'));
+        // Функция смены стиля
+        function changeStyle(style, element) {
+            console.log('Меняем стиль на:', style);
+            currentStyle = style;
+            
+            // Убираем активный класс у всех кнопок
+            document.querySelectorAll('.style-btn').forEach(function(btn) {
+                btn.classList.remove('active');
+            });
+            
+            // Добавляем активный класс нажатой кнопке
             element.classList.add('active');
             
-            const card = document.getElementById('previewCard');
-            card.className = 'invitation-card theme-' + theme;
+            // Меняем стиль карточки
+            var card = document.getElementById('previewCard');
+            card.className = 'invitation-card theme-' + style;
         }
 
-        // Получение данных из формы
-        function getFormData() {
+        // Получение данных формы
+        function getData() {
             return {
-                theme: currentTheme,
+                theme: currentStyle,
                 groom: document.getElementById('groomInput').value.trim() || 'Александр',
                 bride: document.getElementById('brideInput').value.trim() || 'Екатерина',
                 date: document.getElementById('dateInput').value,
                 time: document.getElementById('timeInput').value || '15:00',
                 venue: document.getElementById('venueInput').value.trim() || 'Ресторан "Райский сад"',
-                address: document.getElementById('addressInput').value.trim() || 'ул. Цветочная, 15',
+                address: document.getElementById('addressInput').value.trim() || 'ул. Цветочная, д. 15',
                 guest: document.getElementById('guestInput').value.trim() || 'Дорогой друг!',
                 message: document.getElementById('messageInput').value.trim() || 'Будем рады видеть вас на нашем празднике!'
             };
         }
 
         // Обновление предпросмотра
-        function refreshPreview() {
-            const d = getFormData();
+        function updatePreview() {
+            console.log('Обновляем предпросмотр');
+            var data = getData();
             
-            document.getElementById('prevGroom').textContent = d.groom;
-            document.getElementById('prevBride').textContent = d.bride;
-            document.getElementById('prevGuest').textContent = d.guest;
-            document.getElementById('prevVenue').textContent = d.venue;
-            document.getElementById('prevAddress').textContent = d.address;
-            document.getElementById('prevMessage').textContent = d.message;
-            document.getElementById('prevTime').textContent = d.time;
+            document.getElementById('prevGroom').textContent = data.groom;
+            document.getElementById('prevBride').textContent = data.bride;
+            document.getElementById('prevGuest').textContent = data.guest;
+            document.getElementById('prevVenue').textContent = data.venue;
+            document.getElementById('prevAddress').textContent = data.address;
+            document.getElementById('prevMessage').textContent = data.message;
+            document.getElementById('prevTime').textContent = data.time;
             
-            if (d.date) {
-                const dateObj = new Date(d.date);
-                document.getElementById('prevDate').textContent = dateObj.toLocaleDateString('ru-RU', {
+            if (data.date) {
+                var d = new Date(data.date);
+                document.getElementById('prevDate').textContent = d.toLocaleDateString('ru-RU', {
                     day: 'numeric', month: 'long', year: 'numeric'
                 });
             }
         }
 
-        // Кодирование в URL
-        function encodeForUrl(data) {
-            const json = JSON.stringify(data);
+        // Кодирование данных для URL
+        function encodeData(data) {
+            var json = JSON.stringify(data);
             return btoa(unescape(encodeURIComponent(json)))
                 .replace(/\+/g, '-')
                 .replace(/\//g, '_')
                 .replace(/=/g, '');
         }
 
-        // Декодирование из URL
-        function decodeFromUrl(encoded) {
+        // Декодирование данных из URL
+        function decodeData(str) {
             try {
-                let str = encoded.replace(/-/g, '+').replace(/_/g, '/');
-                while (str.length % 4) str += '=';
-                return JSON.parse(decodeURIComponent(escape(atob(str))));
+                var b64 = str.replace(/-/g, '+').replace(/_/g, '/');
+                while (b64.length % 4) b64 += '=';
+                return JSON.parse(decodeURIComponent(escape(atob(b64))));
             } catch (e) {
+                console.error('Ошибка декодирования:', e);
                 return null;
             }
         }
 
         // Создание ссылки
-        function createInvitationLink() {
-            refreshPreview();
-            const data = getFormData();
-            const encoded = encodeForUrl(data);
+        function createLink() {
+            console.log('Создаём ссылку...');
+            updatePreview();
             
-            // Формируем URL
-            const base = window.location.href.split('?')[0].split('#')[0];
-            generatedLink = base + '?invite=' + encoded;
+            var data = getData();
+            var encoded = encodeData(data);
             
-            // Показываем в модальном окне
-            document.getElementById('linkBox').textContent = generatedLink;
+            // Формируем полный URL
+            var baseUrl = window.location.href.split('?')[0].split('#')[0];
+            currentLink = baseUrl + '?invite=' + encoded;
+            
+            console.log('Ссылка создана:', currentLink);
+            
+            // Показываем модальное окно
+            document.getElementById('linkBox').textContent = currentLink;
             document.getElementById('linkModal').classList.add('show');
+            document.getElementById('copyStatus').style.display = 'none';
             
-            // Прячем старый badge
-            document.getElementById('copiedBadge').style.display = 'none';
-            
-            // Автокопирование
-            setTimeout(() => copyLinkToClipboard(), 300);
+            // Автоматически копируем
+            setTimeout(function() {
+                copyLink();
+            }, 500);
         }
 
         // Копирование ссылки
-        function copyLinkToClipboard() {
-            const text = generatedLink || document.getElementById('linkBox').textContent;
+        function copyLink() {
+            console.log('Копируем ссылку...');
+            var text = currentLink || document.getElementById('linkBox').textContent;
             
             if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(text).then(() => {
-                    showCopiedBadge();
-                }).catch(() => {
+                navigator.clipboard.writeText(text).then(function() {
+                    document.getElementById('copyStatus').style.display = 'block';
+                    setTimeout(function() {
+                        document.getElementById('copyStatus').style.display = 'none';
+                    }, 3000);
+                }).catch(function() {
                     fallbackCopy(text);
                 });
             } else {
@@ -675,104 +656,102 @@
         }
 
         function fallbackCopy(text) {
-            const textarea = document.createElement('textarea');
+            var textarea = document.createElement('textarea');
             textarea.value = text;
             textarea.style.position = 'fixed';
             textarea.style.left = '-9999px';
-            textarea.style.top = '-9999px';
             document.body.appendChild(textarea);
-            textarea.focus();
             textarea.select();
             try {
                 document.execCommand('copy');
-                showCopiedBadge();
+                document.getElementById('copyStatus').style.display = 'block';
+                setTimeout(function() {
+                    document.getElementById('copyStatus').style.display = 'none';
+                }, 3000);
             } catch (e) {
-                alert('Не удалось скопировать. Скопируйте вручную.');
+                alert('Скопируйте ссылку вручную: ' + text);
             }
             document.body.removeChild(textarea);
         }
 
-        function showCopiedBadge() {
-            const badge = document.getElementById('copiedBadge');
-            badge.style.display = 'inline-block';
-            setTimeout(() => { badge.style.display = 'none'; }, 3000);
-        }
-
-        function closeLinkModal() {
+        function closeModal() {
             document.getElementById('linkModal').classList.remove('show');
         }
 
-        // Предпросмотр страницы гостя
-        function previewAsGuest() {
-            refreshPreview();
-            renderGuestPage(getFormData());
+        // Предпросмотр для гостя
+        function previewGuest() {
+            console.log('Предпросмотр для гостя');
+            updatePreview();
+            showGuestPage(getData());
         }
 
-        // Отрисовка страницы гостя
-        function renderGuestPage(data) {
+        // Показ страницы гостя
+        function showGuestPage(data) {
+            console.log('Показываем страницу гостя');
+            
             document.getElementById('constructorView').style.display = 'none';
             document.getElementById('guestView').classList.add('active');
             
             // Форматируем дату
-            let dateStr = 'Дата уточняется';
+            var dateStr = 'Дата уточняется';
             if (data.date) {
-                const d = new Date(data.date);
-                dateStr = d.toLocaleDateString('ru-RU', {day:'numeric', month:'long', year:'numeric'});
+                var d = new Date(data.date);
+                dateStr = d.toLocaleDateString('ru-RU', {
+                    day: 'numeric', month: 'long', year: 'numeric'
+                });
             }
             
             // Обратный отсчёт
-            let countdownHtml = '';
+            var countdownHtml = '';
             if (data.date) {
-                const wedding = new Date(data.date);
-                const now = new Date();
-                const diff = wedding - now;
+                var wedding = new Date(data.date);
+                var now = new Date();
+                var diff = wedding - now;
                 
                 if (diff > 0) {
-                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    countdownHtml = `<div class="g-countdown">⏳ До свадьбы: ${days} дн. ${hours} ч.</div>`;
+                    var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    countdownHtml = '<div class="g-countdown">⏳ До свадьбы: ' + days + ' дн. ' + hours + ' ч.</div>';
                 } else if (diff > -86400000) {
-                    countdownHtml = `<div class="g-countdown">🎉 Свадьба сегодня!</div>`;
+                    countdownHtml = '<div class="g-countdown">🎉 Свадьба сегодня!</div>';
                 }
             }
             
-            const themeClass = 'theme-' + (data.theme || 'classic');
+            var themeClass = 'theme-' + (data.theme || 'classic');
             
-            const html = `
-                <div class="g-top-deco">🌸 🌸 🌸</div>
-                <h2>Приглашение на свадьбу</h2>
-                <div class="g-divider">━━━ ❤ ━━━</div>
-                <p style="font-size:1.1em; margin:10px 0;">С радостью приглашаем</p>
-                <p style="font-weight:500; font-size:1.1em;">${escapeHtml(data.guest)}</p>
-                <div class="g-couple" style="color:#e91e63;">
-                    ${escapeHtml(data.groom)}<br>&<br>${escapeHtml(data.bride)}
-                </div>
-                <p>на торжество в честь нашего бракосочетания!</p>
-                <div class="g-date">${dateStr}</div>
-                <div class="g-details">
-                    <div>🕐 ${escapeHtml(data.time)}</div>
-                    <div>📍 ${escapeHtml(data.venue)}</div>
-                    <div>🏠 ${escapeHtml(data.address)}</div>
-                </div>
-                <div class="g-message">${escapeHtml(data.message)}</div>
-                ${countdownHtml}
-                <div class="g-bottom-deco">🌸 🌸 🌸</div>
-                <p class="g-footer">Пожалуйста, подтвердите ваше присутствие</p>
-            `;
+            var html = '';
+            html += '<div class="g-top-deco">🌸 🌸 🌸</div>';
+            html += '<h2>Приглашение на свадьбу</h2>';
+            html += '<div class="g-divider">━━━ ❤ ━━━</div>';
+            html += '<p style="font-size:1.1em; margin:10px 0;">С радостью приглашаем</p>';
+            html += '<p style="font-weight:500; font-size:1.1em;">' + escapeText(data.guest) + '</p>';
+            html += '<div class="g-couple" style="color:#e91e63;">' + escapeText(data.groom) + '<br>&<br>' + escapeText(data.bride) + '</div>';
+            html += '<p>на торжество в честь нашего бракосочетания!</p>';
+            html += '<div class="g-date">' + dateStr + '</div>';
+            html += '<div class="g-details">';
+            html += '<div>🕐 ' + escapeText(data.time) + '</div>';
+            html += '<div>📍 ' + escapeText(data.venue) + '</div>';
+            html += '<div>🏠 ' + escapeText(data.address) + '</div>';
+            html += '</div>';
+            html += '<div class="g-message">' + escapeText(data.message) + '</div>';
+            html += countdownHtml;
+            html += '<div class="g-bottom-deco">🌸 🌸 🌸</div>';
+            html += '<p class="g-footer">Пожалуйста, подтвердите ваше присутствие</p>';
             
-            const card = document.getElementById('guestCard');
+            var card = document.getElementById('guestCard');
             card.innerHTML = html;
             card.className = 'guest-card ' + themeClass;
         }
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
+        function escapeText(text) {
+            var div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
 
-        // Сброс
-        function resetAll() {
+        // Сброс формы
+        function resetForm() {
+            console.log('Сбрасываем форму');
             document.getElementById('groomInput').value = '';
             document.getElementById('brideInput').value = '';
             document.getElementById('dateInput').value = '';
@@ -782,51 +761,58 @@
             document.getElementById('guestInput').value = '';
             document.getElementById('messageInput').value = 'Будем рады видеть вас на нашем празднике!';
             
-            setStyle('classic', document.querySelector('.style-option'));
-            refreshPreview();
+            changeStyle('classic', document.querySelector('.style-btn'));
+            updatePreview();
         }
 
-        // Инициализация
-        window.addEventListener('DOMContentLoaded', function() {
-            // Проверяем параметры URL
-            const params = new URLSearchParams(window.location.search);
-            const inviteParam = params.get('invite');
+        // Инициализация при загрузке
+        window.onload = function() {
+            console.log('Страница загружена!');
+            console.log('URL:', window.location.href);
             
-            if (inviteParam) {
-                // ГОСТЕВАЯ СТРАНИЦА
-                const data = decodeFromUrl(inviteParam);
+            // Проверяем параметры URL
+            var params = new URLSearchParams(window.location.search);
+            var inviteData = params.get('invite');
+            
+            if (inviteData) {
+                console.log('Найдены данные приглашения в URL');
+                var data = decodeData(inviteData);
+                
                 if (data) {
-                    renderGuestPage(data);
+                    console.log('Данные декодированы успешно:', data);
+                    showGuestPage(data);
                 } else {
+                    console.log('Ошибка декодирования данных');
                     document.getElementById('constructorView').style.display = 'none';
                     document.getElementById('guestView').classList.add('active');
-                    document.getElementById('guestCard').innerHTML = `
-                        <div style="text-align:center; padding:30px;">
-                            <div style="font-size:3em; margin-bottom:15px;">😔</div>
-                            <h2>Приглашение не найдено</h2>
-                            <p style="color:#666; margin:15px 0;">Ссылка недействительна или повреждена.</p>
-                            <p style="color:#888;">Пожалуйста, попросите отправить новую ссылку.</p>
-                        </div>
-                    `;
+                    document.getElementById('guestCard').innerHTML = '<div style="text-align:center; padding:30px;"><div style="font-size:3em;">😔</div><h2>Приглашение не найдено</h2><p style="color:#666;">Ссылка недействительна</p></div>';
                 }
             } else {
-                // КОНСТРУКТОР
-                const today = new Date();
-                const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 15);
-                document.getElementById('dateInput').value = nextMonth.toISOString().split('T')[0];
-                refreshPreview();
+                console.log('Открыт конструктор');
+                // Устанавливаем дату по умолчанию
+                var today = new Date();
+                var nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 15);
+                var dateStr = nextMonth.toISOString().split('T')[0];
+                document.getElementById('dateInput').value = dateStr;
+                updatePreview();
             }
-        });
+        };
 
         // Закрытие модального окна по клику на фон
         document.getElementById('linkModal').addEventListener('click', function(e) {
-            if (e.target === this) closeLinkModal();
+            if (e.target === this) {
+                closeModal();
+            }
         });
 
         // Закрытие по Escape
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeLinkModal();
+            if (e.key === 'Escape') {
+                closeModal();
+            }
         });
+
+        console.log('Инициализация завершена');
     </script>
 </body>
 </html>
