@@ -611,6 +611,7 @@
     </div>
 
     <script>
+        // Фоны
         const backgrounds = {
             gradient1: 'linear-gradient(160deg, #fef9f1, #fdf3e4)',
             gradient2: 'linear-gradient(160deg, #fff0e0, #ffdcc0)',
@@ -849,6 +850,28 @@
             };
         }
 
+        // ----- НАДЁЖНОЕ КОДИРОВАНИЕ В URL-SAFE BASE64 -----
+        function encodeData(obj) {
+            const json = JSON.stringify(obj);
+            // btoa(unescape(encodeURIComponent(json))) – классический подход для Unicode
+            let base64 = btoa(unescape(encodeURIComponent(json)));
+            // делаем URL-safe: заменяем + на -, / на _, убираем =
+            return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+        }
+
+        function decodeData(encoded) {
+            try {
+                // восстанавливаем Base64
+                let base64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+                // добавляем недостающие =
+                while (base64.length % 4) base64 += '=';
+                const json = decodeURIComponent(escape(atob(base64)));
+                return JSON.parse(json);
+            } catch (e) {
+                return null;
+            }
+        }
+
         async function generateLink() {
             refresh();
             document.getElementById('linkModal').classList.add('show');
@@ -863,19 +886,12 @@
                 data.p = await compressImageHard(data.p);
             }
 
-            const json = JSON.stringify(data);
-            const encoded = btoa(encodeURIComponent(json).replace(/%([0-9A-F]{2})/g, (m, p) => String.fromCharCode('0x' + p)));
+            const encoded = encodeData(data);
             currentLink = window.location.href.split('?')[0].split('#')[0] + '?data=' + encoded;
 
-            const linkLength = currentLink.length;
             document.getElementById('modalTitle').textContent = '✅ Готово!';
-            if (linkLength > 1500) {
-                document.getElementById('modalStatus').textContent = '⚠️ Ссылка довольно длинная, но должна работать.';
-                document.getElementById('modalStatus').className = 'status-msg status-info';
-            } else {
-                document.getElementById('modalStatus').textContent = 'Отличная короткая ссылка!';
-                document.getElementById('modalStatus').className = 'status-msg status-success';
-            }
+            document.getElementById('modalStatus').textContent = 'Короткая ссылка создана. Отправьте её гостям.';
+            document.getElementById('modalStatus').className = 'status-msg status-success';
             document.getElementById('linkBox').textContent = currentLink;
             document.getElementById('linkBox').style.display = 'block';
             document.getElementById('copyBtn').style.display = 'block';
@@ -944,7 +960,6 @@
             const borderClass = 'border-' + (data.b || 'classic');
             const animClass = 'anim-' + (data.anim || 'slide-left');
 
-            // Строим расписание
             let scheduleHtml = '';
             if (data.schedule && data.schedule.length > 0) {
                 data.schedule.forEach(item => {
@@ -1010,14 +1025,11 @@
             createFireworks();
         }
 
-        // Глобальная функция переключения вкладок
         window.switchTab = function(tabName, btn) {
             const card = document.getElementById('guestCard');
             if (!card) return;
-            // Обновляем активную кнопку
             card.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            // Показываем нужную вкладку
             card.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             const target = document.getElementById('tab-' + tabName);
             if (target) target.classList.add('active');
@@ -1092,22 +1104,16 @@
             } catch (e) {}
         }
 
-        function decodeData(encoded) {
-            try {
-                const json = decodeURIComponent(atob(encoded).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-                return JSON.parse(json);
-            } catch (e) { return null; }
-        }
-
         window.addEventListener('DOMContentLoaded', () => {
             const params = new URLSearchParams(window.location.search);
             const encoded = params.get('data');
             if (encoded) {
                 const data = decodeData(encoded);
-                if (data) showGuestPage(data);
-                else {
+                if (data) {
+                    showGuestPage(data);
+                } else {
                     document.getElementById('guestView').classList.add('active');
-                    document.getElementById('guestCard').innerHTML = '<div style="padding:40px;text-align:center"><h2>😔 Приглашение не найдено</h2></div>';
+                    document.getElementById('guestCard').innerHTML = '<div style="padding:40px;text-align:center"><h2>😔 Приглашение не найдено</h2><p>Ссылка повреждена. Попросите новое приглашение.</p></div>';
                 }
             } else {
                 document.getElementById('constructorView').classList.add('active');
