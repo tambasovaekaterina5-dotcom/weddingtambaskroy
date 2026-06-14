@@ -3,555 +3,1094 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Конструктор свадебных приглашений</title>
+    <title>Премиум конструктор свадебных приглашений</title>
     <style>
-        :root { --sidebar-w: 420px; --accent: #d4a574; }
+        :root {
+            --sidebar-w: 420px;
+            --accent: #c9a96e;
+            --bg: #f8f6f2;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: #f5f3f0;
-            color: #333;
+            font-family: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
+            background: var(--bg);
+            color: #3d3027;
             height: 100vh;
             overflow: hidden;
         }
 
+        /* ВЕРХНЯЯ ПАНЕЛЬ */
         .topbar {
-            background: white;
-            border-bottom: 1px solid #eee;
-            padding: 10px 20px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid #e8e0d5;
+            padding: 10px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
+            gap: 12px;
             z-index: 50;
             flex-wrap: wrap;
         }
-        .topbar .logo {
-            font-size: 1.2em;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-        .topbar .logo span { color: var(--accent); }
 
-        .btn {
+        .topbar .brand {
+            font-size: 1.4em;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #3d3027;
+        }
+        .topbar .brand span {
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        .device-switcher {
+            display: flex;
+            background: #f0ebe0;
+            border-radius: 10px;
+            padding: 3px;
+            gap: 2px;
+        }
+        .device-switcher button {
             padding: 8px 16px;
             border: none;
+            background: transparent;
             border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: 0.3s;
+            color: #8b7355;
+        }
+        .device-switcher button.active {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            color: #3d3027;
+            font-weight: 600;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
-            font-size: 13px;
-            transition: 0.2s;
+            font-size: 14px;
+            transition: all 0.3s;
             font-family: inherit;
             white-space: nowrap;
+            letter-spacing: 0.5px;
         }
-        .btn-gold { background: #d4a574; color: white; }
-        .btn-gold:hover { background: #c99660; }
-        .btn-white { background: white; border: 1.5px solid #e0e0e0; color: #555; }
-        .btn-white:hover { background: #fafafa; }
 
+        .btn-primary {
+            background: linear-gradient(135deg, #c9a96e, #b8944f);
+            color: white;
+            box-shadow: 0 4px 15px rgba(201,169,110,0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(201,169,110,0.4);
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid #d4c5a9;
+            color: #6b5b45;
+        }
+        .btn-outline:hover {
+            background: #faf7f0;
+            border-color: #c9a96e;
+        }
+
+        .btn-success {
+            background: #7b9b6a;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #6a8b5a;
+        }
+
+        /* ОСНОВНОЙ МАКЕТ */
         .layout {
             display: flex;
-            height: calc(100vh - 53px);
+            height: calc(100vh - 62px);
         }
 
+        /* БОКОВАЯ ПАНЕЛЬ */
         .sidebar {
             width: var(--sidebar-w);
             background: white;
-            border-right: 1px solid #eee;
+            border-right: 1px solid #e8e0d5;
             overflow-y: auto;
             flex-shrink: 0;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.03);
         }
-        .sidebar::-webkit-scrollbar { width: 4px; }
-        .sidebar::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
 
-        .tabs {
+        .sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #d4c5a9;
+            border-radius: 5px;
+        }
+
+        /* НАВИГАЦИЯ */
+        .nav-tabs {
             display: flex;
-            border-bottom: 1px solid #f0f0f0;
+            background: #faf8f3;
+            border-bottom: 1px solid #e8e0d5;
             position: sticky;
             top: 0;
-            background: white;
             z-index: 5;
         }
-        .tabs button {
+
+        .nav-tabs button {
             flex: 1;
-            padding: 12px 6px;
+            padding: 14px 8px;
             border: none;
-            background: none;
+            background: transparent;
             cursor: pointer;
-            font-size: 0.8em;
-            color: #999;
+            font-size: 0.82em;
+            color: #b0a089;
             font-weight: 500;
-            border-bottom: 2px solid transparent;
-            transition: 0.2s;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            font-family: inherit;
+            letter-spacing: 0.5px;
         }
-        .tabs button.active { color: #333; border-bottom-color: var(--accent); font-weight: 600; }
 
-        .tab-panel { display: none; padding: 18px; }
-        .tab-panel.active { display: block; }
+        .nav-tabs button.active {
+            color: #3d3027;
+            border-bottom-color: var(--accent);
+            font-weight: 700;
+            background: rgba(201,169,110,0.05);
+        }
 
-        .section { margin-bottom: 20px; }
-        .section-title {
-            font-size: 0.75em;
+        .nav-tabs button:hover {
+            color: #6b5b45;
+            background: rgba(201,169,110,0.03);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* СЕКЦИИ */
+        .panel-section {
+            margin-bottom: 24px;
+            background: #fdfcf9;
+            border: 1px solid #f0ebe0;
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .panel-title {
+            font-size: 0.8em;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #b0b0b0;
-            margin-bottom: 10px;
-            font-weight: 600;
+            letter-spacing: 2px;
+            color: #b0a089;
+            margin-bottom: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
+        .panel-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e8e0d5;
+        }
+
+        /* СЕТКА ТЕМ */
         .theme-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
+            gap: 10px;
         }
-        .theme-card {
-            border: 2px solid #eee;
-            border-radius: 10px;
-            padding: 8px;
+
+        .theme-item {
+            border: 2px solid #e8e0d5;
+            border-radius: 12px;
+            padding: 10px;
             cursor: pointer;
             text-align: center;
-            transition: 0.2s;
+            transition: all 0.3s;
             background: white;
+            position: relative;
+            overflow: hidden;
         }
-        .theme-card:hover { border-color: #d4a574; transform: translateY(-2px); }
-        .theme-card.active {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 2px rgba(212,165,116,0.15);
-            background: #fdfaf7;
+
+        .theme-item:hover {
+            border-color: #c9a96e;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
         }
-        .theme-card .preview {
+
+        .theme-item.active {
+            border-color: #c9a96e;
+            box-shadow: 0 0 0 3px rgba(201,169,110,0.2);
+            background: #fdf8f0;
+        }
+
+        .theme-item .preview-box {
             width: 100%;
-            height: 40px;
-            border-radius: 6px;
+            height: 55px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .theme-item .name {
+            font-size: 0.78em;
+            color: #6b5b45;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* ПОЛЯ ФОРМЫ */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8em;
+            color: #8b7355;
             margin-bottom: 5px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
-        .theme-card .name { font-size: 0.7em; color: #777; font-weight: 500; }
 
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
-        .field { margin-bottom: 8px; }
-        .field label { display: block; font-size: 0.75em; color: #999; margin-bottom: 3px; font-weight: 500; }
-        .field input, .field textarea, .field select {
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
             width: 100%;
-            padding: 8px 10px;
-            border: 1.5px solid #e8e8e8;
-            border-radius: 7px;
-            font-size: 13px;
+            padding: 10px 14px;
+            border: 2px solid #e8e0d5;
+            border-radius: 10px;
+            font-size: 14px;
             font-family: inherit;
-            transition: 0.2s;
-            background: #fafafa;
+            transition: all 0.3s;
+            background: #fdfcf9;
+            color: #3d3027;
         }
-        .field input:focus, .field textarea:focus, .field select:focus {
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
             outline: none;
-            border-color: var(--accent);
+            border-color: #c9a96e;
             background: white;
+            box-shadow: 0 0 0 4px rgba(201,169,110,0.08);
         }
-        .field textarea { resize: vertical; min-height: 45px; }
 
-        .color-row { display: flex; gap: 6px; flex-wrap: wrap; }
-        .color-dot {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
+        .form-group textarea {
+            resize: vertical;
+            min-height: 55px;
+        }
+
+        /* ЦВЕТОВАЯ ПАЛИТРА */
+        .color-palette {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .color-swatch {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
             cursor: pointer;
-            border: 2px solid transparent;
-            transition: 0.2s;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-        .color-dot:hover { transform: scale(1.15); }
-        .color-dot.active { border-color: #333; box-shadow: 0 0 0 3px rgba(0,0,0,0.08); }
 
-        .toggle-row {
+        .color-swatch:hover {
+            transform: scale(1.15);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .color-swatch.active {
+            border-color: #3d3027;
+            box-shadow: 0 0 0 4px rgba(61,48,39,0.15);
+            transform: scale(1.1);
+        }
+
+        /* ПЕРЕКЛЮЧАТЕЛИ */
+        .toggle-option {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 6px 0;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0ebe0;
         }
-        .toggle-row span { font-size: 0.82em; color: #555; }
-        .switch { position: relative; width: 40px; height: 22px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .switch .slider {
+
+        .toggle-option:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-option span {
+            font-size: 0.9em;
+            color: #5a4a35;
+            font-weight: 500;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-switch .slider {
             position: absolute;
             cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: #ddd;
-            transition: 0.3s;
-            border-radius: 22px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #d4c5a9;
+            transition: 0.4s;
+            border-radius: 26px;
         }
-        .switch .slider:before {
+
+        .toggle-switch .slider:before {
             content: "";
             position: absolute;
-            height: 16px; width: 16px;
-            left: 3px; bottom: 3px;
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
             background: white;
-            transition: 0.3s;
+            transition: 0.4s;
             border-radius: 50%;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
         }
-        .switch input:checked + .slider { background: var(--accent); }
-        .switch input:checked + .slider:before { transform: translateX(18px); }
 
-        .upload-box {
-            border: 2px dashed #e0d8cf;
-            border-radius: 10px;
-            padding: 15px;
+        .toggle-switch input:checked + .slider {
+            background: #7b9b6a;
+        }
+
+        .toggle-switch input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        /* ЗАГРУЗКА ФОТО */
+        .upload-zone {
+            border: 2px dashed #d4c5a9;
+            border-radius: 12px;
+            padding: 20px;
             text-align: center;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.3s;
+            background: #fdfcf9;
         }
-        .upload-box:hover { border-color: var(--accent); background: #fdfaf7; }
-        .upload-box .icon { font-size: 1.6em; margin-bottom: 3px; }
-        .upload-box p { font-size: 0.8em; color: #999; }
-        .upload-box small { font-size: 0.7em; color: #bbb; }
 
-        .preview-area {
+        .upload-zone:hover {
+            border-color: #c9a96e;
+            background: #fdf8f0;
+            transform: translateY(-2px);
+        }
+
+        .upload-zone .icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+
+        .upload-zone p {
+            font-size: 0.9em;
+            color: #8b7355;
+            font-weight: 500;
+        }
+
+        .upload-zone small {
+            font-size: 0.75em;
+            color: #b0a089;
+        }
+
+        /* ПРЕДПРОСМОТР */
+        .preview-panel {
             flex: 1;
-            background: #ede9e4;
+            background: linear-gradient(135deg, #ede5d9, #e5d9c5);
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 30px;
             overflow-y: auto;
         }
 
-        .phone-frame {
+        .device-frame {
             background: white;
-            border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            border-radius: 30px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.2), 0 0 0 2px rgba(201,169,110,0.1);
             overflow: hidden;
             width: 100%;
-            max-width: 370px;
-            transition: 0.4s;
+            max-width: 390px;
+            transition: all 0.4s;
         }
-        .phone-frame.tablet { max-width: 500px; }
-        .phone-frame.desktop { max-width: 650px; }
 
-        .inv-card {
-            padding: 35px 22px;
+        .device-frame.tablet {
+            max-width: 550px;
+        }
+
+        .device-frame.desktop {
+            max-width: 700px;
+        }
+
+        /* КАРТОЧКА ПРИГЛАШЕНИЯ */
+        .invitation-card {
+            padding: 45px 30px;
             text-align: center;
-            min-height: 480px;
+            min-height: 550px;
             position: relative;
             background-size: cover;
             background-position: center;
-            transition: 0.3s;
+            transition: all 0.4s;
         }
-        .inv-card .overlay {
+
+        .invitation-card .bg-overlay {
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             z-index: 1;
         }
-        .inv-card .inner { position: relative; z-index: 2; }
-        .inv-card .ornament { font-size: 1.4em; margin-bottom: 5px; letter-spacing: 4px; }
-        .inv-card h2 { font-weight: 300; font-size: 1.6em; margin: 8px 0; }
-        .inv-card .divider { margin: 8px 0; font-size: 0.9em; }
-        .inv-card .couple { font-size: 2.3em; font-weight: 700; margin: 16px 0; line-height: 1.3; }
-        .inv-card .date { font-size: 1.3em; font-weight: 600; margin: 12px 0; }
-        .inv-card .info { margin: 12px 0; line-height: 2.1; }
-        .inv-card .message { margin: 12px 0; padding: 12px 0; font-style: italic; border-top: 1px solid rgba(0,0,0,0.1); border-bottom: 1px solid rgba(0,0,0,0.1); }
-        .inv-card .extra { margin: 8px 0; }
 
-        /* Темы */
-        .t-watercolor { background: linear-gradient(160deg, #fef9f1, #fdf3e4); }
-        .t-botanical { background: linear-gradient(160deg, #f5f9f2, #eef5e8); }
-        .t-romance { background: linear-gradient(160deg, #fef5f7, #fceff2); }
-        .t-classic { background: linear-gradient(160deg, #fdfaf5, #faf6ef); border: 2px solid #e5d9c5; }
-        .t-modern { background: linear-gradient(160deg, #f8f8f8, #f3f3f3); }
-        .t-boho { background: linear-gradient(160deg, #fdf8f0, #faf3e8); border: 2px dashed #d4c5a9; }
-        .t-navy { background: linear-gradient(160deg, #1a1a2e, #16213e); color: #eee; }
-        .t-navy .message { border-color: rgba(255,255,255,0.2); }
-        .t-gold { background: linear-gradient(160deg, #fdf8f0, #faf1e4); border: 2px solid #d4b896; }
-        .t-lavender { background: linear-gradient(160deg, #f8f5fc, #f3effa); }
-        .t-rose { background: linear-gradient(160deg, #fff5f7, #fef0f3); }
-
-        /* Гостевая страница */
-        .guest-page {
-            display: none;
-            min-height: 100vh;
-            background: #f5f0eb;
-            padding: 20px;
-        }
-        .guest-page.active { display: flex; justify-content: center; align-items: center; }
-        .g-card {
-            max-width: 430px;
-            width: 100%;
-            border-radius: 22px;
-            text-align: center;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.25);
-            overflow: hidden;
+        .invitation-card .card-content {
             position: relative;
-            animation: fadeUp 0.7s ease-out;
-        }
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(40px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .g-card .g-bg {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-size: cover;
-            background-position: center;
-            z-index: 1;
-        }
-        .g-card .g-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
             z-index: 2;
         }
-        .g-card .g-inner { position: relative; z-index: 3; padding: 38px 24px; }
-        .g-card .g-couple { font-size: 2.3em; font-weight: 700; margin: 16px 0; line-height: 1.2; }
-        .g-card .g-date { font-size: 1.2em; font-weight: 600; margin: 12px 0; }
-        .g-card .g-info { margin: 12px 0; line-height: 2.1; }
-        .g-card .g-message { margin: 12px 0; padding: 12px 0; font-style: italic; border-top: 1px solid rgba(0,0,0,0.12); border-bottom: 1px solid rgba(0,0,0,0.12); }
-        .g-card .g-countdown { margin: 10px 0; padding: 8px; background: rgba(255,255,255,0.2); border-radius: 8px; font-weight: 500; }
 
-        /* Модалка */
+        .invitation-card .top-ornament {
+            font-size: 1.6em;
+            margin-bottom: 8px;
+            letter-spacing: 6px;
+            opacity: 0.8;
+        }
+
+        .invitation-card h2 {
+            font-weight: 300;
+            font-size: 1.8em;
+            margin: 12px 0;
+            letter-spacing: 2px;
+        }
+
+        .invitation-card .divider-line {
+            margin: 12px 0;
+            font-size: 1em;
+            letter-spacing: 4px;
+        }
+
+        .invitation-card .couple-names {
+            font-size: 2.8em;
+            font-weight: 700;
+            margin: 22px 0;
+            line-height: 1.3;
+            letter-spacing: 1px;
+        }
+
+        .invitation-card .event-date {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin: 18px 0;
+        }
+
+        .invitation-card .event-details {
+            margin: 18px 0;
+            line-height: 2.3;
+            font-size: 1.05em;
+        }
+
+        .invitation-card .personal-message {
+            margin: 18px 0;
+            padding: 18px 0;
+            font-style: italic;
+            font-size: 1.1em;
+            border-top: 1.5px solid rgba(0,0,0,0.12);
+            border-bottom: 1.5px solid rgba(0,0,0,0.12);
+        }
+
+        .invitation-card .extra-elements {
+            margin: 12px 0;
+        }
+
+        .invitation-card .bottom-ornament {
+            font-size: 1.6em;
+            margin-top: 8px;
+            letter-spacing: 6px;
+            opacity: 0.8;
+        }
+
+        /* ТЕМЫ */
+        .theme-watercolor { background: linear-gradient(160deg, #fef9f1, #fdf3e4, #fef7f2); }
+        .theme-botanical { background: linear-gradient(160deg, #f5f9f2, #eef5e8, #f2f7ef); }
+        .theme-romance { background: linear-gradient(160deg, #fef5f7, #fceff2, #fdf4f6); }
+        .theme-classic { background: linear-gradient(160deg, #fdfaf5, #faf6ef, #fcf8f2); border: 3px solid #e5d9c5; }
+        .theme-modern { background: linear-gradient(160deg, #f8f8f8, #f3f3f3, #fafafa); }
+        .theme-boho { background: linear-gradient(160deg, #fdf8f0, #faf3e8, #fcf6ee); border: 2px dashed #d4c5a9; }
+        .theme-navy { background: linear-gradient(160deg, #1a1a2e, #16213e, #1e2640); color: #f0e6d8; }
+        .theme-navy .personal-message { border-color: rgba(240,230,216,0.3); }
+        .theme-gold { background: linear-gradient(160deg, #fdf8f0, #faf1e4, #fcf5ea); border: 3px solid #d4b896; }
+        .theme-lavender { background: linear-gradient(160deg, #f8f5fc, #f3effa, #f6f2f9); }
+        .theme-peach { background: linear-gradient(160deg, #fff7f2, #fef0e8, #fef3ed); }
+
+        /* ГОСТЕВАЯ СТРАНИЦА */
+        .guest-view {
+            display: none;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #d4c5a9, #c9a96e);
+            padding: 20px;
+        }
+
+        .guest-view.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .guest-card {
+            max-width: 460px;
+            width: 100%;
+            border-radius: 28px;
+            text-align: center;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3), 0 0 0 2px rgba(255,255,255,0.1);
+            overflow: hidden;
+            position: relative;
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.93);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .guest-card .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+        }
+
+        .guest-card .bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2;
+        }
+
+        .guest-card .content {
+            position: relative;
+            z-index: 3;
+            padding: 50px 30px;
+        }
+
+        .guest-card .names {
+            font-size: 2.8em;
+            font-weight: 700;
+            margin: 20px 0;
+            line-height: 1.2;
+        }
+
+        .guest-card .date {
+            font-size: 1.4em;
+            font-weight: 600;
+            margin: 16px 0;
+        }
+
+        .guest-card .info {
+            margin: 16px 0;
+            line-height: 2.3;
+        }
+
+        .guest-card .message {
+            margin: 16px 0;
+            padding: 16px 0;
+            font-style: italic;
+            border-top: 1.5px solid rgba(0,0,0,0.12);
+            border-bottom: 1.5px solid rgba(0,0,0,0.12);
+        }
+
+        .guest-card .countdown {
+            margin: 14px 0;
+            padding: 12px;
+            background: rgba(255,255,255,0.25);
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        /* МОДАЛЬНОЕ ОКНО */
         .modal {
             display: none;
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
             z-index: 9999;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(3px);
+            backdrop-filter: blur(6px);
         }
-        .modal.show { display: flex; }
+
+        .modal.show {
+            display: flex;
+        }
+
         .modal-dialog {
             background: white;
-            border-radius: 16px;
-            padding: 25px;
-            max-width: 450px;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 480px;
             width: 92%;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+            animation: fadeIn 0.4s ease-out;
         }
-        .link-box {
-            background: #f5f5f5;
-            padding: 10px;
-            border-radius: 8px;
-            margin: 12px 0;
+
+        .url-display {
+            background: #f5f3ee;
+            padding: 14px;
+            border-radius: 10px;
+            margin: 16px 0;
             word-break: break-all;
-            font-size: 0.75em;
-            font-family: monospace;
+            font-size: 0.8em;
+            font-family: 'Courier New', monospace;
             text-align: left;
-            max-height: 70px;
+            border: 1px solid #e0d8c8;
+            max-height: 80px;
             overflow-y: auto;
         }
 
-        @media (max-width: 900px) {
-            .layout { flex-direction: column; }
-            .sidebar { width: 100%; max-height: 40vh; border-right: none; border-bottom: 1px solid #eee; }
-            .preview-area { min-height: 60vh; }
+        .qr-code {
+            width: 120px;
+            height: 120px;
+            margin: 15px auto;
+            background: #f5f3ee;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            border: 2px solid #e0d8c8;
+        }
+
+        /* АДАПТИВНОСТЬ */
+        @media (max-width: 1000px) {
+            .layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                max-height: 40vh;
+                border-right: none;
+                border-bottom: 1px solid #e8e0d5;
+            }
+            .preview-panel {
+                min-height: 60vh;
+            }
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .preview-panel, .preview-panel * {
+                visibility: visible;
+            }
+            .preview-panel {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background: white;
+                padding: 0;
+            }
+            .device-frame {
+                box-shadow: none;
+                max-width: 100%;
+                border-radius: 0;
+            }
+            .sidebar, .topbar {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
     <div class="topbar" id="topbar">
-        <div class="logo">💍 Wedding<span>Pro</span></div>
-        <div>
-            <button class="btn btn-gold" onclick="createLink()">🔗 Создать ссылку</button>
-            <button class="btn btn-white" onclick="previewGuest()">👁 Гость</button>
-            <button class="btn btn-white" onclick="window.print()">🖨️</button>
+        <div class="brand">Atelier <span>Mariage</span></div>
+        <div class="device-switcher">
+            <button class="active" onclick="setDevice('mobile')">📱 Телефон</button>
+            <button onclick="setDevice('tablet')">📋 Планшет</button>
+            <button onclick="setDevice('desktop')">🖥️ Экран</button>
+        </div>
+        <div style="display:flex; gap:8px;">
+            <button class="btn btn-outline" onclick="previewGuest()">👁 Гость</button>
+            <button class="btn btn-primary" onclick="generateLink()">🔗 Создать ссылку</button>
         </div>
     </div>
 
+    <!-- ОСНОВНОЙ МАКЕТ -->
     <div class="layout" id="appLayout">
+        <!-- САЙДБАР -->
         <div class="sidebar">
-            <div class="tabs">
-                <button class="active" onclick="switchTab('design')">🎨 Дизайн</button>
-                <button onclick="switchTab('text')">📝 Текст</button>
-                <button onclick="switchTab('extra')">✨ Детали</button>
+            <div class="nav-tabs">
+                <button class="active" onclick="switchTab('theme')">🎨 Дизайн</button>
+                <button onclick="switchTab('content')">📝 Текст</button>
+                <button onclick="switchTab('details')">✨ Детали</button>
             </div>
 
-            <div class="tab-panel active" id="tab-design">
-                <div class="section">
-                    <div class="section-title">Стиль</div>
-                    <div class="theme-grid">
-                        <div class="theme-card active" onclick="setTheme('watercolor', this)"><div class="preview t-watercolor"></div><div class="name">Акварель</div></div>
-                        <div class="theme-card" onclick="setTheme('botanical', this)"><div class="preview t-botanical"></div><div class="name">Ботаника</div></div>
-                        <div class="theme-card" onclick="setTheme('romance', this)"><div class="preview t-romance"></div><div class="name">Романтика</div></div>
-                        <div class="theme-card" onclick="setTheme('classic', this)"><div class="preview t-classic"></div><div class="name">Классика</div></div>
-                        <div class="theme-card" onclick="setTheme('modern', this)"><div class="preview t-modern"></div><div class="name">Модерн</div></div>
-                        <div class="theme-card" onclick="setTheme('boho', this)"><div class="preview t-boho"></div><div class="name">Бохо</div></div>
-                        <div class="theme-card" onclick="setTheme('navy', this)"><div class="preview t-navy"></div><div class="name">Ночной</div></div>
-                        <div class="theme-card" onclick="setTheme('gold', this)"><div class="preview t-gold"></div><div class="name">Золото</div></div>
-                        <div class="theme-card" onclick="setTheme('lavender', this)"><div class="preview t-lavender"></div><div class="name">Лаванда</div></div>
+            <!-- ДИЗАЙН -->
+            <div class="tab-content active" id="tab-theme">
+                <div class="panel-section">
+                    <div class="panel-title">Стиль приглашения</div>
+                    <div class="theme-grid" id="themeGrid">
+                        <div class="theme-item active" onclick="setTheme('watercolor', this)">
+                            <div class="preview-box theme-watercolor"></div>
+                            <div class="name">Акварель</div>
+                        </div>
+                        <div class="theme-item" onclick="setTheme('botanical', this)">
+                            <div class="preview-box theme-botanical"></div>
+                            <div class="name">Ботаника</div>
+                        </div>
+                        <div class="theme-item" onclick="setTheme('romance', this)">
+                            <div class="preview-box theme-romance"></div>
+                            <div class="name">Романс</div>
+                        </div>
+                        <div class="theme-item" onclick="setTheme('classic', this)">
+                            <div class="preview-box theme-classic"></div>
+                            <div class="name">Классика</div>
+                        </div>
+                        <div class="theme-item" onclick="setTheme('modern', this)">
+                            <div class="preview-box theme-modern"></div>
+                            <div class="name">Модерн</div>
+                        </div>
+                        <div class="theme-item" onclick="setTheme('boho', this)">
+                            <div class="preview-box theme-boho"></div>
+                            <div class="name">Бохо</div>
+                        </div>
+                        <div class="theme-item" onclick="setTheme('navy', this)">
+                            <div class="preview-box theme-navy"></div>
+                            <div class="name">Ночной</div>
+                        </div>
+                        <div class="theme-item" onclick="setTheme('gold', this)">
+                            <div class="preview-box theme-gold"></div>
+                            <div class="name">Золото</div>
+                        </div>
+                        <div class="theme-item" onclick="setTheme('lavender', this)">
+                            <div class="preview-box theme-lavender"></div>
+                            <div class="name">Лаванда</div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="section">
-                    <div class="section-title">Фоновое фото</div>
-                    <div class="upload-box" onclick="document.getElementById('bgFile').click()">
-                        <div class="icon">📷</div>
-                        <p>Загрузить фото</p>
-                        <small>JPG, PNG (сжимается автоматически)</small>
+                <div class="panel-section">
+                    <div class="panel-title">Фоновое изображение</div>
+                    <div class="upload-zone" onclick="document.getElementById('photoInput').click()">
+                        <div class="icon">📸</div>
+                        <p>Загрузить фотографию</p>
+                        <small>JPG, PNG • Автоматическая оптимизация</small>
                     </div>
-                    <input type="file" id="bgFile" accept="image/*" style="display:none" onchange="uploadPhoto(event)">
-                    <button class="btn btn-white" style="width:100%; margin-top:5px; padding:6px; font-size:11px;" onclick="removePhoto()">✕ Убрать фото</button>
+                    <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="handlePhotoUpload(event)">
+                    <button class="btn btn-outline" style="width:100%; margin-top:8px; padding:8px;" onclick="removePhoto()">✕ Удалить фото</button>
                 </div>
 
-                <div class="section">
-                    <div class="section-title">Цвет акцента</div>
-                    <div class="color-row">
-                        <div class="color-dot active" style="background:#d4a574" onclick="setAccent('#d4a574', this)"></div>
-                        <div class="color-dot" style="background:#e91e63" onclick="setAccent('#e91e63', this)"></div>
-                        <div class="color-dot" style="background:#9c27b0" onclick="setAccent('#9c27b0', this)"></div>
-                        <div class="color-dot" style="background:#2196f3" onclick="setAccent('#2196f3', this)"></div>
-                        <div class="color-dot" style="background:#4caf50" onclick="setAccent('#4caf50', this)"></div>
-                        <div class="color-dot" style="background:#ff9800" onclick="setAccent('#ff9800', this)"></div>
+                <div class="panel-section">
+                    <div class="panel-title">Цветовая гамма</div>
+                    <div class="color-palette">
+                        <div class="color-swatch active" style="background:#c9a96e" onclick="setColor('#c9a96e', this)"></div>
+                        <div class="color-swatch" style="background:#d4837a" onclick="setColor('#d4837a', this)"></div>
+                        <div class="color-swatch" style="background:#b08bbf" onclick="setColor('#b08bbf', this)"></div>
+                        <div class="color-swatch" style="background:#7b9b6a" onclick="setColor('#7b9b6a', this)"></div>
+                        <div class="color-swatch" style="background:#8ba4c9" onclick="setColor('#8ba4c9', this)"></div>
+                        <div class="color-swatch" style="background:#d4956a" onclick="setColor('#d4956a', this)"></div>
+                        <div class="color-swatch" style="background:#9b8b7a" onclick="setColor('#9b8b7a', this)"></div>
+                        <div class="color-swatch" style="background:#3d3d3d" onclick="setColor('#3d3d3d', this)"></div>
                     </div>
                 </div>
             </div>
 
-            <div class="tab-panel" id="tab-text">
-                <div class="section">
-                    <div class="section-title">Молодожёны</div>
+            <!-- ТЕКСТ -->
+            <div class="tab-content" id="tab-content">
+                <div class="panel-section">
+                    <div class="panel-title">Молодожёны</div>
                     <div class="form-row">
-                        <div class="field"><label>Жених</label><input type="text" id="groomName" placeholder="Александр" oninput="updateAll()"></div>
-                        <div class="field"><label>Невеста</label><input type="text" id="brideName" placeholder="Екатерина" oninput="updateAll()"></div>
+                        <div class="form-group">
+                            <label>Имя жениха</label>
+                            <input type="text" id="groomInput" placeholder="Александр" oninput="updatePreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>Имя невесты</label>
+                            <input type="text" id="brideInput" placeholder="Екатерина" oninput="updatePreview()">
+                        </div>
                     </div>
                 </div>
-                <div class="section">
-                    <div class="section-title">Событие</div>
+
+                <div class="panel-section">
+                    <div class="panel-title">Дата и место</div>
                     <div class="form-row">
-                        <div class="field"><label>Дата</label><input type="date" id="weddingDate" oninput="updateAll()"></div>
-                        <div class="field"><label>Время</label><input type="time" id="weddingTime" value="15:00" oninput="updateAll()"></div>
+                        <div class="form-group">
+                            <label>Дата свадьбы</label>
+                            <input type="date" id="dateInput" oninput="updatePreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>Время</label>
+                            <input type="time" id="timeInput" value="15:00" oninput="updatePreview()">
+                        </div>
                     </div>
-                    <div class="field"><label>Место</label><input type="text" id="venue" placeholder="Ресторан" oninput="updateAll()"></div>
-                    <div class="field"><label>Адрес</label><input type="text" id="address" placeholder="ул. Цветочная, 15" oninput="updateAll()"></div>
+                    <div class="form-group">
+                        <label>Место проведения</label>
+                        <input type="text" id="venueInput" placeholder="Ресторанъ 'Райскій садъ'" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Адрес</label>
+                        <input type="text" id="addressInput" placeholder="ул. Цвѣточная, 15" oninput="updatePreview()">
+                    </div>
                 </div>
-                <div class="section">
-                    <div class="section-title">Текст</div>
-                    <div class="field"><label>Заголовок</label><input type="text" id="titleText" placeholder="Приглашение на свадьбу" oninput="updateAll()"></div>
-                    <div class="field"><label>Обращение</label><input type="text" id="guestName" placeholder="Дорогой друг!" oninput="updateAll()"></div>
-                    <div class="field"><label>Сообщение</label><textarea id="messageText" oninput="updateAll()">Будем рады видеть вас!</textarea></div>
-                    <div class="field"><label>Телефон</label><input type="text" id="contactPhone" placeholder="+7 (XXX) XXX-XX-XX" oninput="updateAll()"></div>
+
+                <div class="panel-section">
+                    <div class="panel-title">Текст приглашения</div>
+                    <div class="form-group">
+                        <label>Заголовок</label>
+                        <input type="text" id="titleInput" placeholder="Приглашенiе на свадьбу" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Дорогой гость</label>
+                        <input type="text" id="guestInput" placeholder="Дорогой другъ!" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Личное сообщение</label>
+                        <textarea id="messageInput" oninput="updatePreview()">Будемъ рады видѣть Васъ на нашемъ праздникѣ!</textarea>
+                    </div>
                 </div>
             </div>
 
-            <div class="tab-panel" id="tab-extra">
-                <div class="section">
-                    <div class="section-title">Декор</div>
-                    <div class="field"><label>Верхний/нижний декор</label>
-                        <select id="topDecor" onchange="updateAll()">
+            <!-- ДЕТАЛИ -->
+            <div class="tab-content" id="tab-details">
+                <div class="panel-section">
+                    <div class="panel-title">Декоративные элементы</div>
+                    <div class="form-group">
+                        <label>Верхний и нижний декор</label>
+                        <select id="decorSelect" onchange="updatePreview()">
                             <option value="🌸">🌸 Цветы</option>
                             <option value="💕">💕 Сердца</option>
                             <option value="✨">✨ Звёзды</option>
-                            <option value="🌿">🌿 Листья</option>
-                            <option value="none">Без декора</option>
+                            <option value="🌿">🌿 Вѣтви</option>
+                            <option value="🕊️">🕊️ Голуби</option>
+                            <option value="none">Безъ декора</option>
                         </select>
                     </div>
-                    <div class="field"><label>Разделитель</label>
-                        <select id="separator" onchange="updateAll()">
+                    <div class="form-group">
+                        <label>Разделитель</label>
+                        <select id="dividerSelect" onchange="updatePreview()">
                             <option value="❤">❤ Сердце</option>
-                            <option value="💎">💎 Бриллиант</option>
-                            <option value="∞">∞ Бесконечность</option>
-                            <option value="none">Без разделителя</option>
+                            <option value="💎">💎 Бриллiантъ</option>
+                            <option value="∞">∞ Безконечность</option>
+                            <option value="—">— Линiя</option>
+                            <option value="none">Безъ разделителя</option>
                         </select>
                     </div>
                 </div>
-                <div class="section">
-                    <div class="section-title">Элементы</div>
-                    <div class="toggle-row"><span>💍 Кольца</span><label class="switch"><input type="checkbox" id="showRings" onchange="updateAll()"><span class="slider"></span></label></div>
-                    <div class="toggle-row"><span>💬 Цитата</span><label class="switch"><input type="checkbox" id="showQuote" onchange="updateAll()"><span class="slider"></span></label></div>
-                    <div class="field" id="quoteField" style="display:none;"><input type="text" id="loveQuote" placeholder="Любовь — это..." oninput="updateAll()"></div>
-                    <div class="toggle-row"><span>⏳ Обратный отсчёт</span><label class="switch"><input type="checkbox" id="showCountdown" checked onchange="updateAll()"><span class="slider"></span></label></div>
-                    <div class="toggle-row"><span>📍 Кнопка карты</span><label class="switch"><input type="checkbox" id="showMap" onchange="updateAll()"><span class="slider"></span></label></div>
+
+                <div class="panel-section">
+                    <div class="panel-title">Дополнительные элементы</div>
+                    <div class="toggle-option">
+                        <span>💍 Обручальныя кольца</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="ringsToggle" onchange="updatePreview()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-option">
+                        <span>💬 Цитата о любви</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="quoteToggle" onchange="updatePreview()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="form-group" id="quoteGroup" style="display:none;">
+                        <input type="text" id="quoteInput" placeholder="Любовь — это..." oninput="updatePreview()">
+                    </div>
+                    <div class="toggle-option">
+                        <span>⏳ Обратный отсчётъ</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="countdownToggle" checked onchange="updatePreview()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-option">
+                        <span>📍 Кнопка карты</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="mapToggle" onchange="updatePreview()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
                 </div>
-                <button class="btn btn-gold" style="width:100%; margin-top:10px;" onclick="createLink()">🔗 Создать ссылку</button>
-                <button class="btn btn-white" style="width:100%; margin-top:5px;" onclick="resetAll()">🔄 Сброс</button>
+
+                <button class="btn btn-primary" style="width:100%; margin-top:16px;" onclick="generateLink()">
+                    🔗 Создать ссылку для гостей
+                </button>
+                <button class="btn btn-outline" style="width:100%; margin-top:8px;" onclick="resetAll()">
+                    🔄 Сбросить всё
+                </button>
             </div>
         </div>
 
-        <div class="preview-area">
-            <div class="phone-frame" id="deviceFrame">
-                <div class="inv-card t-watercolor" id="previewCard">
-                    <div class="overlay"></div>
-                    <div class="inner">
-                        <div class="ornament" id="topOrn">🌸 🌸 🌸</div>
-                        <h2 id="cardTitle">Приглашение на свадьбу</h2>
-                        <div class="divider" id="cardDiv">━━━ ❤ ━━━</div>
-                        <p style="margin:3px 0;">С радостью приглашаем</p>
-                        <p id="cardGuest" style="font-weight:500;">Дорогой друг!</p>
-                        <div class="couple" id="cardCouple"><span id="cardGroom">Александр</span><br>&<br><span id="cardBride">Екатерина</span></div>
-                        <p>на торжество в честь бракосочетания!</p>
-                        <div class="date" id="cardDate">15 июня 2024 года</div>
-                        <div class="info">
-                            <div>🕐 <span id="cardTime">15:00</span></div>
-                            <div>📍 <span id="cardVenue">Ресторан</span></div>
-                            <div>🏠 <span id="cardAddress">ул. Цветочная, 15</span></div>
+        <!-- ПРЕДПРОСМОТР -->
+        <div class="preview-panel">
+            <div class="device-frame" id="deviceFrame">
+                <div class="invitation-card theme-watercolor" id="invitationPreview">
+                    <div class="bg-overlay"></div>
+                    <div class="card-content">
+                        <div class="top-ornament" id="topDecor">🌸 🌸 🌸</div>
+                        <h2 id="titleDisplay">Приглашенiе на свадьбу</h2>
+                        <div class="divider-line" id="dividerDisplay">━━━ ❤ ━━━</div>
+                        <p style="margin:6px 0;">Съ радостью приглашаемъ</p>
+                        <p id="guestDisplay" style="font-weight:500;">Дорогой другъ!</p>
+                        <div class="couple-names" id="namesDisplay">
+                            <span id="groomDisplay">Александръ</span><br>&<br><span id="brideDisplay">Екатерина</span>
                         </div>
-                        <div class="message" id="cardMessage">Будем рады видеть вас!</div>
-                        <div class="extra">
-                            <div id="ringsEl" style="display:none; font-size:1.8em;">💍 💍</div>
-                            <div id="quoteEl" style="display:none; font-style:italic;"></div>
-                            <div id="countdownEl" style="font-weight:500; margin:5px 0;"></div>
-                            <div id="mapEl" style="display:none;"><button style="padding:5px 12px; background:#4CAF50; color:white; border:none; border-radius:5px;">📍 Карта</button></div>
+                        <p>на торжество въ честь бракосочетанiя!</p>
+                        <div class="event-date" id="dateDisplay">15 iюня 2024 года</div>
+                        <div class="event-details">
+                            <div>🕐 <span id="timeDisplay">15:00</span></div>
+                            <div>📍 <span id="venueDisplay">Ресторанъ 'Райскій садъ'</span></div>
+                            <div>🏠 <span id="addressDisplay">ул. Цвѣточная, 15</span></div>
                         </div>
-                        <div class="ornament" id="bottomOrn">🌸 🌸 🌸</div>
-                        <p id="cardContact" style="margin-top:8px; font-size:0.78em; opacity:0.7;">Пожалуйста, подтвердите присутствие</p>
+                        <div class="personal-message" id="messageDisplay">Будемъ рады видѣть Васъ!</div>
+                        <div class="extra-elements">
+                            <div id="ringsDisplay" style="display:none; font-size:1.8em;">💍 💍</div>
+                            <div id="quoteDisplay" style="display:none; font-style:italic;"></div>
+                            <div id="countdownDisplay" style="font-weight:500; margin:6px 0;"></div>
+                            <div id="mapDisplay" style="display:none;">
+                                <button style="padding:6px 14px; background:#7b9b6a; color:white; border:none; border-radius:6px; cursor:pointer; font-family:inherit;">📍 Открыть карту</button>
+                            </div>
+                        </div>
+                        <div class="bottom-ornament" id="bottomDecor">🌸 🌸 🌸</div>
+                        <p style="margin-top:12px; font-size:0.85em; opacity:0.7;">Просимъ подтвердить Ваше присутствiе</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="guest-page" id="guestPage">
-        <div class="g-card" id="guestCard"></div>
+    <!-- ГОСТЕВАЯ СТРАНИЦА -->
+    <div class="guest-view" id="guestView">
+        <div class="guest-card" id="guestCard"></div>
     </div>
 
+    <!-- МОДАЛЬНОЕ ОКНО -->
     <div class="modal" id="linkModal">
         <div class="modal-dialog">
-            <h2>✅ Приглашение создано!</h2>
-            <p style="color:#888; margin:5px 0;">Ссылка готова:</p>
-            <div class="link-box" id="linkBox"></div>
-            <button class="btn btn-gold" style="width:100%;" onclick="copyLink()">📋 Копировать</button>
-            <button class="btn btn-white" style="width:100%; margin-top:5px;" onclick="closeModal()">Закрыть</button>
-            <span style="display:none; color:#4CAF50; margin-top:6px; font-weight:600;" id="copiedMsg">✅ Скопировано!</span>
+            <h2>✨ Приглашенiе готово!</h2>
+            <p style="color:#8b7355; margin:8px 0;">Отправьте ссылку Вашимъ гостямъ:</p>
+            <div class="url-display" id="urlDisplay"></div>
+            <div class="qr-code">📱</div>
+            <button class="btn btn-primary" style="width:100%;" onclick="copyLink()">📋 Копировать ссылку</button>
+            <button class="btn btn-outline" style="width:100%; margin-top:8px;" onclick="closeModal()">Закрыть</button>
+            <span style="display:none; color:#7b9b6a; margin-top:8px; font-weight:600;" id="copyConfirm">✅ Ссылка скопирована!</span>
+            <p style="font-size:0.75em; color:#b0a089; margin-top:12px;">Работаетъ на всѣхъ устройствахъ</p>
         </div>
     </div>
 
     <script>
-        let currentTheme = 'watercolor';
-        let accentColor = '#d4a574';
-        let customPhoto = null;
-        let shareUrl = '';
+        // СОСТОЯНИЕ
+        let state = {
+            theme: 'watercolor',
+            accent: '#c9a96e',
+            photo: null
+        };
 
-        function switchTab(name) {
-            document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+        let currentShareUrl = '';
+
+        // ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК
+        function switchTab(tab) {
+            document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
-            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-            document.getElementById('tab-' + name).classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
         }
 
-        function setTheme(theme, el) {
-            currentTheme = theme;
-            document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
-            el.classList.add('active');
-            document.getElementById('previewCard').className = 'inv-card t-' + theme;
-            if (customPhoto) document.getElementById('previewCard').style.backgroundImage = `url(${customPhoto})`;
-            updateAll();
+        // УСТРОЙСТВО
+        function setDevice(device) {
+            document.querySelectorAll('.device-switcher button').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            const frame = document.getElementById('deviceFrame');
+            frame.className = 'device-frame';
+            if (device === 'tablet') frame.classList.add('tablet');
+            if (device === 'desktop') frame.classList.add('desktop');
         }
 
-        function setAccent(color, el) {
-            accentColor = color;
-            document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
-            el.classList.add('active');
-            document.getElementById('cardCouple').style.color = color;
+        // ТЕМА
+        function setTheme(theme, element) {
+            state.theme = theme;
+            document.querySelectorAll('.theme-item').forEach(i => i.classList.remove('active'));
+            element.classList.add('active');
+            const card = document.getElementById('invitationPreview');
+            card.className = 'invitation-card theme-' + theme;
+            if (state.photo) card.style.backgroundImage = `url(${state.photo})`;
+            updatePreview();
         }
 
-        function uploadPhoto(e) {
-            const file = e.target.files[0];
+        // ЦВЕТ
+        function setColor(color, element) {
+            state.accent = color;
+            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+            element.classList.add('active');
+            document.getElementById('namesDisplay').style.color = color;
+        }
+
+        // ФОТО
+        function handlePhotoUpload(event) {
+            const file = event.target.files[0];
             if (!file) return;
-            if (file.size > 10 * 1024 * 1024) { alert('Файл больше 10MB'); return; }
+            if (file.size > 10 * 1024 * 1024) { alert('Файлъ слишкомъ большой (макс. 10MB)'); return; }
 
             const reader = new FileReader();
-            reader.onload = function(ev) {
+            reader.onload = function(e) {
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    // Сжимаем до 300px максимум
                     let w = img.width, h = img.height;
-                    const max = 300;
+                    const max = 500;
                     if (w > max || h > max) {
                         if (w > h) { h = (max / w) * h; w = max; }
                         else { w = (max / h) * w; h = max; }
@@ -559,159 +1098,141 @@
                     canvas.width = w;
                     canvas.height = h;
                     canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                    // Качество 35% - размер будет ~15-30KB
-                    customPhoto = canvas.toDataURL('image/jpeg', 0.35);
+                    state.photo = canvas.toDataURL('image/jpeg', 0.5);
                     
-                    document.getElementById('previewCard').style.backgroundImage = `url(${customPhoto})`;
-                    console.log('Фото сжато: ' + Math.round(customPhoto.length / 1024) + 'KB');
+                    document.getElementById('invitationPreview').style.backgroundImage = `url(${state.photo})`;
+                    console.log('Фото сжато: ' + Math.round(state.photo.length / 1024) + 'KB');
                 };
-                img.src = ev.target.result;
+                img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
 
         function removePhoto() {
-            customPhoto = null;
-            document.getElementById('previewCard').style.backgroundImage = '';
-            document.getElementById('bgFile').value = '';
+            state.photo = null;
+            document.getElementById('invitationPreview').style.backgroundImage = '';
+            document.getElementById('photoInput').value = '';
         }
 
-        function getData() {
-            return {
-                t: currentTheme,
-                a: accentColor,
-                p: customPhoto,
-                g: document.getElementById('groomName')?.value?.trim() || '',
-                b: document.getElementById('brideName')?.value?.trim() || '',
-                d: document.getElementById('weddingDate')?.value || '',
-                tm: document.getElementById('weddingTime')?.value || '',
-                v: document.getElementById('venue')?.value?.trim() || '',
-                ad: document.getElementById('address')?.value?.trim() || '',
-                ti: document.getElementById('titleText')?.value?.trim() || '',
-                gn: document.getElementById('guestName')?.value?.trim() || '',
-                m: document.getElementById('messageText')?.value?.trim() || '',
-                ph: document.getElementById('contactPhone')?.value?.trim() || '',
-                td: document.getElementById('topDecor')?.value || '',
-                sp: document.getElementById('separator')?.value || '',
-                sr: document.getElementById('showRings')?.checked || false,
-                sq: document.getElementById('showQuote')?.checked || false,
-                lq: document.getElementById('loveQuote')?.value?.trim() || '',
-                sc: document.getElementById('showCountdown')?.checked !== false,
-                sm: document.getElementById('showMap')?.checked || false
-            };
-        }
+        // ОБНОВЛЕНИЕ ПРЕДПРОСМОТРА
+        function updatePreview() {
+            const groom = document.getElementById('groomInput')?.value?.trim() || 'Александръ';
+            const bride = document.getElementById('brideInput')?.value?.trim() || 'Екатерина';
+            const dateVal = document.getElementById('dateInput')?.value || '';
+            const timeVal = document.getElementById('timeInput')?.value || '15:00';
+            const venueVal = document.getElementById('venueInput')?.value?.trim() || "Ресторанъ 'Райскій садъ'";
+            const addressVal = document.getElementById('addressInput')?.value?.trim() || 'ул. Цвѣточная, 15';
+            const titleVal = document.getElementById('titleInput')?.value?.trim() || 'Приглашенiе на свадьбу';
+            const guestVal = document.getElementById('guestInput')?.value?.trim() || 'Дорогой другъ!';
+            const messageVal = document.getElementById('messageInput')?.value?.trim() || 'Будемъ рады видѣть Васъ!';
+            const decorVal = document.getElementById('decorSelect')?.value || '🌸';
+            const dividerVal = document.getElementById('dividerSelect')?.value || '❤';
+            const showRings = document.getElementById('ringsToggle')?.checked || false;
+            const showQuote = document.getElementById('quoteToggle')?.checked || false;
+            const quoteVal = document.getElementById('quoteInput')?.value?.trim() || '';
+            const showCountdown = document.getElementById('countdownToggle')?.checked !== false;
+            const showMap = document.getElementById('mapToggle')?.checked || false;
 
-        function updateAll() {
-            const d = getData();
-            document.getElementById('cardGroom').textContent = d.g || 'Александр';
-            document.getElementById('cardBride').textContent = d.b || 'Екатерина';
-            document.getElementById('cardGuest').textContent = d.gn || 'Дорогой друг!';
-            document.getElementById('cardTitle').textContent = d.ti || 'Приглашение на свадьбу';
-            document.getElementById('cardMessage').textContent = d.m || 'Будем рады видеть вас!';
-            document.getElementById('cardVenue').textContent = d.v || 'Ресторан';
-            document.getElementById('cardAddress').textContent = d.ad || 'ул. Цветочная, 15';
-            document.getElementById('cardTime').textContent = d.tm || '15:00';
-            document.getElementById('cardCouple').style.color = d.a;
-            document.getElementById('cardContact').innerHTML = d.ph ? `Подтвердите:<br>${d.ph}` : 'Пожалуйста, подтвердите присутствие';
+            document.getElementById('groomDisplay').textContent = groom;
+            document.getElementById('brideDisplay').textContent = bride;
+            document.getElementById('guestDisplay').textContent = guestVal;
+            document.getElementById('titleDisplay').textContent = titleVal;
+            document.getElementById('messageDisplay').textContent = messageVal;
+            document.getElementById('venueDisplay').textContent = venueVal;
+            document.getElementById('addressDisplay').textContent = addressVal;
+            document.getElementById('timeDisplay').textContent = timeVal;
+            document.getElementById('namesDisplay').style.color = state.accent;
 
-            if (d.d) {
-                const dt = new Date(d.d);
-                document.getElementById('cardDate').textContent = dt.toLocaleDateString('ru-RU', {day:'numeric', month:'long', year:'numeric'});
+            if (dateVal) {
+                const d = new Date(dateVal);
+                document.getElementById('dateDisplay').textContent = d.toLocaleDateString('ru-RU', {day:'numeric', month:'long', year:'numeric'});
             }
 
-            const td = d.td === 'none' ? '' : `${d.td} ${d.td} ${d.td}`;
-            document.getElementById('topOrn').textContent = td;
-            document.getElementById('bottomOrn').textContent = td;
-            document.getElementById('topOrn').style.display = td ? 'block' : 'none';
-            document.getElementById('bottomOrn').style.display = td ? 'block' : 'none';
+            const decorText = decorVal === 'none' ? '' : `${decorVal} ${decorVal} ${decorVal}`;
+            document.getElementById('topDecor').textContent = decorText;
+            document.getElementById('bottomDecor').textContent = decorText;
+            document.getElementById('topDecor').style.display = decorText ? 'block' : 'none';
+            document.getElementById('bottomDecor').style.display = decorText ? 'block' : 'none';
 
-            const sep = d.sp === 'none' ? '' : `━━━ ${d.sp} ━━━`;
-            document.getElementById('cardDiv').textContent = sep;
-            document.getElementById('cardDiv').style.display = sep ? 'block' : 'none';
+            const dividerText = dividerVal === 'none' ? '' : `━━━ ${dividerVal} ━━━`;
+            document.getElementById('dividerDisplay').textContent = dividerText;
+            document.getElementById('dividerDisplay').style.display = dividerText ? 'block' : 'none';
 
-            document.getElementById('ringsEl').style.display = d.sr ? 'block' : 'none';
-            document.getElementById('quoteEl').style.display = (d.sq && d.lq) ? 'block' : 'none';
-            if (d.sq && d.lq) document.getElementById('quoteEl').textContent = `"${d.lq}"`;
-            document.getElementById('mapEl').style.display = d.sm ? 'block' : 'none';
-            document.getElementById('quoteField').style.display = d.sq ? 'block' : 'none';
+            document.getElementById('ringsDisplay').style.display = showRings ? 'block' : 'none';
+            document.getElementById('quoteDisplay').style.display = (showQuote && quoteVal) ? 'block' : 'none';
+            if (showQuote && quoteVal) document.getElementById('quoteDisplay').textContent = `"${quoteVal}"`;
+            document.getElementById('mapDisplay').style.display = showMap ? 'block' : 'none';
+            document.getElementById('quoteGroup').style.display = showQuote ? 'block' : 'none';
 
-            if (d.sc && d.d) {
-                const w = new Date(d.d), n = new Date(), diff = w - n;
+            if (showCountdown && dateVal) {
+                const w = new Date(dateVal), n = new Date(), diff = w - n;
                 if (diff > 0) {
-                    document.getElementById('countdownEl').textContent = `⏳ ${Math.floor(diff/86400000)} дн.`;
+                    document.getElementById('countdownDisplay').textContent = `⏳ ${Math.floor(diff/86400000)} дн. до свадьбы`;
                 } else if (diff > -86400000) {
-                    document.getElementById('countdownEl').textContent = '🎉 Сегодня!';
+                    document.getElementById('countdownDisplay').textContent = '🎉 Сегодня знаменательный день!';
                 } else {
-                    document.getElementById('countdownEl').textContent = '';
+                    document.getElementById('countdownDisplay').textContent = '';
                 }
-                document.getElementById('countdownEl').style.display = 'block';
+                document.getElementById('countdownDisplay').style.display = 'block';
             } else {
-                document.getElementById('countdownEl').style.display = 'none';
+                document.getElementById('countdownDisplay').style.display = 'none';
             }
         }
 
-        // НОВАЯ СИСТЕМА КОДИРОВАНИЯ
-        function encodeData(obj) {
-            try {
-                // Преобразуем в JSON
-                const json = JSON.stringify(obj);
-                // Используем encodeURIComponent для безопасного кодирования
-                const encoded = encodeURIComponent(json);
-                console.log('Закодировано, длина URL части:', encoded.length);
-                return encoded;
-            } catch (e) {
-                console.error('Ошибка кодирования:', e);
-                return '';
-            }
-        }
+        // СОХРАНЕНИЕ В LOCALSTORAGE И ГЕНЕРАЦИЯ ID
+        function generateLink() {
+            updatePreview();
+            
+            const data = {
+                t: state.theme,
+                a: state.accent,
+                p: state.photo,
+                g: document.getElementById('groomInput')?.value?.trim() || '',
+                b: document.getElementById('brideInput')?.value?.trim() || '',
+                d: document.getElementById('dateInput')?.value || '',
+                tm: document.getElementById('timeInput')?.value || '',
+                v: document.getElementById('venueInput')?.value?.trim() || '',
+                ad: document.getElementById('addressInput')?.value?.trim() || '',
+                ti: document.getElementById('titleInput')?.value?.trim() || '',
+                gn: document.getElementById('guestInput')?.value?.trim() || '',
+                m: document.getElementById('messageInput')?.value?.trim() || '',
+                td: document.getElementById('decorSelect')?.value || '',
+                sp: document.getElementById('dividerSelect')?.value || '',
+                sr: document.getElementById('ringsToggle')?.checked || false,
+                sq: document.getElementById('quoteToggle')?.checked || false,
+                lq: document.getElementById('quoteInput')?.value?.trim() || '',
+                sc: document.getElementById('countdownToggle')?.checked !== false,
+                sm: document.getElementById('mapToggle')?.checked || false
+            };
 
-        function decodeData(str) {
-            try {
-                const json = decodeURIComponent(str);
-                const obj = JSON.parse(json);
-                console.log('Декодировано успешно');
-                return obj;
-            } catch (e) {
-                console.error('Ошибка декодирования:', e);
-                return null;
-            }
-        }
+            // Генерируем уникальный ID
+            const id = 'inv_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 9);
+            
+            // Сохраняем данные в localStorage
+            const storage = JSON.parse(localStorage.getItem('invitations') || '{}');
+            storage[id] = data;
+            localStorage.setItem('invitations', JSON.stringify(storage));
 
-        function createLink() {
-            updateAll();
-            const data = getData();
-            
-            // Проверяем размер фото в данных
-            if (data.p) {
-                console.log('Фото в данных: ' + Math.round(data.p.length / 1024) + 'KB');
-            }
-            
-            const encoded = encodeData(data);
-            
-            // Проверяем общую длину
-            if (encoded.length > 8000) {
-                alert('⚠️ Фото слишком большое для ссылки. Попробуйте фото меньшего размера.');
-                // Убираем фото и пробуем снова
-                data.p = null;
-                shareUrl = window.location.href.split('?')[0] + '?invite=' + encodeData(data);
-            } else {
-                shareUrl = window.location.href.split('?')[0] + '?invite=' + encoded;
-            }
-            
-            document.getElementById('linkBox').textContent = shareUrl;
+            // Создаём КОРОТКУЮ ссылку только с ID
+            const baseUrl = window.location.href.split('?')[0].split('#')[0];
+            currentShareUrl = baseUrl + '?id=' + id;
+
+            console.log('Приглашение сохранено с ID:', id);
+            console.log('Размер данных:', JSON.stringify(data).length, 'байт');
+            if (data.p) console.log('Фото в данных:', Math.round(data.p.length / 1024), 'KB');
+
+            document.getElementById('urlDisplay').textContent = currentShareUrl;
             document.getElementById('linkModal').classList.add('show');
-            document.getElementById('copiedMsg').style.display = 'none';
+            document.getElementById('copyConfirm').style.display = 'none';
             
-            setTimeout(copyLink, 300);
+            setTimeout(copyLink, 400);
         }
 
         function copyLink() {
-            const text = shareUrl || document.getElementById('linkBox').textContent;
+            const text = currentShareUrl || document.getElementById('urlDisplay').textContent;
+            
             if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(text).then(() => {
-                    document.getElementById('copiedMsg').style.display = 'block';
-                    setTimeout(() => document.getElementById('copiedMsg').style.display = 'none', 2500);
-                }).catch(() => fallbackCopy(text));
+                navigator.clipboard.writeText(text).then(showCopyConfirm).catch(() => fallbackCopy(text));
             } else {
                 fallbackCopy(text);
             }
@@ -725,23 +1246,49 @@
             ta.select();
             document.execCommand('copy');
             document.body.removeChild(ta);
-            document.getElementById('copiedMsg').style.display = 'block';
-            setTimeout(() => document.getElementById('copiedMsg').style.display = 'none', 2500);
+            showCopyConfirm();
+        }
+
+        function showCopyConfirm() {
+            document.getElementById('copyConfirm').style.display = 'block';
+            setTimeout(() => document.getElementById('copyConfirm').style.display = 'none', 2500);
         }
 
         function closeModal() {
             document.getElementById('linkModal').classList.remove('show');
         }
 
+        // ГОСТЕВАЯ СТРАНИЦА
         function previewGuest() {
-            updateAll();
-            renderGuest(getData());
+            updatePreview();
+            const data = {
+                t: state.theme,
+                a: state.accent,
+                p: state.photo,
+                g: document.getElementById('groomInput')?.value?.trim() || 'Александръ',
+                b: document.getElementById('brideInput')?.value?.trim() || 'Екатерина',
+                d: document.getElementById('dateInput')?.value || '',
+                tm: document.getElementById('timeInput')?.value || '15:00',
+                v: document.getElementById('venueInput')?.value?.trim() || '',
+                ad: document.getElementById('addressInput')?.value?.trim() || '',
+                ti: document.getElementById('titleInput')?.value?.trim() || '',
+                gn: document.getElementById('guestInput')?.value?.trim() || '',
+                m: document.getElementById('messageInput')?.value?.trim() || '',
+                td: document.getElementById('decorSelect')?.value || '',
+                sp: document.getElementById('dividerSelect')?.value || '',
+                sr: document.getElementById('ringsToggle')?.checked || false,
+                sq: document.getElementById('quoteToggle')?.checked || false,
+                lq: document.getElementById('quoteInput')?.value?.trim() || '',
+                sc: document.getElementById('countdownToggle')?.checked !== false,
+                sm: document.getElementById('mapToggle')?.checked || false
+            };
+            renderGuestPage(data);
         }
 
-        function renderGuest(data) {
+        function renderGuestPage(data) {
             document.getElementById('appLayout').style.display = 'none';
             document.getElementById('topbar').style.display = 'none';
-            document.getElementById('guestPage').classList.add('active');
+            document.getElementById('guestView').classList.add('active');
 
             let dateStr = 'Дата уточняется';
             if (data.d) {
@@ -749,95 +1296,105 @@
                 dateStr = dt.toLocaleDateString('ru-RU', {day:'numeric', month:'long', year:'numeric'});
             }
 
-            let cd = '';
+            let countdownHtml = '';
             if (data.sc && data.d) {
                 const w = new Date(data.d), n = new Date(), diff = w - n;
-                if (diff > 0) cd = `<div class="g-countdown">⏳ ${Math.floor(diff/86400000)} дн.</div>`;
-                else if (diff > -86400000) cd = '<div class="g-countdown">🎉 Свадьба сегодня!</div>';
+                if (diff > 0) {
+                    countdownHtml = `<div class="countdown">⏳ ${Math.floor(diff/86400000)} дн. до свадьбы</div>`;
+                } else if (diff > -86400000) {
+                    countdownHtml = '<div class="countdown">🎉 Сегодня!</div>';
+                }
             }
 
             const esc = s => { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; };
-            const td = data.td === 'none' ? '' : `${data.td} ${data.td} ${data.td}`;
-            const sep = data.sp === 'none' ? '' : `━━━ ${data.sp} ━━━`;
+            const decorText = data.td === 'none' ? '' : `${data.td} ${data.td} ${data.td}`;
+            const dividerText = data.sp === 'none' ? '' : `━━━ ${data.sp} ━━━`;
 
-            let h = '';
-            // ВАЖНО: Фото применяется через background-image
+            let html = '';
             if (data.p) {
-                console.log('Применяем фото к гостевой странице, размер:', Math.round(data.p.length/1024), 'KB');
-                h += `<div class="g-bg" style="background-image:url(${data.p})"></div>`;
+                html += `<div class="bg-image" style="background-image:url(${data.p})"></div>`;
             }
-            h += `<div class="g-overlay" style="background:rgba(255,255,255,0.25)"></div>`;
-            h += '<div class="g-inner">';
-            if (td) h += `<div style="font-size:1.5em; margin-bottom:5px;">${td}</div>`;
-            h += `<h2 style="font-weight:300;">${esc(data.ti) || 'Приглашение на свадьбу'}</h2>`;
-            if (sep) h += `<div style="margin:8px 0;">${sep}</div>`;
-            h += `<p>С радостью приглашаем</p><p style="font-weight:500;">${esc(data.gn) || 'Дорогой друг!'}</p>`;
-            h += `<div class="g-couple" style="color:${data.a || '#d4a574'}">${esc(data.g) || 'Александр'}<br>&<br>${esc(data.b) || 'Екатерина'}</div>`;
-            h += '<p>на торжество в честь бракосочетания!</p>';
-            h += `<div class="g-date">${dateStr}</div>`;
-            h += `<div class="g-info"><div>🕐 ${esc(data.tm) || '15:00'}</div><div>📍 ${esc(data.v) || ''}</div><div>🏠 ${esc(data.ad) || ''}</div></div>`;
-            h += `<div class="g-message">${esc(data.m) || ''}</div>`;
-            if (data.sr) h += '<div style="font-size:1.8em;">💍 💍</div>';
-            if (data.sq && data.lq) h += `<div style="font-style:italic;">"${esc(data.lq)}"</div>`;
-            h += cd;
-            if (data.sm) h += '<div><button style="padding:6px 14px; background:#4CAF50; color:white; border:none; border-radius:5px;">📍 Карта</button></div>';
-            if (td) h += `<div style="font-size:1.5em; margin-top:5px;">${td}</div>`;
-            if (data.ph) h += `<p style="margin-top:8px; opacity:0.8;">Подтвердите: ${esc(data.ph)}</p>`;
-            h += '</div>';
+            html += `<div class="bg-overlay" style="background:rgba(255,255,255,0.3)"></div>`;
+            html += '<div class="content">';
+            if (decorText) html += `<div style="font-size:1.5em; margin-bottom:8px;">${decorText}</div>`;
+            html += `<h2 style="font-weight:300;">${esc(data.ti) || 'Приглашенiе на свадьбу'}</h2>`;
+            if (dividerText) html += `<div style="margin:10px 0;">${dividerText}</div>`;
+            html += `<p>Съ радостью приглашаемъ</p><p style="font-weight:500;">${esc(data.gn) || 'Дорогой другъ!'}</p>`;
+            html += `<div class="names" style="color:${data.a || '#c9a96e'}">${esc(data.g) || 'Александръ'}<br>&<br>${esc(data.b) || 'Екатерина'}</div>`;
+            html += '<p>на торжество въ честь бракосочетанiя!</p>';
+            html += `<div class="date">${dateStr}</div>`;
+            html += `<div class="info"><div>🕐 ${esc(data.tm) || '15:00'}</div><div>📍 ${esc(data.v) || ''}</div><div>🏠 ${esc(data.ad) || ''}</div></div>`;
+            html += `<div class="message">${esc(data.m) || ''}</div>`;
+            if (data.sr) html += '<div style="font-size:1.8em;">💍 💍</div>';
+            if (data.sq && data.lq) html += `<div style="font-style:italic;">"${esc(data.lq)}"</div>`;
+            html += countdownHtml;
+            if (data.sm) html += '<div><button style="padding:8px 16px; background:#7b9b6a; color:white; border:none; border-radius:6px; cursor:pointer;">📍 Открыть карту</button></div>';
+            if (decorText) html += `<div style="font-size:1.5em; margin-top:8px;">${decorText}</div>`;
+            html += '<p style="margin-top:12px; opacity:0.8; font-size:0.9em;">Просимъ подтвердить Ваше присутствiе</p>';
+            html += '</div>';
 
-            document.getElementById('guestCard').innerHTML = h;
-            document.getElementById('guestCard').className = 'g-card t-' + (data.t || 'watercolor');
+            document.getElementById('guestCard').innerHTML = html;
+            document.getElementById('guestCard').className = 'guest-card theme-' + (data.t || 'watercolor');
         }
 
+        // СБРОС
         function resetAll() {
-            ['groomName','brideName','weddingDate','venue','address','guestName','titleText','contactPhone','loveQuote'].forEach(id => {
+            ['groomInput','brideInput','dateInput','venueInput','addressInput','guestInput','titleInput','quoteInput'].forEach(id => {
                 const el = document.getElementById(id); if (el) el.value = '';
             });
-            document.getElementById('weddingTime').value = '15:00';
-            document.getElementById('messageText').value = 'Будем рады видеть вас!';
-            document.getElementById('topDecor').value = '🌸';
-            document.getElementById('separator').value = '❤';
-            document.getElementById('showRings').checked = false;
-            document.getElementById('showQuote').checked = false;
-            document.getElementById('showCountdown').checked = true;
-            document.getElementById('showMap').checked = false;
+            document.getElementById('timeInput').value = '15:00';
+            document.getElementById('messageInput').value = 'Будемъ рады видѣть Васъ на нашемъ праздникѣ!';
+            document.getElementById('decorSelect').value = '🌸';
+            document.getElementById('dividerSelect').value = '❤';
+            document.getElementById('ringsToggle').checked = false;
+            document.getElementById('quoteToggle').checked = false;
+            document.getElementById('countdownToggle').checked = true;
+            document.getElementById('mapToggle').checked = false;
+            
             removePhoto();
-            setTheme('watercolor', document.querySelector('.theme-card'));
-            setAccent('#d4a574', document.querySelector('.color-dot'));
-            updateAll();
+            setTheme('watercolor', document.querySelector('.theme-item'));
+            setColor('#c9a96e', document.querySelector('.color-swatch'));
+            updatePreview();
         }
 
         // ИНИЦИАЛИЗАЦИЯ
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', function() {
             const params = new URLSearchParams(window.location.search);
-            const invite = params.get('invite');
+            const id = params.get('id');
             
-            if (invite) {
-                console.log('Декодируем данные из URL...');
-                const data = decodeData(invite);
+            if (id) {
+                // Загружаем данные по ID из localStorage
+                const storage = JSON.parse(localStorage.getItem('invitations') || '{}');
+                const data = storage[id];
+                
                 if (data) {
-                    console.log('Данные успешно декодированы');
-                    console.log('Фото присутствует:', !!data.p);
-                    if (data.p) console.log('Размер фото:', Math.round(data.p.length/1024), 'KB');
-                    renderGuest(data);
+                    console.log('Загружено приглашение ID:', id);
+                    if (data.p) console.log('Фото найдено:', Math.round(data.p.length / 1024), 'KB');
+                    renderGuestPage(data);
                 } else {
                     document.getElementById('appLayout').style.display = 'none';
                     document.getElementById('topbar').style.display = 'none';
-                    document.getElementById('guestPage').classList.add('active');
-                    document.getElementById('guestCard').innerHTML = '<div style="padding:40px;text-align:center;"><h2>😔 Приглашение не найдено</h2><p>Ссылка недействительна</p></div>';
+                    document.getElementById('guestView').classList.add('active');
+                    document.getElementById('guestCard').innerHTML = `
+                        <div style="padding:40px; text-align:center; background:white; border-radius:20px;">
+                            <div style="font-size:3em;">😔</div>
+                            <h2>Приглашенiе не найдено</h2>
+                            <p style="color:#8b7355;">Ссылка недействительна или устарела</p>
+                        </div>`;
                 }
             } else {
                 const today = new Date();
                 const nm = new Date(today.getFullYear(), today.getMonth() + 1, 15);
-                document.getElementById('weddingDate').value = nm.toISOString().split('T')[0];
-                updateAll();
+                document.getElementById('dateInput').value = nm.toISOString().split('T')[0];
+                updatePreview();
             }
         });
 
-        document.getElementById('linkModal').addEventListener('click', e => {
-            if (e.target === document.getElementById('linkModal')) closeModal();
+        // Закрытие модального окна
+        document.getElementById('linkModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
         });
-        document.addEventListener('keydown', e => {
+        document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') closeModal();
         });
     </script>
