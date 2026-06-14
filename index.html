@@ -39,7 +39,7 @@
         .btn-outline:hover { background: #faf7f0; }
         .btn-small { padding: 6px 12px; font-size: 0.8em; }
 
-        /* ГОСТЕВАЯ СТРАНИЦА */
+        /* === ГОСТЕВАЯ СТРАНИЦА === */
         .guest-page {
             display: none;
             min-height: 100vh;
@@ -64,7 +64,7 @@
         }
         @keyframes cardFadeIn { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-        /* Анимированные элементы */
+        /* Анимации элементов */
         .guest-card .anim-item {
             opacity: 0;
             animation: fadeInUp 0.7s ease forwards;
@@ -75,14 +75,18 @@
         .guest-card .anim-item:nth-child(4) { animation-delay: 0.8s; }
         .guest-card .anim-item:nth-child(5) { animation-delay: 1.0s; }
         .guest-card .anim-item:nth-child(6) { animation-delay: 1.2s; }
+        .guest-card .anim-item:nth-child(7) { animation-delay: 1.4s; }
+        .guest-card .anim-item:nth-child(8) { animation-delay: 1.6s; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Параллакс фон */
         .guest-card .bg-image {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             background-size: cover;
             background-position: center;
             z-index: 1;
+            transition: transform 0.1s ease-out;
         }
         .guest-card .bg-overlay {
             position: absolute;
@@ -93,6 +97,16 @@
         .guest-card .content {
             position: relative;
             z-index: 3;
+        }
+
+        /* Мерцание */
+        @keyframes shimmer {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        .shimmer {
+            animation: shimmer 2s infinite;
         }
 
         /* Рамки */
@@ -132,7 +146,7 @@
         }
         .create-new-btn:hover { background: #fdf8f0; transform: translateY(-2px); }
 
-        /* КОНСТРУКТОР */
+        /* === КОНСТРУКТОР === */
         .constructor-page {
             display: none;
             max-width: 1000px;
@@ -326,29 +340,27 @@
     <div class="constructor-page" id="constructorView">
         <div class="header">
             <h1>💍 Свадебное приглашение</h1>
-            <p>Гибкие настройки • Рамки • Анимации</p>
+            <p>Фоны • Рамки • Анимации</p>
             <button class="btn btn-outline" style="width:auto; display:inline-block; padding:8px 20px; margin-top:10px;" onclick="previewAsGuest()">👁 Предпросмотр</button>
         </div>
 
         <div class="main-grid">
             <div class="editor">
                 <div class="section">
-                    <h3>🎨 Стиль</h3>
-                    <div class="style-grid">
-                        <button class="style-btn active" onclick="setStyle('classic', this)">🌸 Классика</button>
-                        <button class="style-btn" onclick="setStyle('romance', this)">💕 Романтика</button>
-                        <button class="style-btn" onclick="setStyle('modern', this)">✨ Модерн</button>
-                        <button class="style-btn" onclick="setStyle('boho', this)">🌿 Бохо</button>
-                        <button class="style-btn" onclick="setStyle('navy', this)">🌙 Ночной</button>
-                        <button class="style-btn" onclick="setStyle('gold', this)">👑 Золотой</button>
-                        <button class="style-btn" onclick="setStyle('rustic', this)">🪵 Рустик</button>
-                        <button class="style-btn" onclick="setStyle('lavender', this)">💜 Лаванда</button>
+                    <h3>🎨 Фон</h3>
+                    <div class="style-grid" id="bgGrid">
+                        <button class="style-btn active" onclick="setBackground('gradient1', this)">Акварель</button>
+                        <button class="style-btn" onclick="setBackground('gradient2', this)">Персик</button>
+                        <button class="style-btn" onclick="setBackground('gradient3', this)">Небо</button>
+                        <button class="style-btn" onclick="setBackground('gradient4', this)">Лаванда</button>
+                        <button class="style-btn" onclick="setBackground('texture1', this)">Ткань</button>
+                        <button class="style-btn" onclick="setBackground('texture2', this)">Мрамор</button>
                     </div>
                 </div>
 
                 <div class="section">
                     <h3>🖼️ Окантовка</h3>
-                    <div class="style-grid">
+                    <div class="style-grid" id="borderGrid">
                         <button class="style-btn active" onclick="setBorder('none', this)">Без рамки</button>
                         <button class="style-btn" onclick="setBorder('classic', this)">Классическая</button>
                         <button class="style-btn" onclick="setBorder('gold', this)">Золотая</button>
@@ -390,7 +402,7 @@
                 </div>
 
                 <div class="section">
-                    <h3>🎯 Цвет</h3>
+                    <h3>🎯 Цвет акцента</h3>
                     <div class="color-row">
                         <div class="color-dot active" style="background:#c9a96e" onclick="setColor('#c9a96e', this)"></div>
                         <div class="color-dot" style="background:#d4837a" onclick="setColor('#d4837a', this)"></div>
@@ -444,18 +456,17 @@
     </div>
 
     <script>
+        // Фоны
         const backgrounds = {
-            classic: 'linear-gradient(160deg, #fef9f1, #fdf3e4)',
-            romance: 'linear-gradient(160deg, #fef5f7, #fceff2)',
-            modern: 'linear-gradient(160deg, #f8f8f8, #f3f3f3)',
-            boho: 'linear-gradient(160deg, #fdf8f0, #faf3e8)',
-            navy: 'linear-gradient(160deg, #1a1a2e, #16213e)',
-            gold: 'linear-gradient(160deg, #fdf8f0, #faf1e4)',
-            rustic: 'linear-gradient(160deg, #f5e6d3, #deb887)',
-            lavender: 'linear-gradient(160deg, #f8f5fc, #e8e0f0)'
+            gradient1: 'linear-gradient(160deg, #fef9f1, #fdf3e4)',
+            gradient2: 'linear-gradient(160deg, #fff0e0, #ffdcc0)',
+            gradient3: 'linear-gradient(160deg, #e0f0ff, #c0d8f0)',
+            gradient4: 'linear-gradient(160deg, #f0e0ff, #d8c0f0)',
+            texture1: "url('data:image/svg+xml,%3Csvg width=\"100\" height=\"100\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noise\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.8\" numOctaves=\"4\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100\" height=\"100\" filter=\"url(%23noise)\" opacity=\"0.08\"/%3E%3C/svg%3E'), #fdf8f0",
+            texture2: "url('data:image/svg+xml,%3Csvg width=\"100\" height=\"100\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noise\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.4\" numOctaves=\"3\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100\" height=\"100\" filter=\"url(%23noise)\" opacity=\"0.06\"/%3E%3C/svg%3E'), #f5f0e8"
         };
 
-        let currentStyle = 'classic';
+        let currentBg = 'gradient1';
         let currentBorder = 'classic';
         let currentColor = '#c9a96e';
         let currentPhoto = null;
@@ -487,17 +498,18 @@
             return names;
         }
 
-        // --- Стили и рамки ---
-        function setStyle(style, btn) {
-            currentStyle = style;
-            document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+        // --- Фон ---
+        function setBackground(bg, btn) {
+            currentBg = bg;
+            document.querySelectorAll('#bgGrid .style-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             updatePreviewBg();
         }
 
+        // --- Рамка ---
         function setBorder(border, btn) {
             currentBorder = border;
-            document.querySelectorAll('.section:nth-child(2) .style-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('#borderGrid .style-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             applyBorderToPreview();
         }
@@ -505,7 +517,7 @@
         function applyBorderToPreview() {
             const card = document.getElementById('previewCard');
             card.className = 'preview-card border-' + currentBorder;
-            updatePreviewBg(); // чтобы не потерять фон
+            updatePreviewBg();
         }
 
         function setColor(color, dot) {
@@ -576,7 +588,7 @@
                 card.style.backgroundPosition = 'center';
             } else {
                 card.style.backgroundImage = '';
-                card.style.background = backgrounds[currentStyle] || backgrounds.classic;
+                card.style.background = backgrounds[currentBg] || backgrounds.gradient1;
             }
         }
 
@@ -611,7 +623,7 @@
         function getData() {
             const url = document.getElementById('photoUrl')?.value.trim();
             return {
-                s: currentStyle,
+                bg: currentBg,
                 b: currentBorder,
                 c: currentColor,
                 p: url || currentPhoto,
@@ -706,8 +718,7 @@
                 }
             }
 
-            const isNavy = data.s === 'navy';
-            const bgStyle = data.p ? `background-image:url(${data.p}); background-size:cover; background-position:center;` : `background:${backgrounds[data.s] || backgrounds.classic};`;
+            const bgStyle = data.p ? `background-image:url(${data.p}); background-size:cover; background-position:center;` : `background:${backgrounds[data.bg] || backgrounds.gradient1};`;
 
             let namesHtml = '';
             (data.names || []).forEach(n => {
@@ -721,7 +732,7 @@
             html += `<div class="bg-image" style="${bgStyle}"></div>`;
             html += `<div class="bg-overlay"></div>`;
             html += `<div class="content">`;
-            html += `<div class="ornament anim-item">🌸 🌸 🌸</div>`;
+            html += `<div class="ornament anim-item shimmer">🌸 🌸 🌸</div>`;
             html += `<h2 class="anim-item">Приглашение на свадьбу</h2>`;
             html += `<div class="divider anim-item">━━━ ❤ ━━━</div>`;
             html += `<p class="anim-item">С радостью приглашаем</p>`;
@@ -730,15 +741,31 @@
             html += `<p class="anim-item">на торжество в честь бракосочетания!</p>`;
             html += `<div class="date anim-item">${dateStr}</div>`;
             html += `<div class="info anim-item"><div>🕐 ${escHtml(data.t) || '15:00'}</div><div>📍 ${escHtml(data.v) || ''}</div>${data.a ? `<div>🏠 ${escHtml(data.a)}</div>` : ''}</div>`;
-            html += `<div class="message anim-item" style="${isNavy ? 'border-color:rgba(240,230,216,0.3)' : ''}">${escHtml(data.m) || ''}</div>`;
+            html += `<div class="message anim-item">${escHtml(data.m) || ''}</div>`;
             html += countdownHtml;
-            html += `<div class="ornament anim-item">🌸 🌸 🌸</div>`;
+            html += `<div class="ornament anim-item shimmer">🌸 🌸 🌸</div>`;
             html += `<p class="footer-text anim-item">Пожалуйста, подтвердите ваше присутствие</p>`;
             html += `</div>`;
 
             const card = document.getElementById('guestCard');
             card.innerHTML = html;
             card.className = 'guest-card ' + borderClass;
+
+            // Параллакс эффект
+            const bgImage = card.querySelector('.bg-image');
+            if (bgImage) {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const moveX = (x / rect.width - 0.5) * 10;
+                    const moveY = (y / rect.height - 0.5) * 10;
+                    bgImage.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    bgImage.style.transform = 'translate(0, 0)';
+                });
+            }
         }
 
         function getDaysWord(days) {
@@ -769,8 +796,8 @@
                 document.getElementById('address').value = data.a || '';
                 document.getElementById('guest').value = data.gn || '';
                 document.getElementById('message').value = data.m || '';
-                if (data.s) setStyle(data.s, document.querySelector(`.style-btn[onclick*="${data.s}"]`));
-                if (data.b) setBorder(data.b, document.querySelector(`.section:nth-child(2) .style-btn[onclick*="${data.b}"]`));
+                if (data.bg) setBackground(data.bg, document.querySelector(`#bgGrid .style-btn[onclick*="${data.bg}"]`));
+                if (data.b) setBorder(data.b, document.querySelector(`#borderGrid .style-btn[onclick*="${data.b}"]`));
                 if (data.c) setColor(data.c, document.querySelector(`.color-dot[style*="${data.c}"]`));
                 if (data.p) {
                     if (data.p.startsWith('http')) {
@@ -780,7 +807,6 @@
                     }
                     updatePreviewBg();
                 }
-                // Восстановление имён
                 if (data.names && data.names.length > 0) {
                     const container = document.getElementById('namesContainer');
                     container.innerHTML = '';
@@ -795,6 +821,7 @@
                     });
                 }
                 refresh();
+                applyBorderToPreview();
             } catch (e) {}
         }
 
