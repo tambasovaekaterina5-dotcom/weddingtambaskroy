@@ -3,57 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invitly — Цифровые приглашения на свадьбу</title>
+    <title>Invitly — Красивые приглашения</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/qrcode.js@1.0.0/qrcode.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Great+Vibes&family=Inter:wght@400;500&family=Cormorant+Garamond:wght@400;600&display=swap');
+        
         body { font-family: 'Inter', sans-serif; }
         .title { font-family: 'Playfair Display', serif; }
-        .inv-card { box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4); }
+        .vibes { font-family: 'Great Vibes', cursive; }
+        .garamond { font-family: 'Cormorant Garamond', serif; }
+        .inv-card { box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.45); }
     </style>
 </head>
 <body class="bg-zinc-950 text-white min-h-screen">
 
 <div class="max-w-6xl mx-auto p-4">
 
-    <!-- NAV -->
     <nav class="flex justify-between items-center py-6 border-b border-white/10">
         <div class="flex items-center gap-3">
             <span class="text-4xl">💍</span>
-            <h1 class="text-3xl title tracking-tight">Invitly</h1>
+            <h1 class="text-3xl title">Invitly</h1>
         </div>
         <div class="flex gap-6 text-sm">
             <a href="#" onclick="navigate('home')" class="hover:text-rose-400">Главная</a>
-            <a href="#" onclick="navigate('editor')" class="hover:text-rose-400">Создать</a>
+            <a href="#" onclick="navigate('editor')" class="hover:text-rose-400">Редактор</a>
             <a href="#" onclick="navigate('guests')" class="hover:text-rose-400">Гости</a>
         </div>
     </nav>
 
     <!-- HOME -->
     <div id="home" class="pt-20 text-center">
-        <h2 class="text-6xl title leading-tight mb-6">Создайте волшебное<br>приглашение за 5 минут</h2>
-        <button onclick="navigate('editor')" 
-                class="bg-rose-600 hover:bg-rose-700 text-xl px-12 py-6 rounded-3xl mt-8 transition">
-            Начать создание приглашения →
-        </button>
+        <h2 class="text-6xl title leading-tight mb-6">Создайте незабываемое<br>приглашение на свадьбу</h2>
+        <button onclick="navigate('editor')" class="bg-rose-600 hover:bg-rose-700 px-12 py-6 rounded-3xl text-xl mt-8">Начать создание →</button>
     </div>
 
     <!-- EDITOR -->
     <div id="editor" class="hidden pt-10">
-        <div class="grid md:grid-cols-2 gap-10">
+        <div class="grid lg:grid-cols-2 gap-10">
             <!-- Preview -->
             <div>
                 <h3 class="text-2xl mb-4 title">Предпросмотр</h3>
-                <div id="preview" class="inv-card bg-white text-black rounded-3xl overflow-hidden mx-auto max-w-md">
-                    <div id="preview-bg" class="h-96 bg-cover bg-center relative">
-                        <div class="absolute inset-0 bg-gradient-to-b from-black/30 to-black/70"></div>
-                    </div>
-                    <div class="p-8 text-center">
-                        <div id="preview-names" class="title text-5xl mb-4"></div>
+                <div id="preview" class="inv-card bg-white text-black rounded-3xl overflow-hidden max-w-md mx-auto">
+                    <div id="preview-bg" class="h-96 bg-cover bg-center relative"></div>
+                    <div class="p-10 text-center">
+                        <div id="preview-names" class="text-5xl leading-none mb-4"></div>
                         <div id="preview-date" class="text-xl"></div>
-                        <div id="preview-venue" class="text-lg mt-1"></div>
+                        <div id="preview-venue" class="text-lg"></div>
                         <p id="preview-message" class="mt-8 italic"></p>
                     </div>
                 </div>
@@ -61,33 +58,48 @@
 
             <!-- Controls -->
             <div class="space-y-8">
-                <div class="bg-zinc-900 rounded-3xl p-8">
-                    <h4 class="uppercase tracking-widest text-xs mb-4 text-white/60">Данные свадьбы</h4>
-                    <input id="names" class="w-full bg-zinc-800 rounded-2xl px-5 py-4 mb-4" placeholder="Анна & Дмитрий" oninput="updatePreview()">
-                    <input id="date" class="w-full bg-zinc-800 rounded-2xl px-5 py-4 mb-4" placeholder="15 августа 2026" oninput="updatePreview()">
-                    <input id="venue" class="w-full bg-zinc-800 rounded-2xl px-5 py-4" placeholder="Ресторан Золотой Сад" oninput="updatePreview()">
-                    <textarea id="message" rows="3" class="w-full bg-zinc-800 rounded-3xl px-5 py-4 mt-4" oninput="updatePreview()">Дорогие друзья и родные...</textarea>
+                <!-- Шаблоны -->
+                <div class="bg-zinc-900 rounded-3xl p-6">
+                    <h4 class="text-sm uppercase tracking-widest mb-3">Шаблоны дизайна</h4>
+                    <div class="grid grid-cols-5 gap-3">
+                        <button onclick="loadTemplate(0)" class="h-16 bg-cover rounded-2xl border-2 border-white" style="background-image:url('https://picsum.photos/id/1015/300/200')"></button>
+                        <button onclick="loadTemplate(1)" class="h-16 bg-cover rounded-2xl border-2 border-transparent hover:border-white" style="background-image:url('https://picsum.photos/id/133/300/200')"></button>
+                        <button onclick="loadTemplate(2)" class="h-16 bg-cover rounded-2xl border-2 border-transparent hover:border-white" style="background-image:url('https://picsum.photos/id/201/300/200')"></button>
+                        <button onclick="loadTemplate(3)" class="h-16 bg-cover rounded-2xl border-2 border-transparent hover:border-white" style="background-image:url('https://picsum.photos/id/251/300/200')"></button>
+                        <button onclick="loadTemplate(4)" class="h-16 bg-cover rounded-2xl border-2 border-transparent hover:border-white" style="background-image:url('https://picsum.photos/id/866/300/200')"></button>
+                    </div>
                 </div>
 
-                <div class="bg-zinc-900 rounded-3xl p-8">
-                    <h4 class="uppercase tracking-widest text-xs mb-4 text-white/60">Дизайн</h4>
-                    <input type="file" id="bg-upload" accept="image/*" class="hidden" onchange="uploadBackground(event)">
-                    <button onclick="document.getElementById('bg-upload').click()" 
-                            class="w-full border border-dashed border-white/30 py-6 rounded-3xl hover:border-rose-400 transition">
-                        📸 Загрузить свой фон
-                    </button>
+                <!-- Основные данные -->
+                <div class="bg-zinc-900 rounded-3xl p-8 space-y-5">
+                    <input id="names" class="w-full bg-zinc-800 rounded-2xl px-5 py-4" placeholder="Анна & Дмитрий" oninput="updatePreview()">
+                    <div class="grid grid-cols-2 gap-4">
+                        <input id="date" class="bg-zinc-800 rounded-2xl px-5 py-4" placeholder="15 августа 2026" oninput="updatePreview()">
+                        <input id="venue" class="bg-zinc-800 rounded-2xl px-5 py-4" placeholder="Место проведения" oninput="updatePreview()">
+                    </div>
+                    <textarea id="message" rows="3" class="w-full bg-zinc-800 rounded-3xl px-5 py-4" oninput="updatePreview()"></textarea>
                 </div>
 
+                <!-- Дизайн -->
                 <div class="bg-zinc-900 rounded-3xl p-8">
-                    <h4 class="uppercase tracking-widest text-xs mb-3 text-white/60">Фоновая музыка</h4>
-                    <input id="music-url" type="text" placeholder="https://... (прямая ссылка на mp3)" 
-                           class="w-full bg-zinc-800 rounded-2xl px-5 py-4">
-                    <button onclick="saveMusic()" class="mt-3 text-sm bg-white/10 px-6 py-2 rounded-2xl">Применить музыку</button>
+                    <h4 class="uppercase text-xs tracking-widest mb-4">Шрифт заголовка</h4>
+                    <select id="font" onchange="updatePreview()" class="w-full bg-zinc-800 rounded-2xl px-5 py-4">
+                        <option value="title">Playfair Display (Классика)</option>
+                        <option value="vibes">Great Vibes (Романтика)</option>
+                        <option value="garamond">Cormorant Garamond</option>
+                    </select>
+
+                    <h4 class="uppercase text-xs tracking-widest mt-6 mb-3">Цвет акцента</h4>
+                    <div class="flex gap-3">
+                        <button onclick="setAccent('#e11d48')" class="w-10 h-10 rounded-2xl bg-rose-600"></button>
+                        <button onclick="setAccent('#854d0e')" class="w-10 h-10 rounded-2xl bg-amber-800"></button>
+                        <button onclick="setAccent('#166534')" class="w-10 h-10 rounded-2xl bg-green-700"></button>
+                        <button onclick="setAccent('#4338ca')" class="w-10 h-10 rounded-2xl bg-indigo-700"></button>
+                    </div>
                 </div>
 
-                <button onclick="saveTemplate()" 
-                        class="w-full bg-gradient-to-r from-rose-500 to-purple-600 py-7 rounded-3xl text-xl font-medium">
-                    Сохранить и перейти к гостям →
+                <button onclick="saveAndGenerateLink()" class="w-full bg-gradient-to-r from-rose-500 to-purple-600 py-7 rounded-3xl text-xl">
+                    Сохранить и получить ссылку
                 </button>
             </div>
         </div>
@@ -95,33 +107,25 @@
 
     <!-- GUESTS -->
     <div id="guests" class="hidden pt-10">
-        <div class="flex justify-between mb-8">
-            <h2 class="text-4xl title">Список гостей</h2>
-            <button onclick="addGuest()" class="bg-white/10 hover:bg-white/20 px-6 py-3 rounded-2xl flex items-center gap-2">
-                <i class="fas fa-plus"></i> Добавить гостя
-            </button>
-        </div>
-
+        <h2 class="text-4xl title mb-8">Список гостей</h2>
+        <button onclick="addGuest()" class="mb-6 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-2xl">+ Добавить гостя</button>
         <div id="guests-list" class="space-y-4"></div>
     </div>
 </div>
 
-<!-- INVITATION PAGE (для открытия по ссылке) -->
-<div id="invitation-page" class="hidden min-h-screen bg-black flex items-center justify-center p-4">
-    <div class="max-w-md w-full inv-card bg-white text-black rounded-3xl overflow-hidden">
+<!-- INVITATION PAGE -->
+<div id="invitation-page" class="hidden min-h-screen flex items-center justify-center p-4 bg-black">
+    <div id="inv-card" class="inv-card max-w-md w-full bg-white text-black rounded-3xl overflow-hidden">
         <div id="inv-bg" class="h-96 bg-cover bg-center relative"></div>
         <div class="p-10 text-center">
-            <div id="inv-names" class="title text-6xl leading-none mb-6"></div>
+            <div id="inv-names" class="text-6xl leading-none mb-6"></div>
             <div id="inv-date" class="text-2xl mb-2"></div>
-            <div id="inv-venue" class="text-xl"></div>
-            <p id="inv-message" class="mt-10 italic text-lg"></p>
-
-            <div class="mt-12">
-                <button onclick="submitRSVP()" 
-                        class="w-full bg-rose-600 text-white py-5 rounded-2xl text-lg">
-                    Подтвердить участие
-                </button>
-            </div>
+            <div id="inv-venue" class="text-xl mb-8"></div>
+            <p id="inv-message" class="italic text-lg"></p>
+            
+            <button onclick="submitRSVP()" class="mt-12 w-full bg-rose-600 text-white py-6 rounded-3xl text-lg">
+                Подтвердить участие
+            </button>
         </div>
     </div>
 </div>
@@ -132,174 +136,178 @@ let template = {
     names: "Анна & Дмитрий",
     date: "15 августа 2026",
     venue: "Ресторан «Золотой Сад», Москва",
-    message: "Дорогие друзья! Приглашаем вас разделить с нами самый важный день...",
+    message: "Дорогие друзья и родные! Приглашаем вас разделить с нами самый счастливый день в нашей жизни.",
     bg: "https://picsum.photos/id/1015/800/1200",
-    music: ""
+    font: "title",
+    accent: "#e11d48"
 };
 
 let guests = JSON.parse(localStorage.getItem('weddingGuests')) || [];
 
 // ==================== NAV ====================
 function navigate(page) {
-    document.querySelectorAll('#home, #editor, #guests, #invitation-page').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('#home,#editor,#guests,#invitation-page').forEach(el => el.classList.add('hidden'));
     document.getElementById(page).classList.remove('hidden');
-    
     if (page === 'guests') renderGuests();
 }
 
-// ==================== EDITOR ====================
+// ==================== TEMPLATES ====================
+const presets = [
+    { bg: "https://picsum.photos/id/1015/800/1200", font: "title" },
+    { bg: "https://picsum.photos/id/133/800/1200", font: "vibes" },
+    { bg: "https://picsum.photos/id/201/800/1200", font: "garamond" },
+    { bg: "https://picsum.photos/id/251/800/1200", font: "title" },
+    { bg: "https://picsum.photos/id/866/800/1200", font: "vibes" }
+];
+
+function loadTemplate(i) {
+    template.bg = presets[i].bg;
+    template.font = presets[i].font;
+    updatePreview();
+}
+
+// ==================== PREVIEW ====================
 function updatePreview() {
     template.names = document.getElementById('names').value || template.names;
     template.date = document.getElementById('date').value || template.date;
     template.venue = document.getElementById('venue').value || template.venue;
     template.message = document.getElementById('message').value || template.message;
+    template.font = document.getElementById('font').value;
 
+    const preview = document.getElementById('preview');
+    document.getElementById('preview-bg').style.backgroundImage = `url(${template.bg})`;
     document.getElementById('preview-names').textContent = template.names;
     document.getElementById('preview-date').textContent = template.date;
     document.getElementById('preview-venue').textContent = template.venue;
     document.getElementById('preview-message').textContent = template.message;
+
+    // Применяем шрифт
+    const namesEl = document.getElementById('preview-names');
+    namesEl.className = template.font === 'vibes' ? 'vibes text-6xl' : 
+                        template.font === 'garamond' ? 'garamond text-5xl' : 'title text-5xl';
 }
 
-function uploadBackground(e) {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(ev) {
-            template.bg = ev.target.result;
-            document.getElementById('preview-bg').style.backgroundImage = `url(${template.bg})`;
-        };
-        reader.readAsDataURL(file);
-    }
+function setAccent(color) {
+    template.accent = color;
+    updatePreview();
 }
 
-function saveMusic() {
-    template.music = document.getElementById('music-url').value.trim();
-    alert('Музыка сохранена! Она будет играть на приглашении.');
-}
-
-function saveTemplate() {
-    localStorage.setItem('weddingTemplate', JSON.stringify(template));
-    alert('Шаблон сохранён!');
+// ==================== SAVE & SHARE ====================
+function saveAndGenerateLink() {
+    const dataStr = JSON.stringify(template);
+    const encoded = btoa(encodeURIComponent(dataStr));
+    
+    const baseUrl = window.location.origin + window.location.pathname;
+    const shareLink = `${baseUrl}?t=${encoded}`;
+    
+    localStorage.setItem('weddingTemplate', dataStr);
+    alert(`✅ Ссылка на приглашение готова!\n\n${shareLink}\n\nМожешь отправлять её гостям.`);
     navigate('guests');
 }
 
 // ==================== GUESTS ====================
 function renderGuests() {
     const container = document.getElementById('guests-list');
-    container.innerHTML = '';
-
-    guests.forEach((guest, i) => {
-        const div = document.createElement('div');
-        div.className = "bg-zinc-900 rounded-3xl p-6 flex justify-between items-center";
-        div.innerHTML = `
+    container.innerHTML = guests.map((guest, i) => `
+        <div class="bg-zinc-900 rounded-3xl p-6 flex justify-between items-center">
             <div>
                 <div class="font-medium">${guest.name}</div>
-                ${guest.rsvp ? `<span class="text-emerald-400 text-sm">✓ ${guest.rsvp}</span>` : ''}
+                ${guest.rsvp ? `<span class="text-emerald-400">✓ ${guest.rsvp}</span>` : ''}
             </div>
             <div class="flex gap-3">
-                <button onclick="showQR(${i})" class="px-5 py-2 bg-white/10 rounded-2xl text-sm">QR</button>
-                <button onclick="copyLink(${i})" class="px-5 py-2 bg-rose-600 rounded-2xl text-sm">Скопировать ссылку</button>
+                <button onclick="showQR(${i})" class="px-5 py-2.5 bg-white/10 rounded-2xl">QR</button>
+                <button onclick="copyGuestLink(${i})" class="px-5 py-2.5 bg-rose-600 rounded-2xl">Ссылка</button>
             </div>
-        `;
-        container.appendChild(div);
-    });
+        </div>
+    `).join('');
 }
 
 function addGuest() {
-    const name = prompt("Введите имя гостя:");
-    if (!name) return;
-    
-    guests.push({ name, rsvp: null });
-    localStorage.setItem('weddingGuests', JSON.stringify(guests));
-    renderGuests();
+    const name = prompt("Имя гостя:");
+    if (name) {
+        guests.push({ name, rsvp: null });
+        localStorage.setItem('weddingGuests', JSON.stringify(guests));
+        renderGuests();
+    }
 }
 
-function copyLink(index) {
-    const guest = guests[index];
-    const base = window.location.origin + window.location.pathname;
-    const link = `${base}?id=${index}`;
-    
+function copyGuestLink(i) {
+    const dataStr = JSON.stringify(template);
+    const encoded = btoa(encodeURIComponent(dataStr));
+    const baseUrl = window.location.origin + window.location.pathname;
+    const link = `${baseUrl}?t=${encoded}&g=${encodeURIComponent(guests[i].name)}`;
     navigator.clipboard.writeText(link);
-    alert(`Ссылка скопирована:\n${link}`);
+    alert("Ссылка скопирована!");
 }
 
-// ==================== QR ====================
-function showQR(index) {
-    const guest = guests[index];
-    const base = window.location.origin + window.location.pathname;
-    const link = `${base}?id=${index}`;
+function showQR(i) {
+    const dataStr = JSON.stringify(template);
+    const encoded = btoa(encodeURIComponent(dataStr));
+    const baseUrl = window.location.origin + window.location.pathname;
+    const link = `${baseUrl}?t=${encoded}&g=${encodeURIComponent(guests[i].name)}`;
     
-    const qrContainer = document.createElement('div');
-    qrContainer.innerHTML = `<div id="qr" class="mx-auto"></div>`;
-    qrContainer.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;padding:20px;border-radius:20px;z-index:1000;';
+    const div = document.createElement('div');
+    div.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;padding:30px;border-radius:20px;z-index:9999;';
+    div.innerHTML = `<div id="qr"></div>`;
+    document.body.appendChild(div);
     
-    document.body.appendChild(qrContainer);
-    
-    new QRCode(document.getElementById("qr"), {
-        text: link,
-        width: 256,
-        height: 256,
-        colorDark: "#000000",
-        colorLight: "#ffffff"
-    });
-    
-    qrContainer.onclick = () => qrContainer.remove();
+    new QRCode(document.getElementById("qr"), { text: link, width: 280, height: 280 });
+    div.onclick = () => div.remove();
 }
 
 // ==================== INVITATION PAGE ====================
 function loadInvitation() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
+    const params = new URLSearchParams(window.location.search);
+    const encodedTemplate = params.get('t');
+    const guestName = params.get('g');
 
-    if (id !== null) {
-        document.getElementById('home').classList.add('hidden');
-        document.getElementById('editor').classList.add('hidden');
-        document.getElementById('guests').classList.add('hidden');
-        const page = document.getElementById('invitation-page');
-        page.classList.remove('hidden');
-
-        const savedTemplate = JSON.parse(localStorage.getItem('weddingTemplate')) || template;
-        
-        document.getElementById('inv-bg').style.backgroundImage = `url(${savedTemplate.bg})`;
-        document.getElementById('inv-names').textContent = savedTemplate.names;
-        document.getElementById('inv-date').textContent = savedTemplate.date;
-        document.getElementById('inv-venue').textContent = savedTemplate.venue;
-        document.getElementById('inv-message').textContent = savedTemplate.message;
-
-        // Музыка
-        if (savedTemplate.music) {
-            const audio = new Audio(savedTemplate.music);
-            audio.loop = true;
-            audio.volume = 0.4;
-            audio.play().catch(() => {});
-        }
+    if (encodedTemplate) {
+        try {
+            const decoded = decodeURIComponent(atob(encodedTemplate));
+            template = JSON.parse(decoded);
+        } catch(e) { console.error("Ошибка данных"); }
     }
+
+    // Показываем страницу приглашения
+    document.getElementById('home').classList.add('hidden');
+    document.getElementById('editor').classList.add('hidden');
+    document.getElementById('guests').classList.add('hidden');
+    const invPage = document.getElementById('invitation-page');
+    invPage.classList.remove('hidden');
+
+    // Применяем данные
+    document.getElementById('inv-bg').style.backgroundImage = `url(${template.bg})`;
+    const namesEl = document.getElementById('inv-names');
+    namesEl.textContent = template.names;
+    namesEl.className = template.font === 'vibes' ? 'vibes text-7xl' : 
+                        template.font === 'garamond' ? 'garamond text-6xl' : 'title text-6xl';
+
+    document.getElementById('inv-date').textContent = template.date;
+    document.getElementById('inv-venue').textContent = template.venue;
+    document.getElementById('inv-message').textContent = template.message + 
+        (guestName ? `\n\nДорогой(ая) ${guestName}!` : '');
 }
 
 function submitRSVP() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
-    if (id === null) return;
-
-    const answer = prompt("Вы придёте? (Да / Нет / Может быть)", "Да");
-    if (answer) {
-        guests[id].rsvp = answer;
-        localStorage.setItem('weddingGuests', JSON.stringify(guests));
-        alert("Спасибо! Ваш ответ сохранён ❤️");
-    }
+    const answer = prompt("Будете ли вы на свадьбе?\n(Да / Нет / Может быть)", "Да");
+    if (answer) alert(`Спасибо! Ваш ответ "${answer}" сохранён ❤️`);
 }
 
 // ==================== INIT ====================
 window.onload = () => {
-    // Загружаем сохранённый шаблон
     const saved = localStorage.getItem('weddingTemplate');
     if (saved) template = JSON.parse(saved);
 
-    // Проверяем, открыта ли ссылка-приглашение
-    loadInvitation();
+    // Заполняем поля в редакторе
+    if (!document.getElementById('names').value) {
+        document.getElementById('names').value = template.names;
+        document.getElementById('date').value = template.date;
+        document.getElementById('venue').value = template.venue;
+        document.getElementById('message').value = template.message;
+    }
 
-    // Инициализация Tailwind
     updatePreview();
+    loadInvitation();   // Проверяем, открыта ли ссылка-приглашение
 };
 </script>
 </body>
