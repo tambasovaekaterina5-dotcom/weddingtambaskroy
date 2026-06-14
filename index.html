@@ -52,7 +52,6 @@
         }
         .guest-page.active { display: flex; }
 
-        /* Падающие лепестки */
         @keyframes petalFall {
             0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
             100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
@@ -67,7 +66,6 @@
             z-index: 0;
         }
 
-        /* Фейерверк */
         @keyframes firework {
             0% { transform: scale(0); opacity: 1; }
             100% { transform: scale(1.5); opacity: 0; }
@@ -84,7 +82,7 @@
         .guest-card {
             background: white;
             border-radius: 24px;
-            padding: 50px 30px;
+            padding: 40px 30px 30px;
             max-width: 450px;
             width: 100%;
             text-align: center;
@@ -96,7 +94,44 @@
         }
         @keyframes cardFadeIn { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-        /* Базовые анимации для выбора */
+        /* Вкладки */
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 3;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            background: #f5f0e8;
+            border: 2px solid #d4c5a9;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            color: #6b5b45;
+            transition: 0.3s;
+            font-size: 0.9em;
+        }
+        .tab-btn.active {
+            background: var(--gold);
+            color: white;
+            border-color: var(--gold-dark);
+        }
+        .tab-content {
+            display: none;
+            position: relative;
+            z-index: 3;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Анимации элементов */
         .anim-slide-left {
             opacity: 0;
             animation: slideInLeft 0.7s ease forwards;
@@ -137,7 +172,6 @@
         @keyframes slideInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes slideInRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes scaleIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
         @keyframes rotateIn { from { opacity: 0; transform: rotate(-10deg) scale(0.9); } to { opacity: 1; transform: rotate(0) scale(1); } }
         @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.3); } 50% { opacity: 1; transform: scale(1.05); } 70% { transform: scale(0.9); } 100% { transform: scale(1); } }
@@ -201,6 +235,23 @@
         .guest-card .message { margin: 18px 0; padding: 18px 0; font-style: italic; font-size: 1.1em; border-top: 1.5px solid rgba(0,0,0,0.12); border-bottom: 1.5px solid rgba(0,0,0,0.12); }
         .guest-card .countdown { margin: 15px 0; padding: 12px; background: rgba(0,0,0,0.03); border-radius: 10px; font-weight: 500; }
         .guest-card .footer-text { margin-top: 18px; font-size: 0.9em; opacity: 0.75; }
+
+        .schedule-item {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin: 10px 0;
+            font-size: 1.05em;
+        }
+        .schedule-time {
+            font-weight: 600;
+            min-width: 60px;
+            color: var(--gold-dark);
+        }
+        .schedule-desc {
+            flex: 1;
+            text-align: left;
+        }
 
         .create-new-btn {
             position: fixed;
@@ -414,7 +465,7 @@
     <div class="constructor-page" id="constructorView">
         <div class="header">
             <h1>💍 Свадебное приглашение</h1>
-            <p>Фоны • Рамки • Анимации</p>
+            <p>Фоны • Рамки • Анимации • Расписание</p>
             <button class="btn btn-outline" style="width:auto; display:inline-block; padding:8px 20px; margin-top:10px;" onclick="previewAsGuest()">👁 Предпросмотр</button>
         </div>
 
@@ -489,6 +540,17 @@
                 </div>
 
                 <div class="section">
+                    <h3>📋 Расписание</h3>
+                    <div id="scheduleContainer">
+                        <div class="row schedule-entry">
+                            <div class="field"><label>Время</label><input type="time" class="sched-time" oninput="refresh()"></div>
+                            <div class="field"><label>Событие</label><input type="text" class="sched-event" placeholder="Сбор гостей" oninput="refresh()"></div>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline btn-small" onclick="addScheduleRow()">➕ Добавить пункт</button>
+                </div>
+
+                <div class="section">
                     <h3>💌 Текст</h3>
                     <div class="field"><label>Дорогой гость</label><input type="text" id="guest" placeholder="Дорогой друг!" oninput="refresh()"></div>
                     <div class="field"><label>Сообщение</label><textarea id="message" oninput="refresh()">Будем рады видеть вас!</textarea></div>
@@ -549,7 +611,6 @@
     </div>
 
     <script>
-        // Фоны
         const backgrounds = {
             gradient1: 'linear-gradient(160deg, #fef9f1, #fdf3e4)',
             gradient2: 'linear-gradient(160deg, #fff0e0, #ffdcc0)',
@@ -566,7 +627,6 @@
         let currentPhoto = null;
         let currentLink = '';
 
-        // --- Падающие лепестки ---
         function createPetals() {
             const container = document.getElementById('guestView');
             if (!container) return;
@@ -583,7 +643,6 @@
             }
         }
 
-        // --- Фейерверк ---
         function createFireworks() {
             const container = document.getElementById('guestView');
             if (!container) return;
@@ -597,7 +656,6 @@
             }
         }
 
-        // --- Управление именами ---
         function addNameRow() {
             const container = document.getElementById('namesContainer');
             const row = document.createElement('div');
@@ -616,11 +674,32 @@
             entries.forEach(entry => {
                 const label = entry.querySelector('.name-label')?.value.trim();
                 const value = entry.querySelector('.name-value')?.value.trim();
-                if (label || value) {
-                    names.push({ label: label || '', name: value || '' });
-                }
+                if (label || value) names.push({ label: label || '', name: value || '' });
             });
             return names;
+        }
+
+        function addScheduleRow() {
+            const container = document.getElementById('scheduleContainer');
+            const row = document.createElement('div');
+            row.className = 'row schedule-entry';
+            row.innerHTML = `
+                <div class="field"><label>Время</label><input type="time" class="sched-time" oninput="refresh()"></div>
+                <div class="field"><label>Событие</label><input type="text" class="sched-event" placeholder="Церемония" oninput="refresh()"></div>
+            `;
+            container.appendChild(row);
+            refresh();
+        }
+
+        function getScheduleArray() {
+            const entries = document.querySelectorAll('.schedule-entry');
+            const schedule = [];
+            entries.forEach(entry => {
+                const time = entry.querySelector('.sched-time')?.value.trim();
+                const event = entry.querySelector('.sched-event')?.value.trim();
+                if (time || event) schedule.push({ time: time || '', event: event || '' });
+            });
+            return schedule;
         }
 
         function setBackground(bg, btn) {
@@ -686,7 +765,6 @@
                 alert('Файл слишком большой! Максимум 5MB');
                 return;
             }
-
             const reader = new FileReader();
             reader.onload = async function(ev) {
                 const base64 = ev.target.result;
@@ -708,7 +786,6 @@
             const card = document.getElementById('previewCard');
             const customUrl = document.getElementById('customBgUrl')?.value.trim();
             const photoUrl = document.getElementById('photoUrl')?.value.trim();
-
             if (photoUrl) {
                 card.style.backgroundImage = `url(${photoUrl})`;
                 card.style.backgroundSize = 'cover';
@@ -730,12 +807,9 @@
         function refresh() {
             const names = getNamesArray();
             let namesHtml = '';
-            names.forEach(n => {
-                namesHtml += `<div class="name-row"><strong>${escHtml(n.label)}</strong> ${escHtml(n.name)}</div>`;
-            });
+            names.forEach(n => namesHtml += `<div class="name-row"><strong>${escHtml(n.label)}</strong> ${escHtml(n.name)}</div>`);
             document.getElementById('prevNames').innerHTML = namesHtml || '<div class="name-row">Александр & Екатерина</div>';
             document.getElementById('prevNames').style.color = currentColor;
-
             document.getElementById('prevGuest').textContent = document.getElementById('guest').value.trim() || 'Дорогой друг!';
             document.getElementById('prevVenue').textContent = document.getElementById('venue').value.trim() || 'Ресторан';
             document.getElementById('prevAddress').textContent = document.getElementById('address').value.trim() || '';
@@ -765,6 +839,7 @@
                 c: currentColor,
                 p: photoUrl || currentPhoto,
                 names: getNamesArray(),
+                schedule: getScheduleArray(),
                 d: document.getElementById('date').value,
                 t: document.getElementById('time').value,
                 v: document.getElementById('venue').value.trim(),
@@ -863,38 +938,59 @@
             }
 
             let namesHtml = '';
-            (data.names || []).forEach(n => {
-                namesHtml += `<div class="name-row"><strong>${escHtml(n.label)}</strong> ${escHtml(n.name)}</div>`;
-            });
+            (data.names || []).forEach(n => namesHtml += `<div class="name-row"><strong>${escHtml(n.label)}</strong> ${escHtml(n.name)}</div>`);
             if (!namesHtml) namesHtml = '<div class="name-row">Александр & Екатерина</div>';
 
             const borderClass = 'border-' + (data.b || 'classic');
             const animClass = 'anim-' + (data.anim || 'slide-left');
 
-            let html = '';
-            html += `<div class="bg-image" style="${bgStyle}"></div>`;
-            html += `<div class="bg-overlay"></div>`;
-            html += `<div class="content">`;
-            html += `<div class="ornament ${animClass} shimmer pulse">🌸 🌸 🌸</div>`;
-            html += `<h2 class="${animClass}">Приглашение на свадьбу</h2>`;
-            html += `<div class="divider ${animClass}">━━━ ❤ ━━━</div>`;
-            html += `<p class="${animClass}">С радостью приглашаем</p>`;
-            html += `<p class="${animClass}" style="font-weight:500;">${escHtml(data.gn) || 'Дорогой друг!'}</p>`;
-            html += `<div class="names ${animClass}" style="color:${data.c || '#c9a96e'}">${namesHtml}</div>`;
-            html += `<p class="${animClass}">на торжество в честь бракосочетания!</p>`;
-            html += `<div class="date ${animClass} glow">${dateStr}</div>`;
-            html += `<div class="info ${animClass}"><div>🕐 ${escHtml(data.t) || '15:00'}</div><div>📍 ${escHtml(data.v) || ''}</div>${data.a ? `<div>🏠 ${escHtml(data.a)}</div>` : ''}</div>`;
-            html += `<div class="message ${animClass}">${escHtml(data.m) || ''}</div>`;
-            html += countdownHtml;
-            html += `<div class="ornament ${animClass} shimmer pulse">🌸 🌸 🌸</div>`;
-            html += `<p class="footer-text ${animClass}">Пожалуйста, подтвердите ваше присутствие</p>`;
-            html += `</div>`;
+            // Строим расписание
+            let scheduleHtml = '';
+            if (data.schedule && data.schedule.length > 0) {
+                data.schedule.forEach(item => {
+                    scheduleHtml += `<div class="schedule-item"><span class="schedule-time">${item.time || ''}</span><span class="schedule-desc">${escHtml(item.event) || ''}</span></div>`;
+                });
+            } else {
+                scheduleHtml = '<p style="opacity:0.7;">Расписание пока не заполнено</p>';
+            }
+
+            let html = `
+                <div class="bg-image" style="${bgStyle}"></div>
+                <div class="bg-overlay"></div>
+                <div class="content">
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="switchTab('invitation', this)">💌 Приглашение</button>
+                        <button class="tab-btn" onclick="switchTab('schedule', this)">📋 Расписание</button>
+                    </div>
+                    <div class="tab-content active" id="tab-invitation">
+                        <div class="ornament ${animClass} shimmer pulse">🌸 🌸 🌸</div>
+                        <h2 class="${animClass}">Приглашение на свадьбу</h2>
+                        <div class="divider ${animClass}">━━━ ❤ ━━━</div>
+                        <p class="${animClass}">С радостью приглашаем</p>
+                        <p class="${animClass}" style="font-weight:500;">${escHtml(data.gn) || 'Дорогой друг!'}</p>
+                        <div class="names ${animClass}" style="color:${data.c || '#c9a96e'}">${namesHtml}</div>
+                        <p class="${animClass}">на торжество в честь бракосочетания!</p>
+                        <div class="date ${animClass} glow">${dateStr}</div>
+                        <div class="info ${animClass}"><div>🕐 ${escHtml(data.t) || '15:00'}</div><div>📍 ${escHtml(data.v) || ''}</div>${data.a ? `<div>🏠 ${escHtml(data.a)}</div>` : ''}</div>
+                        <div class="message ${animClass}">${escHtml(data.m) || ''}</div>
+                        ${countdownHtml}
+                        <div class="ornament ${animClass} shimmer pulse">🌸 🌸 🌸</div>
+                        <p class="footer-text ${animClass}">Пожалуйста, подтвердите ваше присутствие</p>
+                    </div>
+                    <div class="tab-content" id="tab-schedule">
+                        <div class="ornament ${animClass} shimmer pulse">🌸 🌸 🌸</div>
+                        <h2 class="${animClass}">Расписание</h2>
+                        <div class="divider ${animClass}">━━━ ❤ ━━━</div>
+                        <div class="${animClass}" style="margin-top:20px;">${scheduleHtml}</div>
+                        <div class="ornament ${animClass} shimmer pulse">🌸 🌸 🌸</div>
+                    </div>
+                </div>
+            `;
 
             const card = document.getElementById('guestCard');
             card.innerHTML = html;
             card.className = 'guest-card ' + borderClass;
 
-            // Параллакс эффект
             const bgImage = card.querySelector('.bg-image');
             if (bgImage) {
                 card.addEventListener('mousemove', (e) => {
@@ -913,6 +1009,19 @@
             createPetals();
             createFireworks();
         }
+
+        // Глобальная функция переключения вкладок
+        window.switchTab = function(tabName, btn) {
+            const card = document.getElementById('guestCard');
+            if (!card) return;
+            // Обновляем активную кнопку
+            card.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            // Показываем нужную вкладку
+            card.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            const target = document.getElementById('tab-' + tabName);
+            if (target) target.classList.add('active');
+        };
 
         function getDaysWord(days) {
             if (days % 10 === 1 && days % 100 !== 11) return 'день';
@@ -948,14 +1057,11 @@
                 if (data.anim) setAnimation(data.anim, document.querySelector(`#animGrid .style-btn[onclick*="${data.anim}"]`));
                 if (data.c) setColor(data.c, document.querySelector(`.color-dot[style*="${data.c}"]`));
                 if (data.p) {
-                    if (data.p.startsWith('http')) {
-                        document.getElementById('photoUrl').value = data.p;
-                    } else {
-                        currentPhoto = data.p;
-                    }
+                    if (data.p.startsWith('http')) document.getElementById('photoUrl').value = data.p;
+                    else currentPhoto = data.p;
                     updatePreviewBg();
                 }
-                if (data.names && data.names.length > 0) {
+                if (data.names) {
                     const container = document.getElementById('namesContainer');
                     container.innerHTML = '';
                     data.names.forEach(n => {
@@ -968,6 +1074,19 @@
                         container.appendChild(row);
                     });
                 }
+                if (data.schedule) {
+                    const schedContainer = document.getElementById('scheduleContainer');
+                    schedContainer.innerHTML = '';
+                    data.schedule.forEach(item => {
+                        const row = document.createElement('div');
+                        row.className = 'row schedule-entry';
+                        row.innerHTML = `
+                            <div class="field"><label>Время</label><input type="time" class="sched-time" value="${item.time || ''}" oninput="refresh()"></div>
+                            <div class="field"><label>Событие</label><input type="text" class="sched-event" value="${escHtml(item.event)}" oninput="refresh()"></div>
+                        `;
+                        schedContainer.appendChild(row);
+                    });
+                }
                 refresh();
                 applyBorderToPreview();
             } catch (e) {}
@@ -977,9 +1096,7 @@
             try {
                 const json = decodeURIComponent(atob(encoded).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
                 return JSON.parse(json);
-            } catch (e) {
-                return null;
-            }
+            } catch (e) { return null; }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -987,9 +1104,8 @@
             const encoded = params.get('data');
             if (encoded) {
                 const data = decodeData(encoded);
-                if (data) {
-                    showGuestPage(data);
-                } else {
+                if (data) showGuestPage(data);
+                else {
                     document.getElementById('guestView').classList.add('active');
                     document.getElementById('guestCard').innerHTML = '<div style="padding:40px;text-align:center"><h2>😔 Приглашение не найдено</h2></div>';
                 }
