@@ -3,691 +3,382 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Свадебное приглашение</title>
+    <title>Invitly — Конструктор свадебных приглашений</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600&display=swap');
+        
         body {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            background: #faf8f3;
-            color: #3d3027;
-            min-height: 100vh;
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .title-font {
+            font-family: 'Playfair Display', serif;
         }
 
-        /* ========== ГОСТЕВАЯ СТРАНИЦА (показывается первой) ========== */
-        .guest-page {
-            display: none;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #c9a96e, #d4c5a9);
-            padding: 20px;
-            justify-content: center;
-            align-items: center;
+        .invitation-card {
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .guest-page.active { display: flex; }
-
-        .guest-card {
-            background: white;
-            border-radius: 24px;
-            padding: 50px 30px;
-            max-width: 450px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 30px 70px rgba(0,0,0,0.3);
-            position: relative;
-            overflow: hidden;
-            animation: fadeIn 0.8s ease-out;
+        
+        .invitation-card:hover {
+            transform: scale(1.03) rotate(1deg);
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-        .guest-card .bg-image {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
+        .floral-bg {
+            background-image: 
+                linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+                url('https://picsum.photos/id/1015/1200/800');
             background-size: cover;
-            background-position: center;
-            z-index: 1;
-        }
-        .guest-card .bg-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255,255,255,0.35);
-            z-index: 2;
-        }
-        .guest-card .content {
-            position: relative;
-            z-index: 3;
-        }
-
-        .guest-card .ornament { font-size: 1.6em; margin: 10px 0; letter-spacing: 5px; }
-        .guest-card h2 { font-weight: 300; font-size: 2em; margin: 15px 0; letter-spacing: 1px; }
-        .guest-card .divider { margin: 15px 0; font-size: 1em; }
-        .guest-card .names { font-size: 2.8em; font-weight: bold; margin: 20px 0; line-height: 1.3; }
-        .guest-card .date { font-size: 1.5em; font-weight: 600; margin: 18px 0; }
-        .guest-card .info { margin: 18px 0; line-height: 2.3; font-size: 1.05em; }
-        .guest-card .message { margin: 18px 0; padding: 18px 0; font-style: italic; font-size: 1.1em; border-top: 1.5px solid rgba(0,0,0,0.12); border-bottom: 1.5px solid rgba(0,0,0,0.12); }
-        .guest-card .countdown { margin: 15px 0; padding: 12px; background: rgba(0,0,0,0.03); border-radius: 10px; font-weight: 500; }
-        .guest-card .footer-text { margin-top: 18px; font-size: 0.9em; opacity: 0.75; }
-
-        /* Кнопка конструктора на гостевой странице */
-        .create-new-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 12px 20px;
-            background: white;
-            border: 2px solid #c9a96e;
-            border-radius: 12px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.85em;
-            color: #6b5b45;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            z-index: 10;
-            transition: 0.3s;
-        }
-        .create-new-btn:hover { background: #fdf8f0; transform: translateY(-2px); }
-
-        /* ========== КОНСТРУКТОР ========== */
-        .constructor-page {
-            display: none;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .constructor-page.active { display: block; }
-
-        .header {
-            text-align: center;
-            padding: 25px;
-            background: white;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .header h1 { font-size: 1.8em; font-weight: 300; letter-spacing: 2px; }
-        .header p { color: #8b7355; margin-top: 6px; }
-
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .editor, .preview-box {
-            background: white;
-            padding: 22px;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .section {
-            margin-bottom: 18px;
-            padding: 15px;
-            background: #fdfcf9;
-            border-radius: 12px;
-            border: 1px solid #f0ebe0;
-        }
-        .section h3 {
-            font-size: 0.82em;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #b0a089;
-            margin-bottom: 12px;
-        }
-
-        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; }
-        .field { margin-bottom: 8px; }
-        .field label { display: block; font-size: 0.78em; color: #8b7355; margin-bottom: 3px; font-weight: 600; }
-        .field input, .field textarea, .field select {
-            width: 100%;
-            padding: 10px 12px;
-            border: 2px solid #e8e0d5;
-            border-radius: 8px;
-            font-size: 14px;
-            font-family: inherit;
-            background: #fdfcf9;
-            color: #3d3027;
-            transition: 0.3s;
-        }
-        .field input:focus, .field textarea:focus, .field select:focus {
-            outline: none;
-            border-color: #c9a96e;
-            background: white;
-        }
-        .field textarea { resize: vertical; min-height: 55px; }
-
-        .style-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        .style-btn {
-            padding: 12px 6px;
-            border: 2px solid #e8e0d5;
-            border-radius: 10px;
-            cursor: pointer;
-            text-align: center;
-            transition: 0.3s;
-            background: white;
-            font-family: inherit;
-            font-size: 0.8em;
-        }
-        .style-btn:hover { border-color: #c9a96e; }
-        .style-btn.active { border-color: #c9a96e; background: #fdf8f0; font-weight: bold; }
-
-        .color-row { display: flex; gap: 8px; flex-wrap: wrap; }
-        .color-dot {
-            width: 30px; height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 3px solid transparent;
-            transition: 0.3s;
-        }
-        .color-dot.active { border-color: #3d3027; box-shadow: 0 0 0 3px rgba(61,48,39,0.15); }
-
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            font-family: inherit;
-            margin-top: 10px;
-            letter-spacing: 0.5px;
-        }
-        .btn-gold { background: linear-gradient(135deg, #c9a96e, #b8944f); color: white; }
-        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(201,169,110,0.3); }
-        .btn-outline { background: white; border: 2px solid #d4c5a9; color: #6b5b45; }
-
-        .upload-zone {
-            border: 2px dashed #d4c5a9;
-            border-radius: 10px;
-            padding: 18px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .upload-zone:hover { background: #fdf8f0; }
-        .upload-zone p { font-size: 0.9em; color: #8b7355; }
-        .upload-zone small { font-size: 0.75em; color: #b0a089; }
-
-        .preview-card {
-            text-align: center;
-            padding: 35px 25px;
-            border-radius: 20px;
-            min-height: 450px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .preview-card .overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            z-index: 1;
-        }
-        .preview-card .inner {
-            position: relative;
-            z-index: 2;
-        }
-        .preview-card .ornament { font-size: 1.4em; margin: 8px 0; }
-        .preview-card h2 { font-weight: 300; font-size: 1.6em; margin: 10px 0; }
-        .preview-card .divider { margin: 10px 0; }
-        .preview-card .names { font-size: 2.3em; font-weight: bold; margin: 16px 0; line-height: 1.3; }
-        .preview-card .date { font-size: 1.3em; font-weight: 600; margin: 12px 0; }
-        .preview-card .info { margin: 12px 0; line-height: 2; }
-        .preview-card .message { margin: 12px 0; padding: 12px 0; font-style: italic; border-top: 1px solid rgba(0,0,0,0.1); border-bottom: 1px solid rgba(0,0,0,0.1); }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal.show { display: flex; }
-        .modal-box {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 480px;
-            width: 92%;
-            text-align: center;
-        }
-        .link-display {
-            background: #f5f5f5;
-            padding: 12px;
-            border-radius: 8px;
-            margin: 15px 0;
-            word-break: break-all;
-            font-size: 0.8em;
-            font-family: monospace;
-            text-align: left;
-        }
-
-        @media (max-width: 768px) {
-            .main-grid { grid-template-columns: 1fr; }
-            .row { grid-template-columns: 1fr; }
-            .style-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
-<body>
-    <!-- ========== ГОСТЕВАЯ СТРАНИЦА ========== -->
-    <div class="guest-page" id="guestView">
-        <div class="guest-card" id="guestCard"></div>
-        <button class="create-new-btn" onclick="openConstructor()">💍 Создать своё приглашение</button>
-    </div>
-
-    <!-- ========== КОНСТРУКТОР ========== -->
-    <div class="constructor-page" id="constructorView">
-        <div class="header">
-            <h1>💍 Конструктор свадебных приглашений</h1>
-            <p>Создайте приглашение и отправьте ссылку гостям</p>
-            <button class="btn btn-outline" style="width:auto; display:inline-block; padding:8px 20px; margin-top:10px;" onclick="backToGuest()">← Вернуться к приглашению</button>
-        </div>
-
-        <div class="main-grid">
-            <div class="editor">
-                <div class="section">
-                    <h3>🎨 Стиль</h3>
-                    <div class="style-grid">
-                        <button class="style-btn active" onclick="setStyle('classic', this)">🌸 Классика</button>
-                        <button class="style-btn" onclick="setStyle('romance', this)">💕 Романтика</button>
-                        <button class="style-btn" onclick="setStyle('modern', this)">✨ Модерн</button>
-                        <button class="style-btn" onclick="setStyle('boho', this)">🌿 Бохо</button>
-                        <button class="style-btn" onclick="setStyle('navy', this)">🌙 Ночной</button>
-                        <button class="style-btn" onclick="setStyle('gold', this)">👑 Золотой</button>
-                    </div>
+<body class="bg-zinc-950 text-white">
+    <div class="max-w-7xl mx-auto">
+        <!-- NAV -->
+        <nav class="border-b border-white/10 bg-black/80 backdrop-blur-lg fixed w-full z-50">
+            <div class="px-8 py-5 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-rose-500 rounded-2xl flex items-center justify-center text-xl">💍</div>
+                    <h1 class="text-3xl title-font tracking-tight">Invitly</h1>
                 </div>
-
-                <div class="section">
-                    <h3>🖼️ Фото</h3>
-                    <div class="upload-zone" onclick="document.getElementById('photoFile').click()">
-                        <p>📸 Загрузить фото</p>
-                        <small>JPG, PNG (автоматически оптимизируется)</small>
-                    </div>
-                    <input type="file" id="photoFile" accept="image/*" style="display:none" onchange="loadPhoto(event)">
-                    <button class="btn btn-outline" style="padding:8px; margin-top:6px;" onclick="removePhoto()">✕ Удалить фото</button>
-                </div>
-
-                <div class="section">
-                    <h3>👰🤵 Молодожёны</h3>
-                    <div class="row">
-                        <div class="field"><label>Жених</label><input type="text" id="groom" placeholder="Александр" oninput="refresh()"></div>
-                        <div class="field"><label>Невеста</label><input type="text" id="bride" placeholder="Екатерина" oninput="refresh()"></div>
-                    </div>
-                </div>
-
-                <div class="section">
-                    <h3>📅 Событие</h3>
-                    <div class="row">
-                        <div class="field"><label>Дата</label><input type="date" id="date" oninput="refresh()"></div>
-                        <div class="field"><label>Время</label><input type="time" id="time" value="15:00" oninput="refresh()"></div>
-                    </div>
-                    <div class="field"><label>Место</label><input type="text" id="venue" placeholder="Ресторан" oninput="refresh()"></div>
-                    <div class="field"><label>Адрес</label><input type="text" id="address" placeholder="ул. Цветочная, 15" oninput="refresh()"></div>
-                </div>
-
-                <div class="section">
-                    <h3>💌 Текст</h3>
-                    <div class="field"><label>Дорогой гость</label><input type="text" id="guest" placeholder="Дорогой друг!" oninput="refresh()"></div>
-                    <div class="field"><label>Сообщение</label><textarea id="message" oninput="refresh()">Будем рады видеть вас!</textarea></div>
-                </div>
-
-                <div class="section">
-                    <h3>🎯 Цвет</h3>
-                    <div class="color-row">
-                        <div class="color-dot active" style="background:#c9a96e" onclick="setColor('#c9a96e', this)"></div>
-                        <div class="color-dot" style="background:#d4837a" onclick="setColor('#d4837a', this)"></div>
-                        <div class="color-dot" style="background:#b08bbf" onclick="setColor('#b08bbf', this)"></div>
-                        <div class="color-dot" style="background:#7b9b6a" onclick="setColor('#7b9b6a', this)"></div>
-                        <div class="color-dot" style="background:#8ba4c9" onclick="setColor('#8ba4c9', this)"></div>
-                        <div class="color-dot" style="background:#3d3d3d" onclick="setColor('#3d3d3d', this)"></div>
-                    </div>
-                </div>
-
-                <button class="btn btn-gold" onclick="generateLink()">🔗 Создать и скопировать ссылку</button>
-            </div>
-
-            <div class="preview-box">
-                <h3 style="text-align:center; margin-bottom:15px;">Предпросмотр</h3>
-                <div class="preview-card" id="previewCard" style="background: linear-gradient(160deg, #fef9f1, #fdf3e4);">
-                    <div class="overlay" style="background: rgba(255,255,255,0.3);"></div>
-                    <div class="inner">
-                        <div class="ornament">🌸 🌸 🌸</div>
-                        <h2>Приглашение на свадьбу</h2>
-                        <div class="divider">━━━ ❤ ━━━</div>
-                        <p>С радостью приглашаем</p>
-                        <p id="prevGuest" style="font-weight:500;">Дорогой друг!</p>
-                        <div class="names" id="prevNames" style="color:#c9a96e;">
-                            <span id="prevGroom">Александр</span><br>&<br><span id="prevBride">Екатерина</span>
-                        </div>
-                        <p>на торжество в честь бракосочетания!</p>
-                        <div class="date" id="prevDate">15 июня 2024</div>
-                        <div class="info">
-                            <div>🕐 <span id="prevTime">15:00</span></div>
-                            <div>📍 <span id="prevVenue">Ресторан</span></div>
-                            <div>🏠 <span id="prevAddress">ул. Цветочная, 15</span></div>
-                        </div>
-                        <div class="message" id="prevMessage">Будем рады видеть вас!</div>
-                        <div class="ornament">🌸 🌸 🌸</div>
-                    </div>
+                <div class="flex items-center gap-8 text-sm">
+                    <a href="#" onclick="navigateTo('home')" class="hover:text-rose-400 transition">Главная</a>
+                    <a href="#" onclick="navigateTo('constructor')" class="hover:text-rose-400 transition">Конструктор</a>
+                    <a href="#" onclick="navigateTo('guests')" class="hover:text-rose-400 transition">Гости</a>
+                    <button onclick="generateAllLinks()" 
+                            class="bg-rose-600 hover:bg-rose-700 px-6 py-2.5 rounded-2xl flex items-center gap-2 transition">
+                        <i class="fas fa-share-alt"></i>
+                        <span>Разослать</span>
+                    </button>
                 </div>
             </div>
+        </nav>
+
+        <!-- HOME -->
+        <div id="home" class="pt-24 min-h-screen floral-bg flex items-center">
+            <div class="px-8 max-w-2xl">
+                <h2 class="text-7xl title-font leading-none mb-6">
+                    Красивые приглашения<br>за минуты
+                </h2>
+                <p class="text-2xl text-white/80 mb-10">
+                    Создайте уникальное цифровое приглашение на свадьбу и отправьте персональные ссылки гостям
+                </p>
+                <button onclick="navigateTo('constructor')" 
+                        class="bg-white text-black px-10 py-6 rounded-3xl text-xl font-medium hover:scale-105 transition flex items-center gap-4 group">
+                    Начать создание
+                    <span class="text-3xl group-active:rotate-45 transition">→</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- CONSTRUCTOR -->
+        <div id="constructor" class="hidden pt-24 px-8 pb-20">
+            <div class="grid grid-cols-12 gap-8">
+                <!-- EDITOR -->
+                <div class="col-span-7">
+                    <div class="bg-zinc-900 rounded-3xl p-8 mb-8">
+                        <h3 class="text-3xl title-font mb-6 flex items-center gap-3">
+                            <span>Редактор приглашения</span>
+                        </h3>
+                        
+                        <div id="preview" class="invitation-card mx-auto w-full max-w-md bg-white text-black rounded-3xl overflow-hidden">
+                            <div id="card-bg" class="h-80 bg-cover bg-center relative" 
+                                 style="background-image: url('https://picsum.photos/id/1015/800/600')">
+                                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70"></div>
+                                
+                                <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-10">
+                                    <div class="text-amber-300 text-sm tracking-[4px] mb-2">СВАДЬБА</div>
+                                    <div id="preview-names" class="title-font text-5xl leading-none mb-6">Анна &amp; Дмитрий</div>
+                                    <div id="preview-date" class="text-xl mb-1">15 августа 2026</div>
+                                    <div id="preview-venue" class="text-lg opacity-90">Ресторан «Золотой Сад», Москва</div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-8 text-center space-y-4">
+                                <p id="preview-message" class="italic text-lg">
+                                    Дорогие друзья! Приглашаем вас разделить с нами самый счастливый день в нашей жизни.
+                                </p>
+                                <button onclick="mockRSVP()" 
+                                        class="mt-6 w-full bg-rose-500 text-white py-4 rounded-2xl text-sm tracking-widest">
+                                    ПОДТВЕРДИТЬ ПРИСУТСТВИЕ
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONTROLS -->
+                <div class="col-span-5 space-y-8">
+                    <div class="bg-zinc-900 rounded-3xl p-8">
+                        <h4 class="uppercase text-xs tracking-widest mb-4 text-white/60">Основные данные</h4>
+                        
+                        <div class="space-y-5">
+                            <div>
+                                <label class="block text-sm mb-1">Имена</label>
+                                <input id="names" value="Анна &amp; Дмитрий" 
+                                       oninput="updatePreview()"
+                                       class="w-full bg-zinc-800 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-rose-500">
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm mb-1">Дата</label>
+                                    <input id="date" value="15 августа 2026" 
+                                           oninput="updatePreview()"
+                                           class="w-full bg-zinc-800 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-rose-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm mb-1">Место</label>
+                                    <input id="venue" value="Ресторан «Золотой Сад»" 
+                                           oninput="updatePreview()"
+                                           class="w-full bg-zinc-800 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-rose-500">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm mb-1">Сообщение</label>
+                                <textarea id="message" oninput="updatePreview()" rows="3"
+                                    class="w-full bg-zinc-800 border border-white/10 rounded-3xl px-5 py-4 focus:outline-none focus:border-rose-500">Дорогие друзья! Приглашаем вас разделить с нами самый счастливый день в нашей жизни.</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-zinc-900 rounded-3xl p-8">
+                        <h4 class="uppercase text-xs tracking-widest mb-4 text-white/60">Дизайн</h4>
+                        <div class="flex gap-3 flex-wrap">
+                            <button onclick="changeBackground(0)" class="w-12 h-12 bg-cover rounded-2xl border-2 border-white" 
+                                    style="background-image: url('https://picsum.photos/id/1015/200/200')"></button>
+                            <button onclick="changeBackground(1)" class="w-12 h-12 bg-cover rounded-2xl border-2 border-transparent hover:border-white" 
+                                    style="background-image: url('https://picsum.photos/id/133/200/200')"></button>
+                            <button onclick="changeBackground(2)" class="w-12 h-12 bg-cover rounded-2xl border-2 border-transparent hover:border-white" 
+                                    style="background-image: url('https://picsum.photos/id/201/200/200')"></button>
+                        </div>
+                    </div>
+
+                    <button onclick="saveTemplate()" 
+                            class="w-full bg-gradient-to-r from-rose-500 to-purple-600 py-6 rounded-3xl text-xl font-medium">
+                        Сохранить шаблон
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- GUESTS -->
+        <div id="guests" class="hidden pt-24 px-8">
+            <div class="flex justify-between items-end mb-10">
+                <div>
+                    <h2 class="text-5xl title-font">Список гостей</h2>
+                    <p class="text-white/60">Добавьте гостей — каждому будет сгенерирована уникальная ссылка</p>
+                </div>
+                <button onclick="addGuest()" 
+                        class="flex items-center gap-3 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-2xl">
+                    <i class="fas fa-plus"></i>
+                    <span>Добавить гостя</span>
+                </button>
+            </div>
+
+            <div class="bg-zinc-900 rounded-3xl overflow-hidden">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-white/10">
+                            <th class="text-left p-6">Имя</th>
+                            <th class="text-left p-6">Ссылка</th>
+                            <th class="text-center p-6">Статус</th>
+                            <th class="w-32"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="guests-table" class="divide-y divide-white/10">
+                        <!-- JS populated -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
-    <!-- МОДАЛКА -->
-    <div class="modal" id="linkModal">
-        <div class="modal-box">
-            <h2>✅ Приглашение создано!</h2>
-            <p style="color:#8b7355; margin:8px 0;">Ссылка скопирована. Отправьте её гостям:</p>
-            <div class="link-display" id="linkBox"></div>
-            <button class="btn btn-gold" onclick="copyLinkAgain()">📋 Копировать ещё раз</button>
-            <button class="btn btn-outline" onclick="closeModal()">Закрыть</button>
-            <p style="font-size:0.78em; color:#b0a089; margin-top:10px;">При открытии ссылки гость увидит приглашение</p>
+    <!-- INVITATION VIEW MODAL -->
+    <div id="invitation-modal" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-[100]">
+        <div onclick="event.stopImmediatePropagation()" 
+             class="invitation-card max-w-md w-full mx-4 bg-white text-black rounded-3xl overflow-hidden">
+            <div id="modal-card-bg" class="h-96 bg-cover relative">
+                <button onclick="closeModal()" 
+                        class="absolute top-6 right-6 w-10 h-10 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center">
+                    ✕
+                </button>
+            </div>
+            <div class="p-10 text-center">
+                <div id="modal-names" class="title-font text-6xl leading-none mb-8"></div>
+                <div id="modal-date" class="text-2xl mb-2"></div>
+                <div id="modal-venue" class="mb-8"></div>
+                <p id="modal-message" class="italic"></p>
+            </div>
         </div>
     </div>
 
     <script>
-        // ГЛОБАЛЬНОЕ СОСТОЯНИЕ
-        let currentStyle = 'classic';
-        let currentColor = '#c9a96e';
-        let currentPhoto = null;
-        let currentLink = '';
-
-        const backgrounds = {
-            classic: 'linear-gradient(160deg, #fef9f1, #fdf3e4)',
-            romance: 'linear-gradient(160deg, #fef5f7, #fceff2)',
-            modern: 'linear-gradient(160deg, #f8f8f8, #f3f3f3)',
-            boho: 'linear-gradient(160deg, #fdf8f0, #faf3e8)',
-            navy: 'linear-gradient(160deg, #1a1a2e, #16213e)',
-            gold: 'linear-gradient(160deg, #fdf8f0, #faf1e4)'
+        // State
+        let currentTemplate = {
+            names: "Анна & Дмитрий",
+            date: "15 августа 2026",
+            venue: "Ресторан «Золотой Сад», Москва",
+            message: "Дорогие друзья! Приглашаем вас разделить с нами самый счастливый день в нашей жизни.",
+            bgIndex: 0
         };
 
-        // ========== ФУНКЦИИ КОНСТРУКТОРА ==========
-        
-        function setStyle(style, btn) {
-            currentStyle = style;
-            document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            updatePreviewBackground();
+        let guests = [
+            { id: "g1", name: "Елена Смирнова", link: "", status: "Не отправлено" },
+            { id: "g2", name: "Алексей Иванов", link: "", status: "Не отправлено" },
+        ];
+
+        const backgrounds = [
+            'https://picsum.photos/id/1015/800/600',
+            'https://picsum.photos/id/133/800/600',
+            'https://picsum.photos/id/201/800/600'
+        ];
+
+        // Navigation
+        function navigateTo(page) {
+            document.querySelectorAll('#home, #constructor, #guests').forEach(el => el.classList.add('hidden'));
+            document.getElementById(page).classList.remove('hidden');
+            
+            if (page === 'guests') renderGuests();
         }
 
-        function setColor(color, dot) {
-            currentColor = color;
-            document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
-            dot.classList.add('active');
-            document.getElementById('prevNames').style.color = color;
+        // Preview
+        function updatePreview() {
+            currentTemplate.names = document.getElementById('names').value;
+            currentTemplate.date = document.getElementById('date').value;
+            currentTemplate.venue = document.getElementById('venue').value;
+            currentTemplate.message = document.getElementById('message').value;
+
+            document.getElementById('preview-names').innerHTML = currentTemplate.names;
+            document.getElementById('preview-date').textContent = currentTemplate.date;
+            document.getElementById('preview-venue').textContent = currentTemplate.venue;
+            document.getElementById('preview-message').textContent = currentTemplate.message;
         }
 
-        function loadPhoto(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(ev) {
-                // Сжимаем для URL
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    let w = img.width, h = img.height;
-                    const max = 400;
-                    if (w > max || h > max) {
-                        if (w > h) { h = (max/w)*h; w = max; }
-                        else { w = (max/h)*w; h = max; }
+        function changeBackground(index) {
+            currentTemplate.bgIndex = index;
+            document.getElementById('card-bg').style.backgroundImage = `url('${backgrounds[index]}')`;
+        }
+
+        // Guests
+        function renderGuests() {
+            const tbody = document.getElementById('guests-table');
+            tbody.innerHTML = '';
+            
+            guests.forEach(guest => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-white/5 transition';
+                row.innerHTML = `
+                    <td class="p-6">${guest.name}</td>
+                    <td class="p-6">
+                        ${guest.link ? 
+                            `<a href="${guest.link}" target="_blank" class="text-rose-400 hover:underline text-sm">${guest.link.substring(0, 35)}...</a>` : 
+                            `<span class="text-white/40 text-sm">—</span>`
+                        }
+                    </td>
+                    <td class="p-6 text-center">
+                        <span class="px-4 py-1 text-xs rounded-full ${guest.status === 'Отправлено' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}">
+                            ${guest.status}
+                        </span>
+                    </td>
+                    <td class="p-6">
+                        <button onclick="generateLink('${guest.id}')" 
+                                class="text-xs bg-white/10 hover:bg-white/20 px-5 py-2 rounded-2xl">
+                            ${guest.link ? 'Повторить' : 'Создать ссылку'}
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function addGuest() {
+            const name = prompt("Имя гостя:");
+            if (!name) return;
+            
+            guests.push({
+                id: 'g' + Date.now(),
+                name: name,
+                link: '',
+                status: 'Не отправлено'
+            });
+            renderGuests();
+        }
+
+        function generateLink(id) {
+            const guest = guests.find(g => g.id === id);
+            if (!guest) return;
+            
+            // Симуляция уникальной ссылки
+            const uniqueId = btoa(guest.id + Date.now()).slice(0, 12);
+            guest.link = `https://invitly.example/inv/${uniqueId}`;
+            guest.status = 'Отправлено';
+            
+            renderGuests();
+            
+            // Показываем пример приглашения
+            showSampleInvitation(guest);
+        }
+
+        function generateAllLinks() {
+            if (confirm("Сгенерировать уникальные ссылки для всех гостей?")) {
+                guests.forEach(guest => {
+                    if (!guest.link) {
+                        const uniqueId = btoa(guest.id + Date.now()).slice(0, 12);
+                        guest.link = `https://invitly.example/inv/${uniqueId}`;
+                        guest.status = 'Отправлено';
                     }
-                    canvas.width = w;
-                    canvas.height = h;
-                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                    currentPhoto = canvas.toDataURL('image/jpeg', 0.5);
-                    updatePreviewBackground();
-                };
-                img.src = ev.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function removePhoto() {
-            currentPhoto = null;
-            updatePreviewBackground();
-            document.getElementById('photoFile').value = '';
-        }
-
-        function updatePreviewBackground() {
-            const card = document.getElementById('previewCard');
-            if (currentPhoto) {
-                card.style.backgroundImage = `url(${currentPhoto})`;
-                card.style.backgroundSize = 'cover';
-                card.style.backgroundPosition = 'center';
-            } else {
-                card.style.backgroundImage = '';
-                card.style.background = backgrounds[currentStyle] || backgrounds.classic;
-            }
-        }
-
-        function refresh() {
-            document.getElementById('prevGroom').textContent = document.getElementById('groom').value.trim() || 'Александр';
-            document.getElementById('prevBride').textContent = document.getElementById('bride').value.trim() || 'Екатерина';
-            document.getElementById('prevGuest').textContent = document.getElementById('guest').value.trim() || 'Дорогой друг!';
-            document.getElementById('prevVenue').textContent = document.getElementById('venue').value.trim() || 'Ресторан';
-            document.getElementById('prevAddress').textContent = document.getElementById('address').value.trim() || '';
-            document.getElementById('prevMessage').textContent = document.getElementById('message').value.trim() || 'Будем рады видеть вас!';
-            document.getElementById('prevTime').textContent = document.getElementById('time').value || '15:00';
-            
-            const dateVal = document.getElementById('date').value;
-            if (dateVal) {
-                const d = new Date(dateVal);
-                document.getElementById('prevDate').textContent = d.toLocaleDateString('ru-RU', {
-                    day: 'numeric', month: 'long', year: 'numeric'
                 });
+                renderGuests();
+                alert("✅ Ссылки успешно сгенерированы! Готовы к отправке.");
             }
         }
 
-        function getData() {
-            return {
-                s: currentStyle,
-                c: currentColor,
-                p: currentPhoto,
-                g: document.getElementById('groom').value.trim(),
-                b: document.getElementById('bride').value.trim(),
-                d: document.getElementById('date').value,
-                t: document.getElementById('time').value,
-                v: document.getElementById('venue').value.trim(),
-                a: document.getElementById('address').value.trim(),
-                gn: document.getElementById('guest').value.trim(),
-                m: document.getElementById('message').value.trim()
-            };
-        }
-
-        // ========== ГЕНЕРАЦИЯ ССЫЛКИ ==========
-        
-        function generateLink() {
-            refresh();
-            const data = getData();
+        // Modal
+        function showSampleInvitation(guest) {
+            const modal = document.getElementById('invitation-modal');
+            document.getElementById('modal-names').textContent = currentTemplate.names;
+            document.getElementById('modal-date').textContent = currentTemplate.date;
+            document.getElementById('modal-venue').textContent = currentTemplate.venue;
+            document.getElementById('modal-message').textContent = currentTemplate.message + `\n\nС любовью, для ${guest.name}`;
             
-            // Кодируем данные в URL
-            const json = JSON.stringify(data);
-            const encoded = btoa(encodeURIComponent(json).replace(/%([0-9A-F]{2})/g, (m, p) => {
-                return String.fromCharCode('0x' + p);
-            }));
-            
-            // Создаём ссылку
-            currentLink = window.location.href.split('?')[0].split('#')[0] + '?data=' + encoded;
-            
-            console.log('Длина ссылки:', currentLink.length, 'символов');
-            
-            // Показываем модалку
-            document.getElementById('linkBox').textContent = currentLink;
-            document.getElementById('linkModal').classList.add('show');
-            
-            // Копируем в буфер
-            copyToClipboard(currentLink);
-        }
-
-        function copyToClipboard(text) {
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(text).then(() => {
-                    console.log('Ссылка скопирована');
-                }).catch(() => {
-                    fallbackCopy(text);
-                });
-            } else {
-                fallbackCopy(text);
-            }
-        }
-
-        function fallbackCopy(text) {
-            const ta = document.createElement('textarea');
-            ta.value = text;
-            ta.style.cssText = 'position:fixed;left:-9999px';
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand('copy');
-            document.body.removeChild(ta);
-        }
-
-        function copyLinkAgain() {
-            copyToClipboard(currentLink);
-            alert('✅ Ссылка скопирована!');
+            document.getElementById('modal-card-bg').style.backgroundImage = `url('${backgrounds[currentTemplate.bgIndex]}')`;
+            modal.classList.remove('hidden');
         }
 
         function closeModal() {
-            document.getElementById('linkModal').classList.remove('show');
+            document.getElementById('invitation-modal').classList.add('hidden');
         }
 
-        // ========== ГОСТЕВАЯ СТРАНИЦА ==========
-        
-        function showGuestPage(data) {
-            document.getElementById('constructorView').classList.remove('active');
-            document.getElementById('guestView').classList.add('active');
-
-            let dateStr = 'Дата уточняется';
-            if (data.d) {
-                const dt = new Date(data.d);
-                dateStr = dt.toLocaleDateString('ru-RU', {day:'numeric', month:'long', year:'numeric'});
-            }
-
-            // Обратный отсчёт
-            let countdownHtml = '';
-            if (data.d) {
-                const wedding = new Date(data.d);
-                const now = new Date();
-                const diff = wedding - now;
-                if (diff > 0) {
-                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                    countdownHtml = `<div class="countdown">⏳ ${days} ${getDaysWord(days)} до свадьбы</div>`;
-                } else if (diff > -86400000) {
-                    countdownHtml = '<div class="countdown">🎉 Свадьба сегодня!</div>';
-                }
-            }
-
-            const esc = s => { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; };
-            const isNavy = data.s === 'navy';
-            const bgStyle = data.p ? 
-                `background-image:url(${data.p}); background-size:cover; background-position:center;` : 
-                `background:${backgrounds[data.s] || backgrounds.classic};`;
-
-            let html = '';
-            html += `<div class="bg-image" style="${bgStyle}"></div>`;
-            html += `<div class="bg-overlay" style="background:rgba(255,255,255,0.3)"></div>`;
-            html += `<div class="content" style="${isNavy ? 'color:#f0e6d8' : ''}">`;
-            html += '<div class="ornament">🌸 🌸 🌸</div>';
-            html += '<h2>Приглашение на свадьбу</h2>';
-            html += '<div class="divider">━━━ ❤ ━━━</div>';
-            html += '<p>С радостью приглашаем</p>';
-            html += `<p style="font-weight:500;">${esc(data.gn) || 'Дорогой друг!'}</p>`;
-            html += `<div class="names" style="color:${data.c || '#c9a96e'}">${esc(data.g) || 'Александр'}<br>&<br>${esc(data.b) || 'Екатерина'}</div>`;
-            html += '<p>на торжество в честь бракосочетания!</p>';
-            html += `<div class="date">${dateStr}</div>`;
-            html += `<div class="info"><div>🕐 ${esc(data.t) || '15:00'}</div><div>📍 ${esc(data.v) || ''}</div>${data.a ? `<div>🏠 ${esc(data.a)}</div>` : ''}</div>`;
-            html += `<div class="message" style="${isNavy ? 'border-color:rgba(240,230,216,0.3)' : ''}">${esc(data.m) || ''}</div>`;
-            html += countdownHtml;
-            html += '<div class="ornament">🌸 🌸 🌸</div>';
-            html += '<p class="footer-text">Пожалуйста, подтвердите ваше присутствие</p>';
-            html += '</div>';
-
-            document.getElementById('guestCard').innerHTML = html;
+        function mockRSVP() {
+            alert("🎉 Спасибо! Ваше присутствие подтверждено.");
         }
 
-        function getDaysWord(days) {
-            if (days % 10 === 1 && days % 100 !== 11) return 'день';
-            if ([2,3,4].includes(days % 10) && ![12,13,14].includes(days % 100)) return 'дня';
-            return 'дней';
+        function saveTemplate() {
+            alert("Шаблон успешно сохранён! 🎉\n\nТеперь вы можете добавлять гостей и генерировать персональные ссылки.");
+            navigateTo('guests');
         }
 
-        function openConstructor() {
-            document.getElementById('guestView').classList.remove('active');
-            document.getElementById('constructorView').classList.add('active');
-        }
-
-        function backToGuest() {
-            // Показываем предпросмотр как гость
-            refresh();
-            const data = getData();
-            showGuestPage(data);
-        }
-
-        // ========== ДЕКОДИРОВАНИЕ ==========
-        
-        function decodeData(encoded) {
-            try {
-                const json = decodeURIComponent(atob(encoded).split('').map(c => {
-                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                }).join(''));
-                return JSON.parse(json);
-            } catch(e) {
-                console.error('Ошибка декодирования:', e);
-                return null;
-            }
-        }
-
-        // ========== ИНИЦИАЛИЗАЦИЯ ==========
-        
-        window.addEventListener('DOMContentLoaded', function() {
-            const params = new URLSearchParams(window.location.search);
-            const encodedData = params.get('data');
+        // Init
+        window.onload = () => {
+            // Tailwind script already loaded
+            navigateTo('home');
             
-            if (encodedData) {
-                // ГОСТЬ ОТКРЫЛ ССЫЛКУ - показываем приглашение
-                console.log('Открыта ссылка с данными');
-                const data = decodeData(encodedData);
-                
-                if (data) {
-                    console.log('Данные декодированы успешно');
-                    if (data.p) console.log('Фото присутствует:', Math.round(data.p.length/1024), 'KB');
-                    showGuestPage(data);
-                } else {
-                    // Ошибка - показываем заглушку
-                    document.getElementById('guestView').classList.add('active');
-                    document.getElementById('guestCard').innerHTML = `
-                        <div style="padding:40px; text-align:center;">
-                            <div style="font-size:3em;">😔</div>
-                            <h2>Приглашение не найдено</h2>
-                            <p style="color:#8b7355;">Ссылка повреждена или недействительна</p>
-                            <p style="color:#b0a089; font-size:0.9em;">Пожалуйста, попросите отправить приглашение заново</p>
-                        </div>`;
+            // Auto update preview on load
+            setTimeout(() => {
+                updatePreview();
+            }, 300);
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', e => {
+                if (e.key === '/' && document.getElementById('constructor').classList.contains('hidden') === false) {
+                    document.getElementById('names').focus();
                 }
-            } else {
-                // ОТКРЫТ КОНСТРУКТОР
-                console.log('Открыт конструктор');
-                document.getElementById('constructorView').classList.add('active');
-                
-                const today = new Date();
-                const nm = new Date(today.getFullYear(), today.getMonth() + 1, 15);
-                document.getElementById('date').value = nm.toISOString().split('T')[0];
-                refresh();
-            }
-        });
-
-        document.getElementById('linkModal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeModal();
-        });
+            });
+        };
     </script>
 </body>
 </html>
