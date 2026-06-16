@@ -94,7 +94,6 @@
             box-shadow: var(--shadow);
             margin-bottom: 24px;
             transition: background var(--transition);
-            backdrop-filter: blur(4px);
             border: 1px solid rgba(255,255,255,0.1);
         }
         .app-header h1 {
@@ -456,13 +455,13 @@
         .border-double { border: 6px double var(--accent); }
         .border-dashed { border: 3px dashed var(--accent); }
 
-        /* ===== ГОСТЕВАЯ СТРАНИЦА ===== */
+        /* ===== ГОСТЕВАЯ СТРАНИЦА (оптимизирована для телефона) ===== */
         .guest-page {
             display: none;
             min-height: 100vh;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 10px;
             background: linear-gradient(135deg, #c9a96e, #d4c5a9);
             position: fixed;
             top:0; left:0; right:0; bottom:0;
@@ -486,6 +485,8 @@
             from { opacity:0; transform: translateY(30px) scale(0.96); }
             to { opacity:1; transform: translateY(0) scale(1); }
         }
+
+        /* Адаптация для маленьких экранов */
         @media (max-width: 480px) {
             .guest-page .preview-card {
                 padding: 20px 12px;
@@ -498,6 +499,28 @@
             .guest-page .preview-card .ornament { font-size: 1.6rem; letter-spacing: 4px; }
             .guest-page .preview-card .countdown-digits { font-size: 1.1rem; gap: 6px; }
             .guest-page .preview-card .countdown-digits span { padding: 4px 10px; min-width: 40px; }
+            .guest-page .preview-card .message { font-size: 1rem; padding: 12px 0; }
+            .guest-page .preview-card .rsvp-form { padding: 12px; }
+            .guest-page .preview-card .rsvp-options label { font-size: 0.85rem; }
+            .guest-page .preview-card .btn { font-size: 0.8rem; padding: 8px 16px; }
+        }
+        @media (max-width: 400px) {
+            .guest-page .preview-card {
+                padding: 16px 10px;
+                border-radius: 20px;
+            }
+            .guest-page .preview-card .names { font-size: 1.5rem; }
+            .guest-page .preview-card .date { font-size: 1.3rem; }
+            .guest-page .preview-card .info { font-size: 0.9rem; }
+            .guest-page .preview-card h2 { font-size: 1.3rem; }
+            .guest-page .preview-card .ornament { font-size: 1.4rem; letter-spacing: 3px; }
+            .guest-page .preview-card .countdown-digits { font-size: 0.9rem; gap: 4px; }
+            .guest-page .preview-card .countdown-digits span { padding: 2px 8px; min-width: 30px; }
+            .guest-page .preview-card .message { font-size: 0.9rem; padding: 10px 0; }
+            .guest-page .preview-card .rsvp-form { padding: 10px; }
+            .guest-page .preview-card .rsvp-options label { font-size: 0.8rem; }
+            .guest-page .preview-card .btn { font-size: 0.7rem; padding: 6px 12px; }
+            .guest-page .preview-card .field input { font-size: 0.85rem; padding: 8px 12px; }
         }
 
         /* ===== МОДАЛКА ===== */
@@ -635,7 +658,7 @@
             z-index: 0;
         }
 
-        /* ===== АДАПТИВ ===== */
+        /* ===== АДАПТИВ (общий) ===== */
         @media (max-width: 768px) {
             .app-header h1 { font-size: 1.8rem; }
             .app-header { padding: 12px 16px; }
@@ -649,6 +672,19 @@
         @media (max-width: 480px) {
             .app-header h1 { font-size: 1.4rem; }
             .header-actions .btn { font-size: 0.7rem; padding: 6px 12px; }
+            .preview-card .names { font-size: 1.8rem; }
+            .preview-card .date { font-size: 1.4rem; }
+            .preview-card .info { font-size: 1rem; }
+            .preview-card h2 { font-size: 1.6rem; }
+        }
+        @media (max-width: 400px) {
+            .app-header h1 { font-size: 1.2rem; }
+            .header-actions .btn { font-size: 0.6rem; padding: 4px 10px; }
+            .preview-card { padding: 16px 12px; }
+            .preview-card .names { font-size: 1.5rem; }
+            .preview-card .date { font-size: 1.2rem; }
+            .preview-card .info { font-size: 0.9rem; }
+            .preview-card h2 { font-size: 1.3rem; }
         }
     </style>
 </head>
@@ -942,7 +978,7 @@
     let currentAnim = 'slide-left';
     let currentColor = '#c9a96e';
     let currentPhoto = null;
-    let currentMusic = null; // может быть URL или base64 или 'simple-tone'
+    let currentMusic = null;
     let currentLink = '';
 
     const backgrounds = {
@@ -1174,12 +1210,11 @@
         reader.readAsDataURL(file);
     }
 
-    // ===== МУЗЫКА (новая) =====
+    // ===== МУЗЫКА =====
     function generateSimpleTone() {
-        // Создаём короткую мелодию через Web Audio (колокольчик)
         try {
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const notes = [523, 659, 784, 1047]; // частота
+            const notes = [523, 659, 784, 1047];
             const dur = 0.3;
             const startTime = audioCtx.currentTime + 0.1;
             notes.forEach((freq, i) => {
@@ -1194,17 +1229,14 @@
                 osc.start(startTime + i * 0.2);
                 osc.stop(startTime + i * 0.2 + dur);
             });
-            // Сохраняем как специальный флаг
             currentMusic = 'simple-tone';
             document.getElementById('musicPlayer').style.display = 'block';
-            document.getElementById('audioPlayer').src = ''; // очищаем
-            // Показываем уведомление
-            const player = document.getElementById('musicPlayer');
-            player.innerHTML = `<div style="padding:12px; background:rgba(201,169,110,0.1); border-radius:16px; color:var(--accent-dark);">
-                🎵 Простая мелодия создана! Она будет играть на гостевой странице.
-                <button class="btn btn-outline" onclick="playSimpleTone()" style="margin-top:8px;">▶️ Прослушать</button>
-            </div>`;
-            // Сохраняем для возможности прослушать
+            document.getElementById('musicPlayer').innerHTML = `
+                <div style="padding:12px; background:rgba(201,169,110,0.1); border-radius:16px; color:var(--accent-dark);">
+                    🎵 Простая мелодия создана! Она будет играть на гостевой странице.
+                    <button class="btn btn-outline" onclick="playSimpleTone()" style="margin-top:8px;">▶️ Прослушать</button>
+                </div>
+            `;
             window.simpleToneNotes = notes;
         } catch(e) {
             alert('Не удалось создать мелодию. Ваш браузер может не поддерживать Web Audio.');
@@ -1243,9 +1275,7 @@
             document.getElementById('audioPlayer').src = currentMusic;
             document.getElementById('audioPlayer').load();
             document.getElementById('musicPlayer').style.display = 'block';
-            // Очищаем возможные простые тоны
             window.simpleToneNotes = null;
-            // Пересоздаём плеер для отображения контролов
             document.getElementById('musicPlayer').innerHTML = `
                 <audio controls style="width:100%; border-radius:30px;" id="audioPlayer" src="${currentMusic}"></audio>
                 <button class="btn btn-outline" onclick="document.getElementById('audioPlayer').pause()">⏸️ Пауза</button>
@@ -1353,7 +1383,7 @@
             showRSVP: document.getElementById('showRSVP').value === 'true',
             font: document.getElementById('fontSelect').value,
             fontSize: document.getElementById('fontSizeRange').value,
-            music: currentMusic // может быть 'simple-tone' или base64
+            music: currentMusic
         };
     }
 
@@ -1374,9 +1404,8 @@
         document.getElementById('copyBtn').style.display = 'none';
 
         const data = getData();
-        // Если музыка — это simple-tone, оставляем как строку
         if (data.music && data.music !== 'simple-tone' && data.music.startsWith('data:')) {
-            data.music = await compressAudio(data.music);
+            // Оставляем как есть – без сжатия аудио
         }
 
         const encoded = encodeData(data);
@@ -1389,32 +1418,6 @@
         document.getElementById('linkBox').style.display = 'block';
         document.getElementById('copyBtn').style.display = 'block';
         setTimeout(copyLink, 500);
-    }
-
-    function compressImage(base64) {
-        return new Promise((resolve) => {
-            const img = new Image();
-            img.onload = function() {
-                const canvas = document.createElement('canvas');
-                const maxSize = 200;
-                let w = img.width, h = img.height;
-                if (w > h) { if (w > maxSize) { h = (maxSize/w)*h; w = maxSize; } }
-                else { if (h > maxSize) { w = (maxSize/h)*w; h = maxSize; } }
-                canvas.width = Math.round(w);
-                canvas.height = Math.round(h);
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                resolve(canvas.toDataURL('image/jpeg', 0.5));
-            };
-            img.src = base64;
-        });
-    }
-
-    function compressAudio(base64) {
-        return new Promise((resolve) => {
-            // Для простоты не сжимаем аудио, оставляем как есть (это занимает место, но мы не можем сжать без потери качества)
-            resolve(base64);
-        });
     }
 
     function copyLink() {
@@ -1446,7 +1449,6 @@
     function showGuestPage(data) {
         document.getElementById('guestPage').classList.add('active');
         document.body.style.overflow = 'hidden';
-        // Добавляем частицы
         createParticles();
 
         const card = document.getElementById('guestCard');
@@ -1501,11 +1503,9 @@
             `;
         }
 
-        // === Музыка ===
         let musicHtml = '';
         if (data.music) {
             if (data.music === 'simple-tone') {
-                // Синтезированная мелодия
                 musicHtml = `
                     <div style="margin-top:12px;">
                         <button class="btn btn-music" onclick="playGuestSimpleTone()" id="musicPlayBtn">🎵 Включить музыку (колокольчик)</button>
@@ -1513,7 +1513,6 @@
                     </div>
                 `;
             } else {
-                // Загруженный файл
                 musicHtml = `
                     <div style="margin-top:12px;">
                         <button class="btn btn-music" onclick="playGuestMusic()" id="musicPlayBtn">▶️ Включить музыку</button>
@@ -1592,7 +1591,6 @@
                     } catch(e) { alert('Не удалось запустить'); }
                 };
             } else {
-                // Загружаем файл
                 const audio = document.getElementById('guestAudio');
                 if (audio) {
                     audio.src = data.music;
@@ -1654,7 +1652,6 @@
         };
     }
 
-    // ===== ЧАСТИЦЫ ДЛЯ ГОСТЕВОЙ =====
     function createParticles() {
         const container = document.getElementById('guestPage');
         const existing = container.querySelectorAll('.particle');
@@ -1672,7 +1669,6 @@
             particle.style.transform = `translate(${Math.random() * 40 - 20}px, ${Math.random() * 40 - 20}px)`;
             container.appendChild(particle);
         }
-        // Добавляем стили анимации, если их нет
         if (!document.getElementById('particleStyles')) {
             const style = document.createElement('style');
             style.id = 'particleStyles';
@@ -1689,10 +1685,8 @@
     function closeGuestPage() {
         document.getElementById('guestPage').classList.remove('active');
         document.body.style.overflow = '';
-        // Останавливаем музыку
         const audio = document.getElementById('guestAudio');
         if (audio) audio.pause();
-        // Удаляем частицы
         document.querySelectorAll('.particle').forEach(p => p.remove());
     }
 
