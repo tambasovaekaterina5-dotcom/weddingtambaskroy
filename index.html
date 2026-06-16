@@ -1236,27 +1236,14 @@
             };
         }
 
-        /* ─── НАДЁЖНОЕ КОДИРОВАНИЕ В URL-SAFE BASE64 ─── */
+        /* ─── НАДЁЖНОЕ КОДИРОВАНИЕ (JSON + encodeURIComponent) ─── */
         function encodeData(obj) {
-            const json = JSON.stringify(obj);
-            const encoder = new TextEncoder();
-            const data = encoder.encode(json);
-            let base64 = btoa(String.fromCharCode(...data));
-            return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+            return encodeURIComponent(JSON.stringify(obj));
         }
 
         function decodeData(encoded) {
             try {
-                let base64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
-                while (base64.length % 4) base64 += '=';
-                const binary = atob(base64);
-                const bytes = new Uint8Array(binary.length);
-                for (let i = 0; i < binary.length; i++) {
-                    bytes[i] = binary.charCodeAt(i);
-                }
-                const decoder = new TextDecoder('utf-8');
-                const json = decoder.decode(bytes);
-                return JSON.parse(json);
+                return JSON.parse(decodeURIComponent(encoded));
             } catch (e) {
                 console.error('Ошибка декодирования:', e);
                 return null;
