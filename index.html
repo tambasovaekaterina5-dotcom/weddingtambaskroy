@@ -459,12 +459,12 @@
         .shape-pointed { border-radius: 0 40px 0 40px; }
         .shape-fancy { border-radius: 60px 10px 60px 10px; }
 
-        /* ===== ГОСТЕВАЯ СТРАНИЦА (ПОЛНОЭКРАННАЯ) ===== */
+        /* ===== ГОСТЕВАЯ СТРАНИЦА – ПОЛНОЭКРАННАЯ ===== */
         .guest-page {
             display: none;
-            width: 100vw;
-            height: 100vh;
-            min-height: 100vh;
+            width: 100vw !important;
+            height: 100vh !important;
+            min-height: 100vh !important;
             padding: 0 !important;
             margin: 0 !important;
             background: linear-gradient(135deg, #f5e6d3, #e8d5c0, #f5e6d3);
@@ -490,18 +490,18 @@
         .guest-page.active { display: flex; }
 
         .guest-page .preview-card {
-            width: 100%;
-            height: 100%;
-            min-height: 100vh;
-            max-width: none;
-            margin: 0;
-            padding: 24px 16px;
-            border-radius: 0;
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: none;
-            box-shadow: none;
+            width: 100% !important;
+            height: 100% !important;
+            min-height: 100vh !important;
+            max-width: none !important;
+            margin: 0 !important;
+            padding: 24px 16px !important;
+            border-radius: 0 !important;
+            background: rgba(255,255,255,0.15) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border: none !important;
+            box-shadow: none !important;
             animation: floatIn 0.8s ease;
             transition: all 0.3s;
             color: var(--text-primary);
@@ -509,22 +509,23 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center;
         }
         body.dark .guest-page .preview-card {
-            background: rgba(40,35,30,0.4);
+            background: rgba(40,35,30,0.3) !important;
         }
 
         .guest-page .preview-card .bg-layer {
-            border-radius: 0;
+            border-radius: 0 !important;
             overflow: hidden;
         }
         .guest-page .preview-card .overlay {
-            border-radius: 0;
-            background: rgba(255,255,255,0.08);
+            border-radius: 0 !important;
+            background: rgba(255,255,255,0.05);
             backdrop-filter: blur(4px);
         }
         body.dark .guest-page .preview-card .overlay {
-            background: rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.15);
         }
 
         .guest-page .preview-card .content {
@@ -717,7 +718,7 @@
         /* Адаптив для телефона */
         @media (max-width: 480px) {
             .guest-page .preview-card {
-                padding: 16px 12px;
+                padding: 16px 12px !important;
             }
             .guest-page .preview-card h2 {
                 font-size: 2.2rem;
@@ -759,7 +760,7 @@
 
         @media (max-width: 400px) {
             .guest-page .preview-card {
-                padding: 12px 8px;
+                padding: 12px 8px !important;
             }
             .guest-page .preview-card h2 {
                 font-size: 1.8rem;
@@ -1919,8 +1920,9 @@
         const animClass = 'anim-' + (data.anim || 'slide-left');
         const fontFamily = data.font || "'Cormorant Garamond', serif";
         const fontSize = data.fontSize || '18';
-        const shapeClass = 'shape-' + (data.shape || 'rounded');
+        // Форма на гостевой странице игнорируется, так как мы используем полноэкранный режим
 
+        // Собираем HTML
         card.innerHTML = `
             <div class="bg-layer" style="${bgStyle}"></div>
             <div class="overlay"></div>
@@ -1946,18 +1948,25 @@
             </div>
         `;
 
-        // Применяем классы к карточке — теперь она всегда занимает весь экран
-        card.className = 'preview-card ' + borderClass + ' ' + shapeClass;
-        // Для круга корректируем, но на гостевой странице форма не должна мешать полноэкранности
-        if (data.shape === 'circle') {
-            card.style.aspectRatio = '1/1';
-            card.style.maxWidth = '100%';
-            card.style.padding = '40px';
-        } else {
-            card.style.aspectRatio = 'auto';
-            card.style.maxWidth = '100%';
-            card.style.padding = '24px 16px';
-        }
+        // Применяем стили для полноэкранности
+        card.style.width = '100%';
+        card.style.height = '100%';
+        card.style.maxWidth = 'none';
+        card.style.margin = '0';
+        card.style.borderRadius = '0';
+        card.style.border = 'none';
+        card.style.boxShadow = 'none';
+        card.style.padding = '24px 16px';
+        card.style.background = 'rgba(255,255,255,0.15)';
+        card.style.backdropFilter = 'blur(20px)';
+        card.style.WebkitBackdropFilter = 'blur(20px)';
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+        card.style.justifyContent = 'center';
+        card.style.alignItems = 'center';
+
+        // Также добавляем классы для рамки, если они нужны (но для полноэкранного режима они не имеют значения)
+        // Оставляем только класс preview-card и border-классы для совместимости, но они переопределены стилями
 
         // Музыка
         if (data.music) {
