@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>✨ Свадебное приглашение</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Great+Vibes&family=Montserrat:wght@300;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <title>✨ Свадебный конструктор</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Great+Vibes&family=Montserrat:wght@300;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* ===== ГЛОБАЛЬНЫЕ ===== */
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -311,7 +312,7 @@
             border-radius: 4px;
         }
 
-        /* ===== ПРЕДПРОСМОТР В КОНСТРУКТОРЕ ===== */
+        /* ===== ПРЕДПРОСМОТР ===== */
         .preview-panel {
             background: var(--bg-card);
             border-radius: var(--radius);
@@ -432,13 +433,13 @@
         .border-double { border: 6px double var(--accent); }
         .border-dashed { border: 3px dashed var(--accent); }
 
-        /* ===== НОВАЯ ГОСТЕВАЯ СТРАНИЦА (СОВРЕМЕННЫЙ ДИЗАЙН) ===== */
+        /* ===== ГОСТЕВАЯ СТРАНИЦА (полноэкранная, адаптивная) ===== */
         .guest-page {
             display: none;
             min-height: 100vh;
             justify-content: center;
-            align-items: flex-start;
-            padding: 20px 16px 40px;
+            align-items: center;
+            padding: 12px;
             background: linear-gradient(135deg, #f5e6d3, #e8d5c0, #f5e6d3);
             background-size: 400% 400%;
             animation: gradientShift 12s ease infinite;
@@ -461,21 +462,22 @@
 
         .guest-page.active { display: flex; }
 
-        /* Карточка с эффектом стекла */
         .guest-page .preview-card {
             max-width: 480px;
             width: 100%;
             margin: 10px auto;
-            padding: 32px 24px;
+            padding: 28px 20px;
             border-radius: 40px;
-            background: rgba(255,255,255,0.25);
+            background: rgba(255,255,255,0.2);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid rgba(255,255,255,0.25);
             box-shadow: 0 30px 80px rgba(0,0,0,0.15);
             animation: floatIn 0.8s ease;
             transition: all 0.3s;
             color: var(--text-primary);
+            max-height: none;
+            overflow: visible;
         }
         body.dark .guest-page .preview-card {
             background: rgba(40,35,30,0.4);
@@ -499,15 +501,23 @@
             position: relative;
             z-index: 3;
             text-align: center;
+            overflow-y: auto;
+            max-height: 80vh;
+            padding-right: 4px;
+        }
+        .guest-page .preview-card .content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .guest-page .preview-card .content::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 8px;
         }
 
-        /* Декоративные элементы */
         .guest-page .preview-card .ornament {
             font-size: 2.4rem;
             letter-spacing: 12px;
             margin: 6px 0 10px;
             opacity: 0.9;
-            animation: shimmer 4s infinite;
         }
         .guest-page .preview-card h2 {
             font-family: 'Great Vibes', cursive;
@@ -612,7 +622,7 @@
             letter-spacing: 1px;
         }
 
-        /* RSVP форма */
+        /* RSVP */
         .guest-page .preview-card .rsvp-form {
             margin-top: 20px;
             padding: 20px;
@@ -684,10 +694,10 @@
         /* Адаптив для телефона */
         @media (max-width: 480px) {
             .guest-page {
-                padding: 12px 8px 30px;
+                padding: 8px 6px 20px;
             }
             .guest-page .preview-card {
-                padding: 24px 16px;
+                padding: 20px 14px;
                 border-radius: 32px;
             }
             .guest-page .preview-card h2 {
@@ -730,7 +740,7 @@
 
         @media (max-width: 400px) {
             .guest-page .preview-card {
-                padding: 18px 12px;
+                padding: 16px 10px;
                 border-radius: 28px;
             }
             .guest-page .preview-card h2 {
@@ -861,6 +871,7 @@
                 <button class="tab-btn" data-tab="tab-music">🎵 Музыка</button>
             </div>
 
+            <!-- Вкладка "Основное" (без изменений) -->
             <div class="tab-content active" id="tab-main">
                 <div class="section">
                     <div class="section-title">👥 Имена</div>
@@ -900,7 +911,21 @@
                 </div>
             </div>
 
+            <!-- Вкладка "Дизайн" с готовыми стилями -->
             <div class="tab-content" id="tab-design">
+                <div class="section">
+                    <div class="section-title">🎨 Готовые дизайны</div>
+                    <div class="style-grid" id="presetGrid">
+                        <button class="style-btn" data-preset="classic">Классический</button>
+                        <button class="style-btn" data-preset="romantic">Романтический</button>
+                        <button class="style-btn" data-preset="modern">Современный</button>
+                        <button class="style-btn" data-preset="vintage">Винтажный</button>
+                        <button class="style-btn" data-preset="nature">Природа</button>
+                        <button class="style-btn" data-preset="wedding">Свадебный</button>
+                    </div>
+                    <p style="font-size:0.8rem; margin-top:8px; opacity:0.7;">При выборе дизайна автоматически применяются настройки фона, рамки, цвета и шрифта. Вы можете их доработать вручную ниже.</p>
+                </div>
+
                 <div class="section">
                     <div class="section-title">🎨 Фон</div>
                     <div class="style-grid" id="bgGrid">
@@ -974,6 +999,7 @@
                         <option value="'Playfair Display', serif">Playfair Display</option>
                         <option value="'Montserrat', sans-serif">Montserrat</option>
                         <option value="'Great Vibes', cursive">Great Vibes</option>
+                        <option value="'Dancing Script', cursive">Dancing Script</option>
                     </select>
                 </div>
 
@@ -1007,6 +1033,7 @@
                 </div>
             </div>
 
+            <!-- Остальные вкладки без изменений -->
             <div class="tab-content" id="tab-schedule">
                 <div class="section">
                     <div class="section-title">📋 Расписание</div>
@@ -1116,7 +1143,7 @@
     </div>
 </div>
 
-<!-- Гостевая страница (обновлённый дизайн) -->
+<!-- Гостевая страница -->
 <div class="guest-page" id="guestPage">
     <div class="preview-card" id="guestCard" style="max-width:500px; margin:0 auto;"></div>
     <button class="btn btn-outline" onclick="closeGuestPage()" style="position:fixed; bottom:20px; right:20px; background:rgba(0,0,0,0.5); color:#fff; border:none; padding:14px 24px; border-radius:60px; backdrop-filter:blur(8px); font-family:'Montserrat',sans-serif; font-weight:600; z-index:100;">✕ Закрыть</button>
@@ -1146,6 +1173,124 @@
         texture3: "url('data:image/svg+xml,%3Csvg width=\"100\" height=\"100\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noise\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.05\" numOctaves=\"3\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100\" height=\"100\" filter=\"url(%23noise)\" opacity=\"0.2\"/%3E%3C/svg%3E'), #d4b8a0",
         texture4: "url('data:image/svg+xml,%3Csvg width=\"100\" height=\"100\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noise\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.2\" numOctaves=\"2\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100\" height=\"100\" filter=\"url(%23noise)\" opacity=\"0.1\"/%3E%3C/svg%3E'), #d9c8b4"
     };
+
+    // ===== ПРЕСЕТЫ ДИЗАЙНОВ =====
+    const designPresets = {
+        classic: {
+            bg: 'gradient1',
+            border: 'gold',
+            color: '#c9a96e',
+            font: "'Playfair Display', serif",
+            fontSize: '18',
+            ornament: '✨ ✨ ✨',
+            anim: 'slide-left'
+        },
+        romantic: {
+            bg: 'gradient7',
+            border: 'floral',
+            color: '#d4837a',
+            font: "'Dancing Script', cursive",
+            fontSize: '20',
+            ornament: '🌹 🌹 🌹',
+            anim: 'fade'
+        },
+        modern: {
+            bg: 'gradient3',
+            border: 'double',
+            color: '#8ba4c9',
+            font: "'Montserrat', sans-serif",
+            fontSize: '16',
+            ornament: '◆ ◆ ◆',
+            anim: 'scale'
+        },
+        vintage: {
+            bg: 'gradient4',
+            border: 'elegant',
+            color: '#b08bbf',
+            font: "'Great Vibes', cursive",
+            fontSize: '20',
+            ornament: '🌿 🌿 🌿',
+            anim: 'rotate'
+        },
+        nature: {
+            bg: 'texture3',
+            border: 'rustic',
+            color: '#7b9b6a',
+            font: "'Cormorant Garamond', serif",
+            fontSize: '18',
+            ornament: '🍃 🍃 🍃',
+            anim: 'slide-up'
+        },
+        wedding: {
+            bg: 'gradient1',
+            border: 'classic',
+            color: '#c9a96e',
+            font: "'Playfair Display', serif",
+            fontSize: '18',
+            ornament: '💐 💐 💐',
+            anim: 'bounce'
+        }
+    };
+
+    // ===== ФУНКЦИЯ ПРИМЕНЕНИЯ ПРЕСЕТА =====
+    function applyPreset(presetName) {
+        const preset = designPresets[presetName];
+        if (!preset) return;
+
+        // Применяем настройки
+        currentBg = preset.bg;
+        currentBorder = preset.border;
+        currentColor = preset.color;
+        currentAnim = preset.anim;
+
+        // Обновляем элементы интерфейса
+        // Фон
+        document.querySelectorAll('#bgGrid .style-btn').forEach(b => b.classList.remove('active'));
+        const bgBtn = document.querySelector(`#bgGrid .style-btn[data-bg="${preset.bg}"]`);
+        if (bgBtn) bgBtn.classList.add('active');
+
+        // Рамка
+        document.querySelectorAll('#borderGrid .style-btn').forEach(b => b.classList.remove('active'));
+        const borderBtn = document.querySelector(`#borderGrid .style-btn[data-border="${preset.border}"]`);
+        if (borderBtn) borderBtn.classList.add('active');
+
+        // Цвет
+        document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+        const colorDot = document.querySelector(`.color-dot[data-color="${preset.color}"]`);
+        if (colorDot) colorDot.classList.add('active');
+
+        // Шрифт
+        document.getElementById('fontSelect').value = preset.font;
+
+        // Размер
+        document.getElementById('fontSizeRange').value = preset.fontSize;
+        document.getElementById('fontSizeLabel').textContent = preset.fontSize + 'px';
+
+        // Орнамент
+        document.getElementById('ornamentSymbol').value = preset.ornament;
+
+        // Анимация
+        document.querySelectorAll('#animGrid .style-btn').forEach(b => b.classList.remove('active'));
+        const animBtn = document.querySelector(`#animGrid .style-btn[data-anim="${preset.anim}"]`);
+        if (animBtn) animBtn.classList.add('active');
+
+        // Обновляем предпросмотр
+        refreshPreview();
+    }
+
+    // ===== ОБРАБОТЧИКИ КНОПОК ПРЕСЕТОВ =====
+    document.querySelectorAll('#presetGrid .style-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('#presetGrid .style-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const preset = this.dataset.preset;
+            applyPreset(preset);
+        });
+    });
+
+    // ===== ОСТАЛЬНЫЕ ФУНКЦИИ (без изменений) =====
+    // ... (все функции, которые были ранее, остаются точно такими же)
+    // Я скопирую их из предыдущей версии, чтобы ничего не сломать.
 
     // ===== ВКЛАДКИ =====
     document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1555,9 +1700,8 @@
         document.getElementById('copyBtn').style.display = 'none';
 
         const data = getData();
-        // Если музыка — это simple-tone, оставляем как строку
         if (data.music && data.music !== 'simple-tone' && data.music.startsWith('data:')) {
-            // не сжимаем аудио
+            // не сжимаем
         }
 
         const encoded = encodeData(data);
@@ -1592,7 +1736,7 @@
         document.getElementById('linkModal').classList.remove('show');
     }
 
-    // ===== ГОСТЕВАЯ СТРАНИЦА (ОБНОВЛЁННАЯ) =====
+    // ===== ГОСТЕВАЯ СТРАНИЦА =====
     function previewGuestPage() {
         const data = getData();
         showGuestPage(data);
@@ -1715,7 +1859,7 @@
         `;
         card.className = 'preview-card ' + borderClass;
 
-        // Настройка музыки
+        // Музыка
         if (data.music) {
             if (data.music === 'simple-tone') {
                 window.guestSimpleToneNotes = [523, 659, 784, 1047];
@@ -1787,7 +1931,6 @@
             });
         }
 
-        // Обработка RSVP на гостевой
         window.submitGuestRSVP = function() {
             const name = document.getElementById('guestRsvpName').value.trim();
             const status = document.querySelector('input[name="guestRsvpStatus"]:checked');
@@ -1987,6 +2130,10 @@
         loadDraft();
         refreshPreview();
         renderRSVPList();
+
+        // По умолчанию выбираем классический пресет
+        document.querySelector('#presetGrid .style-btn[data-preset="classic"]').classList.add('active');
+        applyPreset('classic');
     });
 
     document.getElementById('linkModal').addEventListener('click', function(e) {
