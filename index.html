@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Свадебное приглашение</title>
     <style>
+        /* ── корневые переменные ── */
         :root {
             --gold: #c9a96e;
             --gold-dark: #b8944f;
@@ -13,7 +14,12 @@
             --border: #e8e0d5;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ── сброс и база ── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
@@ -22,6 +28,7 @@
             min-height: 100vh;
         }
 
+        /* ── общие кнопки ── */
         .btn {
             padding: 12px 24px;
             border: none;
@@ -33,13 +40,28 @@
             letter-spacing: 0.5px;
             white-space: nowrap;
         }
-        .btn-gold { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: white; }
-        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(201,169,110,0.4); }
-        .btn-outline { background: white; border: 2px solid var(--border); color: #6b5b45; }
-        .btn-outline:hover { background: #faf7f0; }
-        .btn-small { padding: 6px 12px; font-size: 0.8em; }
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: #fff;
+        }
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(201, 169, 110, 0.4);
+        }
+        .btn-outline {
+            background: #fff;
+            border: 2px solid var(--border);
+            color: #6b5b45;
+        }
+        .btn-outline:hover {
+            background: #faf7f0;
+        }
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.8em;
+        }
 
-        /* === ГОСТЕВАЯ СТРАНИЦА === */
+        /* ── ГОСТЕВАЯ СТРАНИЦА ── */
         .guest-page {
             display: none;
             min-height: 100vh;
@@ -50,11 +72,20 @@
             position: relative;
             overflow: hidden;
         }
-        .guest-page.active { display: flex; }
+        .guest-page.active {
+            display: flex;
+        }
 
+        /* лепестки */
         @keyframes petalFall {
-            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(720deg);
+                opacity: 0;
+            }
         }
         .petal {
             position: absolute;
@@ -64,11 +95,19 @@
             border-radius: 50% 0 50% 50%;
             animation: petalFall linear infinite;
             z-index: 0;
+            pointer-events: none;
         }
 
+        /* фейерверк */
         @keyframes firework {
-            0% { transform: scale(0); opacity: 1; }
-            100% { transform: scale(1.5); opacity: 0; }
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
         }
         .firework-particle {
             position: absolute;
@@ -77,24 +116,35 @@
             background: gold;
             border-radius: 50%;
             animation: firework 1.5s ease-out infinite;
+            pointer-events: none;
         }
 
+        /* карточка приглашения */
         .guest-card {
-            background: white;
+            background: #fff;
             border-radius: 24px;
             padding: 40px 30px 30px;
             max-width: 450px;
             width: 100%;
             text-align: center;
-            box-shadow: 0 30px 70px rgba(0,0,0,0.3);
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
             animation: cardFadeIn 0.8s ease-out;
             z-index: 1;
         }
-        @keyframes cardFadeIn { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes cardFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
 
-        /* Вкладки */
+        /* вкладки */
         .tabs {
             display: flex;
             gap: 5px;
@@ -117,7 +167,7 @@
         }
         .tab-btn.active {
             background: var(--gold);
-            color: white;
+            color: #fff;
             border-color: var(--gold-dark);
         }
         .tab-content {
@@ -129,9 +179,16 @@
             display: block;
             animation: fadeIn 0.5s ease;
         }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
 
-        /* Анимации элементов */
+        /* ── анимационные классы ── */
         .anim-slide-left {
             opacity: 0;
             animation: slideInLeft 0.7s ease forwards;
@@ -169,72 +226,246 @@
             animation: glowPulse 0.7s ease forwards, glow 2s infinite;
         }
 
-        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes slideInRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes scaleIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
-        @keyframes rotateIn { from { opacity: 0; transform: rotate(-10deg) scale(0.9); } to { opacity: 1; transform: rotate(0) scale(1); } }
-        @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.3); } 50% { opacity: 1; transform: scale(1.05); } 70% { transform: scale(0.9); } 100% { transform: scale(1); } }
-        @keyframes flipIn { from { opacity: 0; transform: perspective(400px) rotateY(90deg); } to { opacity: 1; transform: perspective(400px) rotateY(0); } }
-        @keyframes glowPulse { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        @keyframes rotateIn {
+            from {
+                opacity: 0;
+                transform: rotate(-10deg) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: rotate(0) scale(1);
+            }
+        }
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        @keyframes flipIn {
+            from {
+                opacity: 0;
+                transform: perspective(400px) rotateY(90deg);
+            }
+            to {
+                opacity: 1;
+                transform: perspective(400px) rotateY(0);
+            }
+        }
+        @keyframes glowPulse {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
 
         @keyframes shimmer {
-            0% { opacity: 0.6; filter: brightness(1); }
-            50% { opacity: 1; filter: brightness(1.2); }
-            100% { opacity: 0.6; filter: brightness(1); }
+            0% {
+                opacity: 0.6;
+                filter: brightness(1);
+            }
+            50% {
+                opacity: 1;
+                filter: brightness(1.2);
+            }
+            100% {
+                opacity: 0.6;
+                filter: brightness(1);
+            }
         }
-        .shimmer { animation: shimmer 2s infinite; }
+        .shimmer {
+            animation: shimmer 2s infinite;
+        }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.07); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.07);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
-        .pulse { animation: pulse 2s infinite; }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
 
         @keyframes glow {
-            0% { text-shadow: 0 0 5px rgba(201,169,110,0.5); }
-            50% { text-shadow: 0 0 20px rgba(201,169,110,0.8); }
-            100% { text-shadow: 0 0 5px rgba(201,169,110,0.5); }
+            0% {
+                text-shadow: 0 0 5px rgba(201, 169, 110, 0.5);
+            }
+            50% {
+                text-shadow: 0 0 20px rgba(201, 169, 110, 0.8);
+            }
+            100% {
+                text-shadow: 0 0 5px rgba(201, 169, 110, 0.5);
+            }
         }
-        .glow { animation: glow 2s infinite; }
+        .glow {
+            animation: glow 2s infinite;
+        }
 
+        /* фон карточки с параллаксом */
         .guest-card .bg-image {
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background-size: cover;
             background-position: center;
             z-index: 1;
             transition: transform 0.1s ease-out;
+            pointer-events: none;
         }
         .guest-card .bg-overlay {
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255,255,255,0.35);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.35);
             z-index: 2;
+            pointer-events: none;
         }
         .guest-card .content {
             position: relative;
             z-index: 3;
         }
 
-        .border-none { border: none; }
-        .border-classic { border: 3px solid #d4c5a9; }
-        .border-gold { border: 4px double #c9a96e; }
-        .border-elegant { border: 2px solid #b0a089; box-shadow: 0 0 0 6px #fdf8f0, 0 0 0 8px #b0a089; }
-        .border-floral { border: 3px dashed #d4837a; }
-        .border-rustic { border: 4px solid #8b7355; border-radius: 0; }
+        /* рамки */
+        .border-none {
+            border: none;
+        }
+        .border-classic {
+            border: 3px solid #d4c5a9;
+        }
+        .border-gold {
+            border: 4px double #c9a96e;
+        }
+        .border-elegant {
+            border: 2px solid #b0a089;
+            box-shadow: 0 0 0 6px #fdf8f0, 0 0 0 8px #b0a089;
+        }
+        .border-floral {
+            border: 3px dashed #d4837a;
+        }
+        .border-rustic {
+            border: 4px solid #8b7355;
+            border-radius: 0;
+        }
 
-        .guest-card .ornament { font-size: 1.6em; margin: 10px 0; letter-spacing: 5px; }
-        .guest-card h2 { font-weight: 300; font-size: 2em; margin: 15px 0; letter-spacing: 1px; }
-        .guest-card .divider { margin: 15px 0; font-size: 1em; }
-        .guest-card .names { font-size: 2em; font-weight: bold; margin: 20px 0; line-height: 1.3; }
-        .guest-card .names .name-row { margin: 5px 0; }
-        .guest-card .date { font-size: 1.5em; font-weight: 600; margin: 18px 0; }
-        .guest-card .info { margin: 18px 0; line-height: 2.3; font-size: 1.05em; }
-        .guest-card .message { margin: 18px 0; padding: 18px 0; font-style: italic; font-size: 1.1em; border-top: 1.5px solid rgba(0,0,0,0.12); border-bottom: 1.5px solid rgba(0,0,0,0.12); }
-        .guest-card .countdown { margin: 15px 0; padding: 12px; background: rgba(0,0,0,0.03); border-radius: 10px; font-weight: 500; }
-        .guest-card .footer-text { margin-top: 18px; font-size: 0.9em; opacity: 0.75; }
+        /* внутренние элементы карточки */
+        .guest-card .ornament {
+            font-size: 1.6em;
+            margin: 10px 0;
+            letter-spacing: 5px;
+        }
+        .guest-card h2 {
+            font-weight: 300;
+            font-size: 2em;
+            margin: 15px 0;
+            letter-spacing: 1px;
+        }
+        .guest-card .divider {
+            margin: 15px 0;
+            font-size: 1em;
+        }
+        .guest-card .names {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 20px 0;
+            line-height: 1.3;
+        }
+        .guest-card .names .name-row {
+            margin: 5px 0;
+        }
+        .guest-card .date {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin: 18px 0;
+        }
+        .guest-card .info {
+            margin: 18px 0;
+            line-height: 2.3;
+            font-size: 1.05em;
+        }
+        .guest-card .message {
+            margin: 18px 0;
+            padding: 18px 0;
+            font-style: italic;
+            font-size: 1.1em;
+            border-top: 1.5px solid rgba(0, 0, 0, 0.12);
+            border-bottom: 1.5px solid rgba(0, 0, 0, 0.12);
+        }
+        .guest-card .countdown {
+            margin: 15px 0;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.03);
+            border-radius: 10px;
+            font-weight: 500;
+        }
+        .guest-card .footer-text {
+            margin-top: 18px;
+            font-size: 0.9em;
+            opacity: 0.75;
+        }
 
         .schedule-item {
             display: flex;
@@ -253,43 +484,56 @@
             text-align: left;
         }
 
+        /* кнопка «Создать своё» */
         .create-new-btn {
             position: fixed;
             bottom: 20px;
             right: 20px;
             padding: 12px 20px;
-            background: white;
+            background: #fff;
             border: 2px solid #c9a96e;
             border-radius: 12px;
             cursor: pointer;
             font-family: inherit;
             font-size: 0.85em;
             color: #6b5b45;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             z-index: 10;
             transition: 0.3s;
         }
-        .create-new-btn:hover { background: #fdf8f0; transform: translateY(-2px); }
+        .create-new-btn:hover {
+            background: #fdf8f0;
+            transform: translateY(-2px);
+        }
 
-        /* === КОНСТРУКТОР === */
+        /* ── КОНСТРУКТОР ── */
         .constructor-page {
             display: none;
             max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
         }
-        .constructor-page.active { display: block; }
+        .constructor-page.active {
+            display: block;
+        }
 
         .header {
             text-align: center;
             padding: 25px;
-            background: white;
+            background: #fff;
             border-radius: 15px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
-        .header h1 { font-size: 1.8em; font-weight: 300; letter-spacing: 2px; }
-        .header p { color: #8b7355; margin-top: 6px; }
+        .header h1 {
+            font-size: 1.8em;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        .header p {
+            color: #8b7355;
+            margin-top: 6px;
+        }
 
         .main-grid {
             display: grid;
@@ -297,11 +541,12 @@
             gap: 20px;
         }
 
-        .editor, .preview-box {
-            background: white;
+        .editor,
+        .preview-box {
+            background: #fff;
             padding: 22px;
             border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
         .section {
@@ -319,10 +564,25 @@
             margin-bottom: 12px;
         }
 
-        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; }
-        .field { margin-bottom: 8px; }
-        .field label { display: block; font-size: 0.78em; color: #8b7355; margin-bottom: 3px; font-weight: 600; }
-        .field input, .field textarea, .field select {
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .field {
+            margin-bottom: 8px;
+        }
+        .field label {
+            display: block;
+            font-size: 0.78em;
+            color: #8b7355;
+            margin-bottom: 3px;
+            font-weight: 600;
+        }
+        .field input,
+        .field textarea,
+        .field select {
             width: 100%;
             padding: 10px 12px;
             border: 2px solid #e8e0d5;
@@ -333,14 +593,23 @@
             color: #3d3027;
             transition: 0.3s;
         }
-        .field input:focus, .field textarea:focus, .field select:focus {
+        .field input:focus,
+        .field textarea:focus,
+        .field select:focus {
             outline: none;
             border-color: #c9a96e;
-            background: white;
+            background: #fff;
         }
-        .field textarea { resize: vertical; min-height: 55px; }
+        .field textarea {
+            resize: vertical;
+            min-height: 55px;
+        }
 
-        .style-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .style-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
         .style-btn {
             padding: 12px 6px;
             border: 2px solid #e8e0d5;
@@ -348,22 +617,36 @@
             cursor: pointer;
             text-align: center;
             transition: 0.3s;
-            background: white;
+            background: #fff;
             font-family: inherit;
             font-size: 0.8em;
         }
-        .style-btn:hover { border-color: #c9a96e; }
-        .style-btn.active { border-color: #c9a96e; background: #fdf8f0; font-weight: bold; }
+        .style-btn:hover {
+            border-color: #c9a96e;
+        }
+        .style-btn.active {
+            border-color: #c9a96e;
+            background: #fdf8f0;
+            font-weight: bold;
+        }
 
-        .color-row { display: flex; gap: 8px; flex-wrap: wrap; }
+        .color-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
         .color-dot {
-            width: 30px; height: 30px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             cursor: pointer;
             border: 3px solid transparent;
             transition: 0.3s;
         }
-        .color-dot.active { border-color: #3d3027; box-shadow: 0 0 0 3px rgba(61,48,39,0.15); }
+        .color-dot.active {
+            border-color: #3d3027;
+            box-shadow: 0 0 0 3px rgba(61, 48, 39, 0.15);
+        }
 
         .upload-zone {
             border: 2px dashed #d4c5a9;
@@ -373,10 +656,19 @@
             cursor: pointer;
             transition: 0.3s;
         }
-        .upload-zone:hover { background: #fdf8f0; }
-        .upload-zone p { font-size: 0.9em; color: #8b7355; }
-        .upload-zone small { font-size: 0.75em; color: #b0a089; }
+        .upload-zone:hover {
+            background: #fdf8f0;
+        }
+        .upload-zone p {
+            font-size: 0.9em;
+            color: #8b7355;
+        }
+        .upload-zone small {
+            font-size: 0.75em;
+            color: #b0a089;
+        }
 
+        /* превью карточки в конструкторе */
         .preview-card {
             text-align: center;
             padding: 35px 25px;
@@ -389,31 +681,69 @@
         }
         .preview-card .overlay {
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             z-index: 1;
         }
-        .preview-card .inner { position: relative; z-index: 2; }
-        .preview-card .ornament { font-size: 1.4em; margin: 8px 0; }
-        .preview-card h2 { font-weight: 300; font-size: 1.6em; margin: 10px 0; }
-        .preview-card .divider { margin: 10px 0; }
-        .preview-card .names { font-size: 2em; font-weight: bold; margin: 16px 0; line-height: 1.3; }
-        .preview-card .date { font-size: 1.3em; font-weight: 600; margin: 12px 0; }
-        .preview-card .info { margin: 12px 0; line-height: 2; }
-        .preview-card .message { margin: 12px 0; padding: 12px 0; font-style: italic; border-top: 1px solid rgba(0,0,0,0.1); border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .preview-card .inner {
+            position: relative;
+            z-index: 2;
+        }
+        .preview-card .ornament {
+            font-size: 1.4em;
+            margin: 8px 0;
+        }
+        .preview-card h2 {
+            font-weight: 300;
+            font-size: 1.6em;
+            margin: 10px 0;
+        }
+        .preview-card .divider {
+            margin: 10px 0;
+        }
+        .preview-card .names {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 16px 0;
+            line-height: 1.3;
+        }
+        .preview-card .date {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin: 12px 0;
+        }
+        .preview-card .info {
+            margin: 12px 0;
+            line-height: 2;
+        }
+        .preview-card .message {
+            margin: 12px 0;
+            padding: 12px 0;
+            font-style: italic;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
 
+        /* модалка */
         .modal {
             display: none;
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
             z-index: 9999;
             justify-content: center;
             align-items: center;
         }
-        .modal.show { display: flex; }
+        .modal.show {
+            display: flex;
+        }
         .modal-box {
-            background: white;
+            background: #fff;
             padding: 30px;
             border-radius: 20px;
             max-width: 480px;
@@ -436,8 +766,14 @@
             margin: 10px 0;
             font-size: 0.9em;
         }
-        .status-info { background: #e3f2fd; color: #1565c0; }
-        .status-success { background: #e8f5e9; color: #2e7d32; }
+        .status-info {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        .status-success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
 
         .note {
             background: #fff3cd;
@@ -447,124 +783,148 @@
             margin-top: 10px;
         }
 
+        /* ── адаптив ── */
         @media (max-width: 768px) {
-            .main-grid { grid-template-columns: 1fr; }
-            .row { grid-template-columns: 1fr; }
-            .style-grid { grid-template-columns: repeat(2, 1fr); }
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            .row {
+                grid-template-columns: 1fr;
+            }
+            .style-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
-    <!-- ГОСТЕВАЯ СТРАНИЦА -->
+
+    <!-- ═══ ГОСТЕВАЯ СТРАНИЦА ═══ -->
     <div class="guest-page" id="guestView">
         <div class="guest-card" id="guestCard"></div>
         <button class="create-new-btn" onclick="openConstructor()">💍 Создать своё</button>
     </div>
 
-    <!-- КОНСТРУКТОР -->
+    <!-- ═══ КОНСТРУКТОР ═══ -->
     <div class="constructor-page" id="constructorView">
         <div class="header">
             <h1>💍 Свадебное приглашение</h1>
             <p>Фоны • Рамки • Анимации • Расписание</p>
-            <button class="btn btn-outline" style="width:auto; display:inline-block; padding:8px 20px; margin-top:10px;" onclick="previewAsGuest()">👁 Предпросмотр</button>
+            <button class="btn btn-outline" style="width:auto;display:inline-block;padding:8px 20px;margin-top:10px;" onclick="previewAsGuest()">👁 Предпросмотр</button>
         </div>
 
         <div class="main-grid">
+            <!-- левая колонка: редактор -->
             <div class="editor">
+
+                <!-- ФОН -->
                 <div class="section">
                     <h3>🎨 Фон</h3>
                     <div class="style-grid" id="bgGrid">
-                        <button class="style-btn active" onclick="setBackground('gradient1', this)">Акварель</button>
-                        <button class="style-btn" onclick="setBackground('gradient2', this)">Персик</button>
-                        <button class="style-btn" onclick="setBackground('gradient3', this)">Небо</button>
-                        <button class="style-btn" onclick="setBackground('gradient4', this)">Лаванда</button>
-                        <button class="style-btn" onclick="setBackground('texture1', this)">Ткань</button>
-                        <button class="style-btn" onclick="setBackground('texture2', this)">Мрамор</button>
+                        <button class="style-btn active" onclick="setBackground('gradient1',this)">Акварель</button>
+                        <button class="style-btn" onclick="setBackground('gradient2',this)">Персик</button>
+                        <button class="style-btn" onclick="setBackground('gradient3',this)">Небо</button>
+                        <button class="style-btn" onclick="setBackground('gradient4',this)">Лаванда</button>
+                        <button class="style-btn" onclick="setBackground('texture1',this)">Ткань</button>
+                        <button class="style-btn" onclick="setBackground('texture2',this)">Мрамор</button>
                     </div>
                     <div class="field" style="margin-top:10px;">
                         <label>Или вставьте URL своего фона</label>
-                        <input type="text" id="customBgUrl" placeholder="https://example.com/background.jpg" oninput="updatePreviewBg()">
+                        <input type="text" id="customBgUrl" placeholder="https://example.com/background.jpg" oninput="updatePreviewBg()" />
+                    </div>
+                    <div class="field" style="margin-top:8px;">
+                        <label>Загрузить фото (сжимается до 100px)</label>
+                        <input type="file" id="photoFile" accept="image/*" onchange="handlePhoto(event)" />
+                        <button class="btn btn-outline btn-small" style="margin-top:4px;" onclick="removePhoto()">✕ Убрать фото</button>
+                        <input type="hidden" id="photoUrl" />
                     </div>
                 </div>
 
+                <!-- ОКАНТОВКА -->
                 <div class="section">
                     <h3>🖼️ Окантовка</h3>
                     <div class="style-grid" id="borderGrid">
-                        <button class="style-btn active" onclick="setBorder('none', this)">Без рамки</button>
-                        <button class="style-btn" onclick="setBorder('classic', this)">Классическая</button>
-                        <button class="style-btn" onclick="setBorder('gold', this)">Золотая</button>
-                        <button class="style-btn" onclick="setBorder('elegant', this)">Элегантная</button>
-                        <button class="style-btn" onclick="setBorder('floral', this)">Цветочная</button>
-                        <button class="style-btn" onclick="setBorder('rustic', this)">Рустик</button>
+                        <button class="style-btn active" onclick="setBorder('none',this)">Без рамки</button>
+                        <button class="style-btn" onclick="setBorder('classic',this)">Классическая</button>
+                        <button class="style-btn" onclick="setBorder('gold',this)">Золотая</button>
+                        <button class="style-btn" onclick="setBorder('elegant',this)">Элегантная</button>
+                        <button class="style-btn" onclick="setBorder('floral',this)">Цветочная</button>
+                        <button class="style-btn" onclick="setBorder('rustic',this)">Рустик</button>
                     </div>
                 </div>
 
+                <!-- АНИМАЦИЯ -->
                 <div class="section">
                     <h3>✨ Анимация элементов</h3>
                     <div class="style-grid" id="animGrid">
-                        <button class="style-btn active" onclick="setAnimation('slide-left', this)">Слайд влево</button>
-                        <button class="style-btn" onclick="setAnimation('slide-right', this)">Слайд вправо</button>
-                        <button class="style-btn" onclick="setAnimation('slide-up', this)">Слайд вверх</button>
-                        <button class="style-btn" onclick="setAnimation('fade', this)">Плавное появление</button>
-                        <button class="style-btn" onclick="setAnimation('scale', this)">Масштаб</button>
-                        <button class="style-btn" onclick="setAnimation('rotate', this)">Вращение</button>
-                        <button class="style-btn" onclick="setAnimation('bounce', this)">Прыжок</button>
-                        <button class="style-btn" onclick="setAnimation('flip', this)">Переворот</button>
-                        <button class="style-btn" onclick="setAnimation('glow-pulse', this)">Свечение + пульс</button>
+                        <button class="style-btn active" onclick="setAnimation('slide-left',this)">Слайд влево</button>
+                        <button class="style-btn" onclick="setAnimation('slide-right',this)">Слайд вправо</button>
+                        <button class="style-btn" onclick="setAnimation('slide-up',this)">Слайд вверх</button>
+                        <button class="style-btn" onclick="setAnimation('fade',this)">Появление</button>
+                        <button class="style-btn" onclick="setAnimation('scale',this)">Масштаб</button>
+                        <button class="style-btn" onclick="setAnimation('rotate',this)">Вращение</button>
+                        <button class="style-btn" onclick="setAnimation('bounce',this)">Прыжок</button>
+                        <button class="style-btn" onclick="setAnimation('flip',this)">Переворот</button>
+                        <button class="style-btn" onclick="setAnimation('glow-pulse',this)">Свечение+пульс</button>
                     </div>
                 </div>
 
+                <!-- ИМЕНА -->
                 <div class="section">
                     <h3>👥 Имена</h3>
                     <div id="namesContainer">
                         <div class="row name-entry">
-                            <div class="field"><label>Роль</label><input type="text" class="name-label" placeholder="Жених" value="Жених"></div>
-                            <div class="field"><label>Имя</label><input type="text" class="name-value" placeholder="Александр" oninput="refresh()"></div>
+                            <div class="field"><label>Роль</label><input type="text" class="name-label" placeholder="Жених" value="Жених" /></div>
+                            <div class="field"><label>Имя</label><input type="text" class="name-value" placeholder="Александр" oninput="refresh()" /></div>
                         </div>
                         <div class="row name-entry">
-                            <div class="field"><label>Роль</label><input type="text" class="name-label" placeholder="Невеста" value="Невеста"></div>
-                            <div class="field"><label>Имя</label><input type="text" class="name-value" placeholder="Екатерина" oninput="refresh()"></div>
+                            <div class="field"><label>Роль</label><input type="text" class="name-label" placeholder="Невеста" value="Невеста" /></div>
+                            <div class="field"><label>Имя</label><input type="text" class="name-value" placeholder="Екатерина" oninput="refresh()" /></div>
                         </div>
                     </div>
                     <button class="btn btn-outline btn-small" onclick="addNameRow()">➕ Добавить имя</button>
                 </div>
 
+                <!-- СОБЫТИЕ -->
                 <div class="section">
                     <h3>📅 Событие</h3>
                     <div class="row">
-                        <div class="field"><label>Дата</label><input type="date" id="date" oninput="refresh()"></div>
-                        <div class="field"><label>Время</label><input type="time" id="time" value="15:00" oninput="refresh()"></div>
+                        <div class="field"><label>Дата</label><input type="date" id="date" oninput="refresh()" /></div>
+                        <div class="field"><label>Время</label><input type="time" id="time" value="15:00" oninput="refresh()" /></div>
                     </div>
-                    <div class="field"><label>Место</label><input type="text" id="venue" placeholder="Ресторан" oninput="refresh()"></div>
-                    <div class="field"><label>Адрес</label><input type="text" id="address" placeholder="ул. Цветочная, 15" oninput="refresh()"></div>
+                    <div class="field"><label>Место</label><input type="text" id="venue" placeholder="Ресторан" oninput="refresh()" /></div>
+                    <div class="field"><label>Адрес</label><input type="text" id="address" placeholder="ул. Цветочная, 15" oninput="refresh()" /></div>
                 </div>
 
+                <!-- РАСПИСАНИЕ -->
                 <div class="section">
                     <h3>📋 Расписание</h3>
                     <div id="scheduleContainer">
                         <div class="row schedule-entry">
-                            <div class="field"><label>Время</label><input type="time" class="sched-time" oninput="refresh()"></div>
-                            <div class="field"><label>Событие</label><input type="text" class="sched-event" placeholder="Сбор гостей" oninput="refresh()"></div>
+                            <div class="field"><label>Время</label><input type="time" class="sched-time" oninput="refresh()" /></div>
+                            <div class="field"><label>Событие</label><input type="text" class="sched-event" placeholder="Сбор гостей" oninput="refresh()" /></div>
                         </div>
                     </div>
                     <button class="btn btn-outline btn-small" onclick="addScheduleRow()">➕ Добавить пункт</button>
                 </div>
 
+                <!-- ТЕКСТ -->
                 <div class="section">
                     <h3>💌 Текст</h3>
-                    <div class="field"><label>Дорогой гость</label><input type="text" id="guest" placeholder="Дорогой друг!" oninput="refresh()"></div>
+                    <div class="field"><label>Дорогой гость</label><input type="text" id="guest" placeholder="Дорогой друг!" oninput="refresh()" /></div>
                     <div class="field"><label>Сообщение</label><textarea id="message" oninput="refresh()">Будем рады видеть вас!</textarea></div>
                 </div>
 
+                <!-- ЦВЕТ -->
                 <div class="section">
                     <h3>🎯 Цвет акцента</h3>
                     <div class="color-row">
-                        <div class="color-dot active" style="background:#c9a96e" onclick="setColor('#c9a96e', this)"></div>
-                        <div class="color-dot" style="background:#d4837a" onclick="setColor('#d4837a', this)"></div>
-                        <div class="color-dot" style="background:#b08bbf" onclick="setColor('#b08bbf', this)"></div>
-                        <div class="color-dot" style="background:#7b9b6a" onclick="setColor('#7b9b6a', this)"></div>
-                        <div class="color-dot" style="background:#8ba4c9" onclick="setColor('#8ba4c9', this)"></div>
-                        <div class="color-dot" style="background:#3d3d3d" onclick="setColor('#3d3d3d', this)"></div>
+                        <div class="color-dot active" style="background:#c9a96e" onclick="setColor('#c9a96e',this)"></div>
+                        <div class="color-dot" style="background:#d4837a" onclick="setColor('#d4837a',this)"></div>
+                        <div class="color-dot" style="background:#b08bbf" onclick="setColor('#b08bbf',this)"></div>
+                        <div class="color-dot" style="background:#7b9b6a" onclick="setColor('#7b9b6a',this)"></div>
+                        <div class="color-dot" style="background:#8ba4c9" onclick="setColor('#8ba4c9',this)"></div>
+                        <div class="color-dot" style="background:#3d3d3d" onclick="setColor('#3d3d3d',this)"></div>
                     </div>
                 </div>
 
@@ -572,10 +932,11 @@
                 <button class="btn btn-outline" onclick="saveDraft()" style="margin-top:6px;">💾 Сохранить черновик</button>
             </div>
 
+            <!-- правая колонка: предпросмотр -->
             <div class="preview-box">
-                <h3 style="text-align:center; margin-bottom:15px;">Предпросмотр</h3>
-                <div class="preview-card border-classic" id="previewCard" style="background: linear-gradient(160deg, #fef9f1, #fdf3e4);">
-                    <div class="overlay" style="background: rgba(255,255,255,0.3);"></div>
+                <h3 style="text-align:center;margin-bottom:15px;">Предпросмотр</h3>
+                <div class="preview-card border-classic" id="previewCard" style="background:linear-gradient(160deg,#fef9f1,#fdf3e4);">
+                    <div class="overlay" style="background:rgba(255,255,255,0.3);"></div>
                     <div class="inner">
                         <div class="ornament">🌸 🌸 🌸</div>
                         <h2>Приглашение на свадьбу</h2>
@@ -598,7 +959,7 @@
         </div>
     </div>
 
-    <!-- МОДАЛКА -->
+    <!-- ═══ МОДАЛКА ═══ -->
     <div class="modal" id="linkModal">
         <div class="modal-box">
             <h2 id="modalTitle">Создание ссылки...</h2>
@@ -611,7 +972,9 @@
     </div>
 
     <script>
-        // Фоны
+        /* ═══════════════════════════════════════════════════
+           ДАННЫЕ ФОНОВ
+           ═══════════════════════════════════════════════════ */
         const backgrounds = {
             gradient1: 'linear-gradient(160deg, #fef9f1, #fdf3e4)',
             gradient2: 'linear-gradient(160deg, #fff0e0, #ffdcc0)',
@@ -628,6 +991,7 @@
         let currentPhoto = null;
         let currentLink = '';
 
+        /* ─── ЛЕПЕСТКИ И ФЕЙЕРВЕРК ─── */
         function createPetals() {
             const container = document.getElementById('guestView');
             if (!container) return;
@@ -647,6 +1011,7 @@
         function createFireworks() {
             const container = document.getElementById('guestView');
             if (!container) return;
+            container.querySelectorAll('.firework-particle').forEach(p => p.remove());
             for (let i = 0; i < 15; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'firework-particle';
@@ -657,27 +1022,17 @@
             }
         }
 
+        /* ─── ДОБАВЛЕНИЕ СТРОК ─── */
         function addNameRow() {
             const container = document.getElementById('namesContainer');
             const row = document.createElement('div');
             row.className = 'row name-entry';
             row.innerHTML = `
-                <div class="field"><label>Роль</label><input type="text" class="name-label" placeholder="Свидетель"></div>
-                <div class="field"><label>Имя</label><input type="text" class="name-value" placeholder="Имя" oninput="refresh()"></div>
+                <div class="field"><label>Роль</label><input type="text" class="name-label" placeholder="Свидетель" /></div>
+                <div class="field"><label>Имя</label><input type="text" class="name-value" placeholder="Имя" oninput="refresh()" /></div>
             `;
             container.appendChild(row);
             refresh();
-        }
-
-        function getNamesArray() {
-            const entries = document.querySelectorAll('.name-entry');
-            const names = [];
-            entries.forEach(entry => {
-                const label = entry.querySelector('.name-label')?.value.trim();
-                const value = entry.querySelector('.name-value')?.value.trim();
-                if (label || value) names.push({ label: label || '', name: value || '' });
-            });
-            return names;
         }
 
         function addScheduleRow() {
@@ -685,24 +1040,43 @@
             const row = document.createElement('div');
             row.className = 'row schedule-entry';
             row.innerHTML = `
-                <div class="field"><label>Время</label><input type="time" class="sched-time" oninput="refresh()"></div>
-                <div class="field"><label>Событие</label><input type="text" class="sched-event" placeholder="Церемония" oninput="refresh()"></div>
+                <div class="field"><label>Время</label><input type="time" class="sched-time" oninput="refresh()" /></div>
+                <div class="field"><label>Событие</label><input type="text" class="sched-event" placeholder="Церемония" oninput="refresh()" /></div>
             `;
             container.appendChild(row);
             refresh();
+        }
+
+        /* ─── СБОР ДАННЫХ ─── */
+        function getNamesArray() {
+            const entries = document.querySelectorAll('.name-entry');
+            const names = [];
+            entries.forEach(entry => {
+                const label = entry.querySelector('.name-label')?.value.trim() || '';
+                const value = entry.querySelector('.name-value')?.value.trim() || '';
+                if (label || value) names.push({ label, name: value });
+            });
+            return names;
         }
 
         function getScheduleArray() {
             const entries = document.querySelectorAll('.schedule-entry');
             const schedule = [];
             entries.forEach(entry => {
-                const time = entry.querySelector('.sched-time')?.value.trim();
-                const event = entry.querySelector('.sched-event')?.value.trim();
-                if (time || event) schedule.push({ time: time || '', event: event || '' });
+                const time = entry.querySelector('.sched-time')?.value.trim() || '';
+                const event = entry.querySelector('.sched-event')?.value.trim() || '';
+                if (time || event) schedule.push({ time, event });
             });
             return schedule;
         }
 
+        function escHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        /* ─── УПРАВЛЕНИЕ ФОНОМ ─── */
         function setBackground(bg, btn) {
             currentBg = bg;
             document.querySelectorAll('#bgGrid .style-btn').forEach(b => b.classList.remove('active'));
@@ -724,12 +1098,6 @@
             btn.classList.add('active');
         }
 
-        function applyBorderToPreview() {
-            const card = document.getElementById('previewCard');
-            card.className = 'preview-card border-' + currentBorder;
-            updatePreviewBg();
-        }
-
         function setColor(color, dot) {
             currentColor = color;
             document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
@@ -737,17 +1105,50 @@
             refresh();
         }
 
+        function applyBorderToPreview() {
+            const card = document.getElementById('previewCard');
+            card.className = 'preview-card border-' + currentBorder;
+            updatePreviewBg();
+        }
+
+        function updatePreviewBg() {
+            const card = document.getElementById('previewCard');
+            const customUrl = document.getElementById('customBgUrl')?.value.trim();
+            const photoUrl = document.getElementById('photoUrl')?.value.trim();
+
+            if (photoUrl) {
+                card.style.backgroundImage = `url(${photoUrl})`;
+                card.style.backgroundSize = 'cover';
+                card.style.backgroundPosition = 'center';
+            } else if (currentPhoto) {
+                card.style.backgroundImage = `url(${currentPhoto})`;
+                card.style.backgroundSize = 'cover';
+                card.style.backgroundPosition = 'center';
+            } else if (customUrl) {
+                card.style.backgroundImage = `url(${customUrl})`;
+                card.style.backgroundSize = 'cover';
+                card.style.backgroundPosition = 'center';
+            } else {
+                card.style.backgroundImage = '';
+                card.style.background = backgrounds[currentBg] || backgrounds.gradient1;
+            }
+        }
+
+        /* ─── РАБОТА С ФОТО ─── */
         function compressImageHard(base64) {
             return new Promise((resolve) => {
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
                     const maxSize = 100;
-                    let w = img.width, h = img.height;
+                    let w = img.width,
+                        h = img.height;
                     if (w > h) {
-                        if (w > maxSize) { h = (maxSize / w) * h; w = maxSize; }
+                        if (w > maxSize) { h = (maxSize / w) * h;
+                            w = maxSize; }
                     } else {
-                        if (h > maxSize) { w = (maxSize / h) * w; h = maxSize; }
+                        if (h > maxSize) { w = (maxSize / h) * w;
+                            h = maxSize; }
                     }
                     canvas.width = Math.round(w);
                     canvas.height = Math.round(h);
@@ -779,32 +1180,11 @@
         function removePhoto() {
             currentPhoto = null;
             document.getElementById('photoUrl').value = '';
-            updatePreviewBg();
             document.getElementById('photoFile').value = '';
+            updatePreviewBg();
         }
 
-        function updatePreviewBg() {
-            const card = document.getElementById('previewCard');
-            const customUrl = document.getElementById('customBgUrl')?.value.trim();
-            const photoUrl = document.getElementById('photoUrl')?.value.trim();
-            if (photoUrl) {
-                card.style.backgroundImage = `url(${photoUrl})`;
-                card.style.backgroundSize = 'cover';
-                card.style.backgroundPosition = 'center';
-            } else if (currentPhoto) {
-                card.style.backgroundImage = `url(${currentPhoto})`;
-                card.style.backgroundSize = 'cover';
-                card.style.backgroundPosition = 'center';
-            } else if (customUrl) {
-                card.style.backgroundImage = `url(${customUrl})`;
-                card.style.backgroundSize = 'cover';
-                card.style.backgroundPosition = 'center';
-            } else {
-                card.style.backgroundImage = '';
-                card.style.background = backgrounds[currentBg] || backgrounds.gradient1;
-            }
-        }
-
+        /* ─── ОБНОВЛЕНИЕ ПРЕВЬЮ ─── */
         function refresh() {
             const names = getNamesArray();
             let namesHtml = '';
@@ -814,22 +1194,28 @@
             document.getElementById('prevGuest').textContent = document.getElementById('guest').value.trim() || 'Дорогой друг!';
             document.getElementById('prevVenue').textContent = document.getElementById('venue').value.trim() || 'Ресторан';
             document.getElementById('prevAddress').textContent = document.getElementById('address').value.trim() || '';
-            document.getElementById('prevMessage').textContent = document.getElementById('message').value.trim() || 'Будем рады видеть вас!';
+            document.getElementById('prevMessage').textContent = document.getElementById('message').value.trim() ||
+                'Будем рады видеть вас!';
             document.getElementById('prevTime').textContent = document.getElementById('time').value || '15:00';
             const dateVal = document.getElementById('date').value;
             if (dateVal) {
                 const d = new Date(dateVal);
-                document.getElementById('prevDate').textContent = d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+                document.getElementById('prevDate').textContent = d.toLocaleDateString('ru-RU', { day: 'numeric',
+                    month: 'long', year: 'numeric' });
             }
         }
 
-        function escHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
+        /* ─── СБОР ВСЕХ ДАННЫХ (с авто-датой) ─── */
         function getData() {
+            // Если дата не задана, подставляем через 1 месяц
+            let dateVal = document.getElementById('date').value;
+            if (!dateVal) {
+                const defaultDate = new Date();
+                defaultDate.setMonth(defaultDate.getMonth() + 1);
+                dateVal = defaultDate.toISOString().split('T')[0];
+                document.getElementById('date').value = dateVal; // обновим поле
+            }
+
             const photoUrl = document.getElementById('photoUrl')?.value.trim();
             const customBgUrl = document.getElementById('customBgUrl')?.value.trim();
             return {
@@ -841,7 +1227,7 @@
                 p: photoUrl || currentPhoto,
                 names: getNamesArray(),
                 schedule: getScheduleArray(),
-                d: document.getElementById('date').value,
+                d: dateVal,
                 t: document.getElementById('time').value,
                 v: document.getElementById('venue').value.trim(),
                 a: document.getElementById('address').value.trim(),
@@ -850,28 +1236,34 @@
             };
         }
 
-        // ----- НАДЁЖНОЕ КОДИРОВАНИЕ В URL-SAFE BASE64 -----
+        /* ─── НАДЁЖНОЕ КОДИРОВАНИЕ В URL-SAFE BASE64 ─── */
         function encodeData(obj) {
             const json = JSON.stringify(obj);
-            // btoa(unescape(encodeURIComponent(json))) – классический подход для Unicode
-            let base64 = btoa(unescape(encodeURIComponent(json)));
-            // делаем URL-safe: заменяем + на -, / на _, убираем =
+            const encoder = new TextEncoder();
+            const data = encoder.encode(json);
+            let base64 = btoa(String.fromCharCode(...data));
             return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
         }
 
         function decodeData(encoded) {
             try {
-                // восстанавливаем Base64
                 let base64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
-                // добавляем недостающие =
                 while (base64.length % 4) base64 += '=';
-                const json = decodeURIComponent(escape(atob(base64)));
+                const binary = atob(base64);
+                const bytes = new Uint8Array(binary.length);
+                for (let i = 0; i < binary.length; i++) {
+                    bytes[i] = binary.charCodeAt(i);
+                }
+                const decoder = new TextDecoder('utf-8');
+                const json = decoder.decode(bytes);
                 return JSON.parse(json);
             } catch (e) {
+                console.error('Ошибка декодирования:', e);
                 return null;
             }
         }
 
+        /* ─── ГЕНЕРАЦИЯ ССЫЛКИ ─── */
         async function generateLink() {
             refresh();
             document.getElementById('linkModal').classList.add('show');
@@ -914,13 +1306,17 @@
             }
         }
 
-        function closeModal() { document.getElementById('linkModal').classList.remove('show'); }
+        function closeModal() {
+            document.getElementById('linkModal').classList.remove('show');
+        }
 
+        /* ─── ПРЕДПРОСМОТР В ГОСТЕВОЙ ─── */
         function previewAsGuest() {
             refresh();
             showGuestPage(getData());
         }
 
+        /* ─── ОТОБРАЖЕНИЕ ГОСТЕВОЙ СТРАНИЦЫ (с защитой от невалидной даты) ─── */
         function showGuestPage(data) {
             document.getElementById('constructorView').classList.remove('active');
             document.getElementById('guestView').classList.add('active');
@@ -928,7 +1324,11 @@
             let dateStr = 'Дата уточняется';
             if (data.d) {
                 const dt = new Date(data.d);
-                dateStr = dt.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+                if (!isNaN(dt.getTime())) {
+                    dateStr = dt.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+                } else {
+                    console.warn('Невалидная дата:', data.d);
+                }
             }
 
             let countdownHtml = '';
@@ -936,25 +1336,28 @@
                 const wedding = new Date(data.d);
                 const now = new Date();
                 const diff = wedding - now;
-                if (diff > 0) {
+                if (!isNaN(wedding.getTime()) && diff > 0) {
                     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
                     countdownHtml = `<div class="countdown anim-${data.anim || 'slide-up'}">⏳ ${days} ${getDaysWord(days)} до свадьбы</div>`;
-                } else if (diff > -86400000) {
+                } else if (!isNaN(wedding.getTime()) && diff > -86400000) {
                     countdownHtml = `<div class="countdown anim-${data.anim || 'slide-up'}">🎉 Свадьба сегодня!</div>`;
                 }
             }
 
             let bgStyle = '';
             if (data.p) {
-                bgStyle = `background-image:url(${data.p}); background-size:cover; background-position:center;`;
+                bgStyle =
+                    `background-image:url(${data.p}); background-size:cover; background-position:center;`;
             } else if (data.customBg) {
-                bgStyle = `background-image:url(${data.customBg}); background-size:cover; background-position:center;`;
+                bgStyle =
+                    `background-image:url(${data.customBg}); background-size:cover; background-position:center;`;
             } else {
                 bgStyle = `background:${backgrounds[data.bg] || backgrounds.gradient1};`;
             }
 
             let namesHtml = '';
-            (data.names || []).forEach(n => namesHtml += `<div class="name-row"><strong>${escHtml(n.label)}</strong> ${escHtml(n.name)}</div>`);
+            (data.names || []).forEach(n => namesHtml +=
+                `<div class="name-row"><strong>${escHtml(n.label)}</strong> ${escHtml(n.name)}</div>`);
             if (!namesHtml) namesHtml = '<div class="name-row">Александр & Екатерина</div>';
 
             const borderClass = 'border-' + (data.b || 'classic');
@@ -963,19 +1366,20 @@
             let scheduleHtml = '';
             if (data.schedule && data.schedule.length > 0) {
                 data.schedule.forEach(item => {
-                    scheduleHtml += `<div class="schedule-item"><span class="schedule-time">${item.time || ''}</span><span class="schedule-desc">${escHtml(item.event) || ''}</span></div>`;
+                    scheduleHtml +=
+                        `<div class="schedule-item"><span class="schedule-time">${item.time || ''}</span><span class="schedule-desc">${escHtml(item.event) || ''}</span></div>`;
                 });
             } else {
                 scheduleHtml = '<p style="opacity:0.7;">Расписание пока не заполнено</p>';
             }
 
-            let html = `
+            const html = `
                 <div class="bg-image" style="${bgStyle}"></div>
                 <div class="bg-overlay"></div>
                 <div class="content">
                     <div class="tabs">
-                        <button class="tab-btn active" onclick="switchTab('invitation', this)">💌 Приглашение</button>
-                        <button class="tab-btn" onclick="switchTab('schedule', this)">📋 Расписание</button>
+                        <button class="tab-btn active" onclick="switchTab('invitation',this)">💌 Приглашение</button>
+                        <button class="tab-btn" onclick="switchTab('schedule',this)">📋 Расписание</button>
                     </div>
                     <div class="tab-content active" id="tab-invitation">
                         <div class="ornament ${animClass} shimmer pulse">🌸 🌸 🌸</div>
@@ -1006,6 +1410,7 @@
             card.innerHTML = html;
             card.className = 'guest-card ' + borderClass;
 
+            // параллакс
             const bgImage = card.querySelector('.bg-image');
             if (bgImage) {
                 card.addEventListener('mousemove', (e) => {
@@ -1025,6 +1430,7 @@
             createFireworks();
         }
 
+        /* ─── ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ─── */
         window.switchTab = function(tabName, btn) {
             const card = document.getElementById('guestCard');
             if (!card) return;
@@ -1041,11 +1447,13 @@
             return 'дней';
         }
 
+        /* ─── НАВИГАЦИЯ ─── */
         function openConstructor() {
             document.getElementById('guestView').classList.remove('active');
             document.getElementById('constructorView').classList.add('active');
         }
 
+        /* ─── ЧЕРНОВИК ─── */
         function saveDraft() {
             refresh();
             localStorage.setItem('weddingDraft', JSON.stringify(getData()));
@@ -1063,11 +1471,23 @@
                 document.getElementById('address').value = data.a || '';
                 document.getElementById('guest').value = data.gn || '';
                 document.getElementById('message').value = data.m || '';
-                if (data.bg) setBackground(data.bg, document.querySelector(`#bgGrid .style-btn[onclick*="${data.bg}"]`));
+                if (data.bg) {
+                    const btn = document.querySelector(`#bgGrid .style-btn[onclick*="${data.bg}"]`);
+                    if (btn) setBackground(data.bg, btn);
+                }
                 if (data.customBg) document.getElementById('customBgUrl').value = data.customBg;
-                if (data.b) setBorder(data.b, document.querySelector(`#borderGrid .style-btn[onclick*="${data.b}"]`));
-                if (data.anim) setAnimation(data.anim, document.querySelector(`#animGrid .style-btn[onclick*="${data.anim}"]`));
-                if (data.c) setColor(data.c, document.querySelector(`.color-dot[style*="${data.c}"]`));
+                if (data.b) {
+                    const btn = document.querySelector(`#borderGrid .style-btn[onclick*="${data.b}"]`);
+                    if (btn) setBorder(data.b, btn);
+                }
+                if (data.anim) {
+                    const btn = document.querySelector(`#animGrid .style-btn[onclick*="${data.anim}"]`);
+                    if (btn) setAnimation(data.anim, btn);
+                }
+                if (data.c) {
+                    const dot = document.querySelector(`.color-dot[style*="${data.c}"]`);
+                    if (dot) setColor(data.c, dot);
+                }
                 if (data.p) {
                     if (data.p.startsWith('http')) document.getElementById('photoUrl').value = data.p;
                     else currentPhoto = data.p;
@@ -1080,30 +1500,31 @@
                         const row = document.createElement('div');
                         row.className = 'row name-entry';
                         row.innerHTML = `
-                            <div class="field"><label>Роль</label><input type="text" class="name-label" value="${escHtml(n.label)}"></div>
-                            <div class="field"><label>Имя</label><input type="text" class="name-value" value="${escHtml(n.name)}" oninput="refresh()"></div>
+                            <div class="field"><label>Роль</label><input type="text" class="name-label" value="${escHtml(n.label)}" /></div>
+                            <div class="field"><label>Имя</label><input type="text" class="name-value" value="${escHtml(n.name)}" oninput="refresh()" /></div>
                         `;
                         container.appendChild(row);
                     });
                 }
                 if (data.schedule) {
-                    const schedContainer = document.getElementById('scheduleContainer');
-                    schedContainer.innerHTML = '';
+                    const container = document.getElementById('scheduleContainer');
+                    container.innerHTML = '';
                     data.schedule.forEach(item => {
                         const row = document.createElement('div');
                         row.className = 'row schedule-entry';
                         row.innerHTML = `
-                            <div class="field"><label>Время</label><input type="time" class="sched-time" value="${item.time || ''}" oninput="refresh()"></div>
-                            <div class="field"><label>Событие</label><input type="text" class="sched-event" value="${escHtml(item.event)}" oninput="refresh()"></div>
+                            <div class="field"><label>Время</label><input type="time" class="sched-time" value="${item.time || ''}" oninput="refresh()" /></div>
+                            <div class="field"><label>Событие</label><input type="text" class="sched-event" value="${escHtml(item.event)}" oninput="refresh()" /></div>
                         `;
-                        schedContainer.appendChild(row);
+                        container.appendChild(row);
                     });
                 }
                 refresh();
                 applyBorderToPreview();
-            } catch (e) {}
+            } catch (_) {}
         }
 
+        /* ─── ИНИЦИАЛИЗАЦИЯ ─── */
         window.addEventListener('DOMContentLoaded', () => {
             const params = new URLSearchParams(window.location.search);
             const encoded = params.get('data');
@@ -1113,7 +1534,8 @@
                     showGuestPage(data);
                 } else {
                     document.getElementById('guestView').classList.add('active');
-                    document.getElementById('guestCard').innerHTML = '<div style="padding:40px;text-align:center"><h2>😔 Приглашение не найдено</h2><p>Ссылка повреждена. Попросите новое приглашение.</p></div>';
+                    document.getElementById('guestCard').innerHTML =
+                        '<div style="padding:40px;text-align:center"><h2>😔 Приглашение не найдено</h2><p>Ссылка повреждена. Попросите новое приглашение.</p></div>';
                 }
             } else {
                 document.getElementById('constructorView').classList.add('active');
@@ -1126,8 +1548,13 @@
             }
         });
 
-        document.getElementById('linkModal').addEventListener('click', e => { if (e.target === document.getElementById('linkModal')) closeModal(); });
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+        // модалка — закрытие по клику вне и по Escape
+        document.getElementById('linkModal').addEventListener('click', e => {
+            if (e.target === document.getElementById('linkModal')) closeModal();
+        });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeModal();
+        });
     </script>
 </body>
 </html>
