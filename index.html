@@ -72,6 +72,11 @@
             color: #fff;
         }
         .btn-success:hover { background: #1b5e20; }
+        .btn-music {
+            background: #6a1b9a;
+            color: #fff;
+        }
+        .btn-music:hover { background: #4a148c; }
 
         /* ===== ШАПКА ===== */
         .app-header {
@@ -403,7 +408,6 @@
             margin: 0 auto;
             padding: 24px 16px;
         }
-        /* Адаптив для телефона – делаем карточку шире и уменьшаем шрифты */
         @media (max-width: 480px) {
             .guest-page .preview-card {
                 padding: 20px 12px;
@@ -758,8 +762,8 @@
                         <label>Выбрать встроенный трек</label>
                         <select id="presetMusic" onchange="loadPresetMusic()">
                             <option value="">-- Выберите мелодию --</option>
+                            <option value="https://cdn.pixabay.com/download/audio/2022/03/10/audio_1808fbf07a.mp3?filename=wedding-march-126267.mp3">Свадебный марш</option>
                             <option value="https://cdn.pixabay.com/download/audio/2022/02/22/audio_d3c8c8c2c2.mp3?filename=romantic-piano-145988.mp3">Романтичный пианино</option>
-                            <option value="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=wedding-march-126267.mp3">Свадебный марш</option>
                             <option value="https://cdn.pixabay.com/download/audio/2022/03/10/audio_3f7b8a7f7a.mp3?filename=soft-classical-148169.mp3">Классическая нежная</option>
                             <option value="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0f9c5f7c0.mp3?filename=acoustic-guitar-123478.mp3">Акустическая гитара</option>
                             <option value="https://cdn.pixabay.com/download/audio/2022/04/01/audio_2f6b8a7f7a.mp3?filename=jazz-lounge-132075.mp3">Джаз-лаунж</option>
@@ -1067,18 +1071,23 @@
         reader.readAsDataURL(file);
     }
 
-    // ===== МУЗЫКА =====
+    // ===== МУЗЫКА (исправленная) =====
     function loadPresetMusic() {
         const select = document.getElementById('presetMusic');
         const url = select.value;
-        if (!url) return;
-        // Загружаем по ссылке
+        if (!url) {
+            // Если выбрано пустое значение, сбрасываем
+            currentMusic = null;
+            document.getElementById('musicPlayer').style.display = 'none';
+            return;
+        }
+        // Устанавливаем источник и показываем плеер
         currentMusic = url;
         const player = document.getElementById('audioPlayer');
         player.src = url;
+        player.load(); // перезагружаем
         document.getElementById('musicPlayer').style.display = 'block';
-        // Для превью мы не будем автоматически включать, только в гостевой странице
-        // Сохраняем в данных
+        // Автоматически не запускаем, даём пользователю кнопку
     }
 
     function loadMusic(e) {
@@ -1088,8 +1097,8 @@
         reader.onload = function(ev) {
             currentMusic = ev.target.result;
             document.getElementById('audioPlayer').src = currentMusic;
+            document.getElementById('audioPlayer').load();
             document.getElementById('musicPlayer').style.display = 'block';
-            // Сбрасываем выбор пресета
             document.getElementById('presetMusic').value = '';
         };
         reader.readAsDataURL(file);
@@ -1124,7 +1133,6 @@
         ).join('');
     }
 
-    // ===== СКАЧИВАНИЕ ОТВЕТОВ =====
     function downloadRSVP() {
         const data = JSON.parse(localStorage.getItem('rsvpList') || '[]');
         if (data.length === 0) {
@@ -1270,7 +1278,7 @@
         document.getElementById('linkModal').classList.remove('show');
     }
 
-    // ===== ГОСТЕВАЯ СТРАНИЦА =====
+    // ===== ГОСТЕВАЯ СТРАНИЦА (с исправленной музыкой) =====
     function previewGuestPage() {
         const data = getData();
         showGuestPage(data);
@@ -1332,6 +1340,19 @@
             `;
         }
 
+        // === Музыка ===
+        let musicHtml = '';
+        if (data.music) {
+            // Добавляем кнопку для запуска (чтобы обойти автоблокировку)
+            musicHtml = `
+                <div style="margin-top:12px;">
+                    <button class="btn btn-music" onclick="playGuestMusic()" id="musicPlayBtn">▶️ Включить музыку</button>
+                    <span style="font-size:0.8rem; opacity:0.6; display:block; margin-top:4px;">(нажмите, чтобы запустить)</span>
+                    <audio id="guestAudio" style="display:none;"></audio>
+                </div>
+            `;
+        }
+
         let bgStyle = '';
         if (data.photo) {
             bgStyle = `background-image:url(${data.photo}); background-size:cover; background-position:center;`;
@@ -1366,20 +1387,42 @@
                 <div class="message ${animClass}">${escHtml(data.message) || ''}</div>
                 ${countdownHtml}
                 ${rsvpHtml}
+                ${musicHtml}
                 <div class="ornament ${animClass} shimmer pulse">${data.ornament || '🌸 🌸 🌸'}</div>
             </div>
         `;
         card.className = 'preview-card ' + borderClass;
 
-        // Музыка – если есть, запускаем
+        // Если есть музыка, сохраняем ссылку в глобальную переменную и подготавливаем аудио
         if (data.music) {
-            const player = document.createElement('audio');
-            player.src = data.music;
-            player.autoplay = true;
-            player.loop = true;
-            player.style.display = 'none';
-            card.appendChild(player);
-            // Также добавим кнопку управления? Можно оставить автоматическую.
+            const audio = document.getElementById('guestAudio');
+            if (audio) {
+                audio.src = data.music;
+                audio.loop = true;
+                audio.preload = 'auto';
+                // Обработка ошибок
+                audio.onerror = function() {
+                    document.getElementById('musicPlayBtn').textContent = '⚠️ Ошибка загрузки';
+                    document.getElementById('musicPlayBtn').style.opacity = '0.5';
+                };
+            }
+            // Глобальная функция для кнопки
+            window.playGuestMusic = function() {
+                const audio = document.getElementById('guestAudio');
+                const btn = document.getElementById('musicPlayBtn');
+                if (!audio) return;
+                if (audio.paused) {
+                    audio.play().then(() => {
+                        btn.textContent = '⏸️ Остановить музыку';
+                    }).catch((err) => {
+                        alert('Не удалось запустить музыку. Попробуйте нажать ещё раз или загрузить другой трек.');
+                        console.error(err);
+                    });
+                } else {
+                    audio.pause();
+                    btn.textContent = '▶️ Включить музыку';
+                }
+            };
         }
 
         // Параллакс
@@ -1418,7 +1461,9 @@
     function closeGuestPage() {
         document.getElementById('guestPage').classList.remove('active');
         document.body.style.overflow = '';
-        document.querySelectorAll('#guestCard audio').forEach(a => a.pause());
+        // Останавливаем музыку, если играет
+        const audio = document.getElementById('guestAudio');
+        if (audio) audio.pause();
     }
 
     // ===== ЧЕРНОВИК =====
@@ -1502,8 +1547,9 @@
             if (data.music) {
                 currentMusic = data.music;
                 document.getElementById('audioPlayer').src = data.music;
+                document.getElementById('audioPlayer').load();
                 document.getElementById('musicPlayer').style.display = 'block';
-                // Если это ссылка, попробуем выбрать в селекторе
+                // Если это ссылка из пресета, подсветим в списке
                 const presetSelect = document.getElementById('presetMusic');
                 const options = presetSelect.options;
                 for (let opt of options) {
