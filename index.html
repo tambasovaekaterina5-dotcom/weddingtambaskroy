@@ -2,19 +2,23 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>✨ Свадебный конструктор</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>✨ Свадебное приглашение</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Great+Vibes&family=Montserrat:wght@300;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* ===== ГЛОБАЛЬНЫЕ ===== */
         * { margin:0; padding:0; box-sizing:border-box; }
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
         body {
             font-family: 'Cormorant Garamond', serif;
             background: #f7f3ee;
             color: #2d2520;
             transition: background 0.4s, color 0.4s;
-            min-height: 100vh;
         }
         body.dark {
             background: #1a1614;
@@ -81,7 +85,7 @@
         }
         .btn-music:hover { background: #4a148c; transform: scale(1.03); }
 
-        /* ===== ШАПКА ===== */
+        /* ===== ШАПКА КОНСТРУКТОРА ===== */
         .app-header {
             display: flex;
             justify-content: space-between;
@@ -423,7 +427,7 @@
             justify-content: center;
         }
 
-        /* ===== РАМКИ (окантовки) ===== */
+        /* ===== РАМКИ ===== */
         .border-none { border: none; }
         .border-classic { border: 4px solid #d4c5a9; }
         .border-gold { border: 4px double #c9a96e; }
@@ -448,20 +452,21 @@
             font-size: 1.5rem;
         }
 
-        /* ===== ФОРМА (для гостевой и превью) ===== */
+        /* ===== ФОРМА ===== */
         .shape-rectangle { border-radius: 0; }
         .shape-rounded { border-radius: 32px; }
-        .shape-circle { border-radius: 50%; width: 100%; aspect-ratio: 1/1; max-width: 480px; padding: 40px; }
+        .shape-circle { border-radius: 50%; aspect-ratio: 1/1; padding: 40px; }
         .shape-pointed { border-radius: 0 40px 0 40px; }
         .shape-fancy { border-radius: 60px 10px 60px 10px; }
 
-        /* ===== ГОСТЕВАЯ СТРАНИЦА ===== */
+        /* ===== ГОСТЕВАЯ СТРАНИЦА (ПОЛНОЭКРАННАЯ) ===== */
         .guest-page {
             display: none;
+            width: 100vw;
+            height: 100vh;
             min-height: 100vh;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
+            padding: 0 !important;
+            margin: 0 !important;
             background: linear-gradient(135deg, #f5e6d3, #e8d5c0, #f5e6d3);
             background-size: 400% 400%;
             animation: gradientShift 12s ease infinite;
@@ -484,35 +489,37 @@
 
         .guest-page.active { display: flex; }
 
-        /* Карточка на гостевой — теперь 100% ширины с отступами */
         .guest-page .preview-card {
             width: 100%;
-            max-width: 100%;
+            height: 100%;
+            min-height: 100vh;
+            max-width: none;
             margin: 0;
             padding: 24px 16px;
-            border-radius: 32px;
+            border-radius: 0;
             background: rgba(255,255,255,0.2);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.25);
-            box-shadow: 0 30px 80px rgba(0,0,0,0.15);
+            border: none;
+            box-shadow: none;
             animation: floatIn 0.8s ease;
             transition: all 0.3s;
             color: var(--text-primary);
-            max-height: none;
-            overflow: visible;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         body.dark .guest-page .preview-card {
             background: rgba(40,35,30,0.4);
-            border: 1px solid rgba(255,255,255,0.08);
         }
 
         .guest-page .preview-card .bg-layer {
-            border-radius: 32px;
+            border-radius: 0;
             overflow: hidden;
         }
         .guest-page .preview-card .overlay {
-            border-radius: 32px;
+            border-radius: 0;
             background: rgba(255,255,255,0.08);
             backdrop-filter: blur(4px);
         }
@@ -524,16 +531,10 @@
             position: relative;
             z-index: 3;
             text-align: center;
-            overflow-y: auto;
-            max-height: 80vh;
-            padding-right: 4px;
-        }
-        .guest-page .preview-card .content::-webkit-scrollbar {
-            width: 4px;
-        }
-        .guest-page .preview-card .content::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 8px 0;
         }
 
         .guest-page .preview-card .ornament {
@@ -544,7 +545,7 @@
         }
         .guest-page .preview-card h2 {
             font-family: 'Great Vibes', cursive;
-            font-size: 2.6rem;
+            font-size: 2.8rem;
             font-weight: 400;
             margin: 8px 0 12px;
             letter-spacing: 2px;
@@ -709,19 +710,14 @@
             border-radius: 50px;
         }
 
-        /* Кнопка музыки */
         .guest-page .preview-card .btn-music {
             min-width: 180px;
         }
 
         /* Адаптив для телефона */
         @media (max-width: 480px) {
-            .guest-page {
-                padding: 8px;
-            }
             .guest-page .preview-card {
-                padding: 20px 12px;
-                border-radius: 28px;
+                padding: 16px 12px;
             }
             .guest-page .preview-card h2 {
                 font-size: 2.2rem;
@@ -763,8 +759,7 @@
 
         @media (max-width: 400px) {
             .guest-page .preview-card {
-                padding: 16px 10px;
-                border-radius: 24px;
+                padding: 12px 8px;
             }
             .guest-page .preview-card h2 {
                 font-size: 1.8rem;
@@ -1193,7 +1188,7 @@
 
 <!-- Гостевая страница -->
 <div class="guest-page" id="guestPage">
-    <div class="preview-card" id="guestCard" style="max-width:100%; margin:0;"></div>
+    <div class="preview-card" id="guestCard"></div>
     <button class="btn btn-outline" onclick="closeGuestPage()" style="position:fixed; bottom:20px; right:20px; background:rgba(0,0,0,0.5); color:#fff; border:none; padding:14px 24px; border-radius:60px; backdrop-filter:blur(8px); font-family:'Montserrat',sans-serif; font-weight:600; z-index:100;">✕ Закрыть</button>
 </div>
 
@@ -1206,7 +1201,7 @@
     let currentPhoto = null;
     let currentMusic = null;
     let currentLink = '';
-    let currentShape = 'rounded'; // форма
+    let currentShape = 'rounded';
 
     const backgrounds = {
         gradient1: 'linear-gradient(160deg, #fef9f1, #fdf3e4)',
@@ -1481,7 +1476,6 @@
 
     function applyBorderToPreview() {
         const card = document.getElementById('previewCard');
-        // Удаляем все классы рамок
         card.className = 'preview-card';
         if (currentBorder !== 'none') {
             card.classList.add('border-' + currentBorder);
@@ -1490,7 +1484,6 @@
 
     function applyShapeToPreview() {
         const card = document.getElementById('previewCard');
-        // Удаляем классы формы
         ['shape-rectangle', 'shape-rounded', 'shape-circle', 'shape-pointed', 'shape-fancy'].forEach(cls => {
             card.classList.remove(cls);
         });
@@ -1499,7 +1492,6 @@
         } else {
             card.classList.add('shape-rounded');
         }
-        // Для круга нужно особое поведение — задаем aspect-ratio
         if (currentShape === 'circle') {
             card.style.aspectRatio = '1/1';
             card.style.width = '100%';
@@ -1954,17 +1946,15 @@
             </div>
         `;
 
-        // Применяем классы к карточке
+        // Применяем классы к карточке — теперь она всегда занимает весь экран
         card.className = 'preview-card ' + borderClass + ' ' + shapeClass;
-        // Для круга корректируем
+        // Для круга корректируем, но на гостевой странице форма не должна мешать полноэкранности
         if (data.shape === 'circle') {
             card.style.aspectRatio = '1/1';
-            card.style.width = '100%';
             card.style.maxWidth = '100%';
             card.style.padding = '40px';
         } else {
             card.style.aspectRatio = 'auto';
-            card.style.width = '100%';
             card.style.maxWidth = '100%';
             card.style.padding = '24px 16px';
         }
@@ -2247,7 +2237,6 @@
         refreshPreview();
         renderRSVPList();
 
-        // По умолчанию классический пресет
         document.querySelector('#presetGrid .style-btn[data-preset="classic"]').classList.add('active');
         applyPreset('classic');
     });
