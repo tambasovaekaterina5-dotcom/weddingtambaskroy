@@ -12,24 +12,25 @@
         body {
             font-family: 'Cormorant Garamond', serif;
             background: #f7f3ee;
-            color: #3d3027;
-            transition: background 0.3s, color 0.3s;
+            color: #2d2520;
+            transition: background 0.4s, color 0.4s;
             min-height: 100vh;
         }
         body.dark {
-            background: #1e1a17;
+            background: #1a1614;
             color: #ede7e0;
         }
 
         :root {
             --accent: #c9a96e;
+            --accent-glow: rgba(201,169,110,0.4);
             --accent-dark: #b8944f;
             --bg-card: #ffffff;
-            --text-primary: #3d3027;
+            --text-primary: #2d2520;
             --text-secondary: #6b5b45;
             --border: #e0d6c8;
             --shadow: 0 12px 40px rgba(0,0,0,0.08);
-            --radius: 18px;
+            --radius: 20px;
             --transition: 0.3s ease;
         }
         body.dark {
@@ -42,9 +43,9 @@
 
         /* ===== КНОПКИ ===== */
         .btn {
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 12px;
+            border-radius: 16px;
             font-family: 'Montserrat', sans-serif;
             font-weight: 600;
             font-size: 0.9rem;
@@ -52,16 +53,18 @@
             transition: all var(--transition);
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             background: var(--border);
             color: var(--text-primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
         .btn-primary {
             background: linear-gradient(135deg, var(--accent), var(--accent-dark));
             color: #fff;
+            box-shadow: 0 4px 16px var(--accent-glow);
         }
-        .btn-primary:hover { box-shadow: 0 6px 24px rgba(201,169,110,0.4); }
+        .btn-primary:hover { box-shadow: 0 8px 30px var(--accent-glow); transform: translateY(-3px); }
         .btn-outline {
             background: transparent;
             border: 2px solid var(--border);
@@ -75,8 +78,9 @@
         .btn-music {
             background: #6a1b9a;
             color: #fff;
+            box-shadow: 0 4px 16px rgba(106,27,154,0.3);
         }
-        .btn-music:hover { background: #4a148c; }
+        .btn-music:hover { background: #4a148c; transform: scale(1.03); }
 
         /* ===== ШАПКА ===== */
         .app-header {
@@ -90,11 +94,15 @@
             box-shadow: var(--shadow);
             margin-bottom: 24px;
             transition: background var(--transition);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
         .app-header h1 {
             font-family: 'Great Vibes', cursive;
-            font-size: 2.4rem;
-            color: var(--accent);
+            font-size: 2.6rem;
+            background: linear-gradient(135deg, var(--accent), #e8c97a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             letter-spacing: 2px;
         }
         .header-actions {
@@ -123,6 +131,7 @@
             max-height: calc(100vh - 150px);
             overflow-y: auto;
             transition: background var(--transition);
+            border: 1px solid rgba(255,255,255,0.05);
         }
         .editor-panel::-webkit-scrollbar { width: 6px; }
         .editor-panel::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 8px; }
@@ -150,15 +159,20 @@
         .tab-btn.active {
             background: var(--accent);
             color: #fff;
+            box-shadow: 0 2px 12px var(--accent-glow);
         }
         .tab-btn:hover:not(.active) { background: var(--border); }
 
-        .tab-content { display: none; animation: fadeUp 0.4s ease; }
+        .tab-content { display: none; animation: fadeUp 0.5s ease; }
         .tab-content.active { display: block; }
-        @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
 
         .section {
-            margin-bottom: 22px;
+            margin-bottom: 24px;
+            background: rgba(0,0,0,0.02);
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
         }
         .section-title {
             font-family: 'Playfair Display', serif;
@@ -166,7 +180,7 @@
             font-size: 1.1rem;
             color: var(--accent-dark);
             border-bottom: 1px dashed var(--border);
-            padding-bottom: 6px;
+            padding-bottom: 8px;
             margin-bottom: 14px;
             display: flex;
             align-items: center;
@@ -182,12 +196,13 @@
             font-size: 0.8rem;
             color: var(--text-secondary);
             margin-bottom: 4px;
+            letter-spacing: 0.5px;
         }
         .field input, .field select, .field textarea {
             width: 100%;
-            padding: 10px 14px;
+            padding: 12px 16px;
             border: 2px solid var(--border);
-            border-radius: 12px;
+            border-radius: 14px;
             background: var(--bg-card);
             color: var(--text-primary);
             font-family: inherit;
@@ -213,7 +228,7 @@
         .style-btn {
             padding: 10px 4px;
             border: 2px solid var(--border);
-            border-radius: 12px;
+            border-radius: 14px;
             background: var(--bg-card);
             cursor: pointer;
             font-family: 'Montserrat', sans-serif;
@@ -227,35 +242,40 @@
             border-color: var(--accent);
             background: var(--accent);
             color: #fff;
+            box-shadow: 0 2px 12px var(--accent-glow);
         }
         .style-btn:hover:not(.active) { border-color: var(--accent); }
 
         .color-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 12px;
         }
         .color-dot {
-            width: 34px;
-            height: 34px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             border: 3px solid transparent;
             cursor: pointer;
             transition: all var(--transition);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
         .color-dot.active {
             border-color: var(--text-primary);
-            transform: scale(1.1);
+            transform: scale(1.15);
+            box-shadow: 0 0 20px rgba(201,169,110,0.3);
         }
 
         .name-entry, .schedule-entry {
             background: var(--bg-card);
             padding: 14px;
-            border-radius: 14px;
+            border-radius: 16px;
             margin-bottom: 10px;
             border: 1px solid var(--border);
             position: relative;
+            transition: all 0.2s;
         }
+        .name-entry:hover, .schedule-entry:hover { border-color: var(--accent); }
         .remove-btn {
             position: absolute;
             top: 8px;
@@ -263,30 +283,33 @@
             background: none;
             border: none;
             color: #d4837a;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             cursor: pointer;
             transition: transform 0.2s;
         }
-        .remove-btn:hover { transform: scale(1.2); }
+        .remove-btn:hover { transform: scale(1.3) rotate(90deg); }
 
         .file-upload {
             display: block;
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border: 2px dashed var(--border);
-            border-radius: 12px;
+            border-radius: 14px;
             cursor: pointer;
             text-align: center;
             color: var(--text-secondary);
             font-family: 'Montserrat', sans-serif;
             font-size: 0.9rem;
             transition: all var(--transition);
+            background: var(--bg-card);
         }
-        .file-upload:hover { border-color: var(--accent); background: var(--bg-card); }
+        .file-upload:hover { border-color: var(--accent); background: var(--bg-card); box-shadow: inset 0 0 20px rgba(201,169,110,0.05); }
 
         input[type="range"] {
             width: 100%;
             accent-color: var(--accent);
+            height: 6px;
+            border-radius: 4px;
         }
 
         /* ===== ПРЕДПРОСМОТР ===== */
@@ -299,24 +322,28 @@
             flex-direction: column;
             align-items: center;
             transition: background var(--transition);
+            border: 1px solid rgba(255,255,255,0.05);
         }
         .preview-panel h3 {
             font-family: 'Playfair Display', serif;
             margin-bottom: 18px;
             color: var(--text-secondary);
+            font-weight: 400;
+            letter-spacing: 1px;
         }
         .preview-card {
             width: 100%;
             max-width: 480px;
             background: #fdf8f0;
-            border-radius: 28px;
-            padding: 36px 24px;
+            border-radius: 32px;
+            padding: 40px 28px;
             text-align: center;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
             transition: all 0.3s;
             margin: 0 auto;
+            border: 1px solid rgba(255,255,255,0.3);
         }
         body.dark .preview-card { background: #3a322c; }
 
@@ -327,53 +354,94 @@
             background-position: center;
             z-index:1;
             opacity:0.85;
+            transition: transform 0.2s;
         }
         .preview-card .overlay {
             position: absolute;
             top:0; left:0; right:0; bottom:0;
-            background: rgba(255,255,255,0.25);
+            background: rgba(255,255,255,0.2);
             z-index:2;
+            backdrop-filter: blur(2px);
         }
-        body.dark .preview-card .overlay { background: rgba(0,0,0,0.3); }
+        body.dark .preview-card .overlay { background: rgba(0,0,0,0.25); }
 
         .preview-card .content {
             position: relative;
             z-index:3;
         }
-        .preview-card .ornament { font-size: 2rem; letter-spacing: 8px; margin: 8px 0; }
+        .preview-card .ornament {
+            font-size: 2.2rem;
+            letter-spacing: 10px;
+            margin: 8px 0;
+            opacity: 0.8;
+        }
         .preview-card h2 {
             font-family: 'Playfair Display', serif;
             font-weight: 400;
-            font-size: 2rem;
+            font-size: 2.2rem;
             margin: 12px 0;
+            letter-spacing: 2px;
         }
-        .preview-card .divider { margin: 12px 0; font-size: 1.2rem; opacity:0.5; }
-        .preview-card .names { font-size: 2.2rem; font-weight: 700; margin: 16px 0; line-height:1.4; }
-        .preview-card .date { font-size: 1.8rem; font-weight: 600; margin: 16px 0; }
-        .preview-card .info { font-size: 1.1rem; line-height: 2.2; }
+        .preview-card .divider {
+            margin: 12px 0;
+            font-size: 1.4rem;
+            opacity:0.4;
+            letter-spacing: 4px;
+        }
+        .preview-card .names {
+            font-size: 2.4rem;
+            font-weight: 700;
+            margin: 18px 0;
+            line-height:1.4;
+        }
+        .preview-card .date {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 18px 0;
+            letter-spacing: 1px;
+        }
+        .preview-card .info {
+            font-size: 1.15rem;
+            line-height: 2.4;
+            opacity: 0.9;
+        }
         .preview-card .message {
             font-style: italic;
-            padding: 16px 0;
+            padding: 18px 0;
             border-top: 1px solid rgba(0,0,0,0.08);
             border-bottom: 1px solid rgba(0,0,0,0.08);
-            margin: 12px 0;
+            margin: 14px 0;
+            font-size: 1.1rem;
         }
-        .preview-card .countdown { font-weight: 600; padding: 10px; background: rgba(0,0,0,0.04); border-radius: 16px; margin: 12px 0; }
+        .preview-card .countdown {
+            font-weight: 600;
+            padding: 12px;
+            background: rgba(0,0,0,0.04);
+            border-radius: 20px;
+            margin: 14px 0;
+            backdrop-filter: blur(4px);
+        }
         .countdown-digits {
             display: flex;
             justify-content: center;
-            gap: 12px;
+            gap: 14px;
             font-family: 'Montserrat', sans-serif;
             font-weight: 600;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
         }
-        .countdown-digits span { background: rgba(0,0,0,0.05); padding: 4px 14px; border-radius: 12px; min-width: 50px; }
-        .countdown-digits .label { font-size: 0.6rem; font-weight:400; opacity:0.7; display:block; }
+        .countdown-digits span {
+            background: rgba(0,0,0,0.06);
+            padding: 6px 18px;
+            border-radius: 16px;
+            min-width: 60px;
+            backdrop-filter: blur(2px);
+        }
+        .countdown-digits .label { font-size: 0.6rem; font-weight:400; opacity:0.7; display:block; margin-top:2px; }
 
         .preview-actions {
             margin-top: 20px;
             display: flex;
-            gap: 12px;
+            gap: 14px;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -394,32 +462,42 @@
             min-height: 100vh;
             justify-content: center;
             align-items: center;
-            padding: 16px;
+            padding: 20px;
             background: linear-gradient(135deg, #c9a96e, #d4c5a9);
             position: fixed;
             top:0; left:0; right:0; bottom:0;
             z-index: 9999;
             overflow-y: auto;
+            animation: bgPulse 6s infinite alternate;
+        }
+        @keyframes bgPulse {
+            0% { background: linear-gradient(135deg, #c9a96e, #d4c5a9); }
+            100% { background: linear-gradient(135deg, #d4c5a9, #c9a96e); }
         }
         .guest-page.active { display: flex; }
         .guest-page .preview-card {
             max-width: 480px;
             width: 100%;
             margin: 0 auto;
-            padding: 24px 16px;
+            padding: 28px 18px;
+            animation: floatIn 0.8s ease;
+        }
+        @keyframes floatIn {
+            from { opacity:0; transform: translateY(30px) scale(0.96); }
+            to { opacity:1; transform: translateY(0) scale(1); }
         }
         @media (max-width: 480px) {
             .guest-page .preview-card {
                 padding: 20px 12px;
-                border-radius: 20px;
+                border-radius: 24px;
             }
             .guest-page .preview-card .names { font-size: 1.8rem; }
-            .guest-page .preview-card .date { font-size: 1.4rem; }
+            .guest-page .preview-card .date { font-size: 1.5rem; }
             .guest-page .preview-card .info { font-size: 1rem; }
             .guest-page .preview-card h2 { font-size: 1.6rem; }
             .guest-page .preview-card .ornament { font-size: 1.6rem; letter-spacing: 4px; }
-            .guest-page .preview-card .countdown-digits { font-size: 1.2rem; gap: 8px; }
-            .guest-page .preview-card .countdown-digits span { padding: 2px 10px; min-width: 40px; }
+            .guest-page .preview-card .countdown-digits { font-size: 1.1rem; gap: 6px; }
+            .guest-page .preview-card .countdown-digits span { padding: 4px 10px; min-width: 40px; }
         }
 
         /* ===== МОДАЛКА ===== */
@@ -428,7 +506,7 @@
             position: fixed;
             top:0; left:0; width:100%; height:100%;
             background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(12px);
             justify-content: center;
             align-items: center;
             z-index: 99999;
@@ -436,25 +514,27 @@
         .modal.show { display: flex; }
         .modal-box {
             background: var(--bg-card);
-            padding: 30px;
-            border-radius: 24px;
+            padding: 32px;
+            border-radius: 28px;
             max-width: 520px;
             width: 92%;
             color: var(--text-primary);
-            box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
         }
         .link-display {
             background: var(--bg-card);
             padding: 14px;
-            border-radius: 12px;
+            border-radius: 14px;
             margin: 16px 0;
             word-break: break-all;
             font-family: monospace;
             font-size: 0.8rem;
             border: 1px solid var(--border);
             text-align: left;
+            background: rgba(0,0,0,0.02);
         }
-        .status-msg { padding: 10px; border-radius: 12px; margin: 10px 0; font-size: 0.9rem; }
+        .status-msg { padding: 12px; border-radius: 16px; margin: 12px 0; font-size: 0.9rem; }
         .status-info { background: #e3f2fd; color: #1565c0; }
         .status-success { background: #e8f5e9; color: #2e7d32; }
         body.dark .status-info { background: #1a2a3a; color: #8bb8e0; }
@@ -462,8 +542,8 @@
 
         .note {
             background: #fff3cd;
-            padding: 10px;
-            border-radius: 12px;
+            padding: 12px;
+            border-radius: 14px;
             font-size: 0.8rem;
             margin-top: 12px;
             color: #856404;
@@ -473,24 +553,46 @@
         /* ===== RSVP ===== */
         .rsvp-form {
             margin-top: 16px;
-            padding: 16px;
+            padding: 18px;
             background: rgba(0,0,0,0.03);
-            border-radius: 16px;
+            border-radius: 20px;
             border: 1px solid var(--border);
+            backdrop-filter: blur(4px);
         }
-        .rsvp-options { display: flex; gap: 12px; flex-wrap: wrap; }
-        .rsvp-options label { display: flex; align-items: center; gap: 4px; font-weight: 400; cursor: pointer; }
-        .rsvp-options input[type="radio"] { accent-color: var(--accent); width: 18px; height: 18px; }
+        .rsvp-options { display: flex; gap: 14px; flex-wrap: wrap; }
+        .rsvp-options label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 30px;
+            background: rgba(0,0,0,0.02);
+            transition: all 0.2s;
+        }
+        .rsvp-options label:hover { background: rgba(201,169,110,0.1); }
+        .rsvp-options input[type="radio"] {
+            accent-color: var(--accent);
+            width: 18px;
+            height: 18px;
+        }
         .rsvp-list {
             margin-top: 12px;
-            max-height: 130px;
+            max-height: 140px;
             overflow-y: auto;
             font-size: 0.9rem;
             text-align: left;
             border-top: 1px solid var(--border);
-            padding-top: 10px;
+            padding-top: 12px;
         }
-        .rsvp-item { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dashed var(--border); }
+        .rsvp-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px dashed var(--border);
+            align-items: center;
+        }
 
         /* ===== АНИМАЦИИ ===== */
         .anim-slide-left { animation: slideLeft 0.7s ease forwards; }
@@ -519,10 +621,19 @@
         @keyframes zoomIn { from { opacity:0; transform:scale(0.5) rotate(5deg); } to { opacity:1; transform:scale(1) rotate(0); } }
         @keyframes shakeIn { 0%{opacity:0;transform:translateX(-20px);} 20%{transform:translateX(10px);} 40%{transform:translateX(-10px);} 60%{transform:translateX(6px);} 80%{transform:translateX(-4px);} 100%{opacity:1;transform:translateX(0);} }
         @keyframes wobbleIn { 0%{opacity:0;transform:rotate(-6deg) scale(0.9);} 50%{transform:rotate(4deg) scale(1.02);} 100%{opacity:1;transform:rotate(0) scale(1);} }
-        .shimmer { animation: shimmer 2s infinite; }
+        .shimmer { animation: shimmer 3s infinite; }
         @keyframes shimmer { 0%{opacity:0.6;} 50%{opacity:1;} 100%{opacity:0.6;} }
-        .pulse { animation: pulse 2s infinite; }
+        .pulse { animation: pulse 2.5s infinite; }
         @keyframes pulse { 0%{transform:scale(1);} 50%{transform:scale(1.05);} 100%{transform:scale(1);} }
+
+        /* ===== ЧАСТИЦЫ (гостевая) ===== */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            border-radius: 50%;
+            opacity: 0.6;
+            z-index: 0;
+        }
 
         /* ===== АДАПТИВ ===== */
         @media (max-width: 768px) {
@@ -538,10 +649,6 @@
         @media (max-width: 480px) {
             .app-header h1 { font-size: 1.4rem; }
             .header-actions .btn { font-size: 0.7rem; padding: 6px 12px; }
-            .preview-card .names { font-size: 1.8rem; }
-            .preview-card .date { font-size: 1.4rem; }
-            .preview-card .info { font-size: 1rem; }
-            .preview-card h2 { font-size: 1.6rem; }
         }
     </style>
 </head>
@@ -759,20 +866,16 @@
                 <div class="section">
                     <div class="section-title">🎵 Музыка</div>
                     <div class="field">
-                        <label>Выбрать встроенный трек</label>
-                        <select id="presetMusic" onchange="loadPresetMusic()">
-                            <option value="">-- Выберите мелодию --</option>
-                            <option value="https://cdn.pixabay.com/download/audio/2022/03/10/audio_1808fbf07a.mp3?filename=wedding-march-126267.mp3">Свадебный марш</option>
-                            <option value="https://cdn.pixabay.com/download/audio/2022/02/22/audio_d3c8c8c2c2.mp3?filename=romantic-piano-145988.mp3">Романтичный пианино</option>
-                            <option value="https://cdn.pixabay.com/download/audio/2022/03/10/audio_3f7b8a7f7a.mp3?filename=soft-classical-148169.mp3">Классическая нежная</option>
-                            <option value="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0f9c5f7c0.mp3?filename=acoustic-guitar-123478.mp3">Акустическая гитара</option>
-                            <option value="https://cdn.pixabay.com/download/audio/2022/04/01/audio_2f6b8a7f7a.mp3?filename=jazz-lounge-132075.mp3">Джаз-лаунж</option>
-                            <option value="https://cdn.pixabay.com/download/audio/2022/03/15/audio_3f6b8a7f7a.mp3?filename=celtic-harp-148169.mp3">Кельтская арфа</option>
-                        </select>
+                        <label>Встроенная простая мелодия (Web Audio)</label>
+                        <button class="btn btn-music" onclick="generateSimpleTone()" style="width:100%; justify-content:center;">🎵 Сгенерировать простую мелодию</button>
+                        <span style="font-size:0.8rem; opacity:0.6; display:block; margin-top:4px;">(работает без интернета, звучит как нежный колокольчик)</span>
                     </div>
-                    <div class="field"><label>Или загрузить свою MP3</label><input type="file" accept="audio/*" id="musicFile" onchange="loadMusic(event)" class="file-upload"></div>
-                    <div id="musicPlayer" style="display:none; margin-top:10px;">
-                        <audio controls style="width:100%;" id="audioPlayer"></audio>
+                    <div class="field" style="margin-top:12px;">
+                        <label>Или загрузите свой MP3</label>
+                        <input type="file" accept="audio/*" id="musicFile" onchange="loadMusic(event)" class="file-upload">
+                    </div>
+                    <div id="musicPlayer" style="display:none; margin-top:12px;">
+                        <audio controls style="width:100%; border-radius:30px;" id="audioPlayer"></audio>
                         <button class="btn btn-outline" onclick="document.getElementById('audioPlayer').pause()">⏸️ Пауза</button>
                         <button class="btn btn-outline" onclick="document.getElementById('audioPlayer').play()">▶️ Играть</button>
                     </div>
@@ -829,7 +932,7 @@
 <!-- Гостевая страница -->
 <div class="guest-page" id="guestPage">
     <div class="preview-card" id="guestCard" style="max-width:500px; margin:0 auto;"></div>
-    <button class="btn btn-outline" onclick="closeGuestPage()" style="position:fixed; bottom:20px; right:20px; background:rgba(0,0,0,0.6); color:#fff; border:none; padding:10px 16px; border-radius:40px;">✕ Закрыть</button>
+    <button class="btn btn-outline" onclick="closeGuestPage()" style="position:fixed; bottom:20px; right:20px; background:rgba(0,0,0,0.6); color:#fff; border:none; padding:12px 20px; border-radius:40px; backdrop-filter:blur(4px);">✕ Закрыть</button>
 </div>
 
 <script>
@@ -839,7 +942,7 @@
     let currentAnim = 'slide-left';
     let currentColor = '#c9a96e';
     let currentPhoto = null;
-    let currentMusic = null;
+    let currentMusic = null; // может быть URL или base64 или 'simple-tone'
     let currentLink = '';
 
     const backgrounds = {
@@ -1071,23 +1174,64 @@
         reader.readAsDataURL(file);
     }
 
-    // ===== МУЗЫКА (исправленная) =====
-    function loadPresetMusic() {
-        const select = document.getElementById('presetMusic');
-        const url = select.value;
-        if (!url) {
-            // Если выбрано пустое значение, сбрасываем
-            currentMusic = null;
-            document.getElementById('musicPlayer').style.display = 'none';
-            return;
+    // ===== МУЗЫКА (новая) =====
+    function generateSimpleTone() {
+        // Создаём короткую мелодию через Web Audio (колокольчик)
+        try {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const notes = [523, 659, 784, 1047]; // частота
+            const dur = 0.3;
+            const startTime = audioCtx.currentTime + 0.1;
+            notes.forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.3, startTime + i * 0.2);
+                gain.gain.exponentialRampToValueAtTime(0.01, startTime + i * 0.2 + dur);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(startTime + i * 0.2);
+                osc.stop(startTime + i * 0.2 + dur);
+            });
+            // Сохраняем как специальный флаг
+            currentMusic = 'simple-tone';
+            document.getElementById('musicPlayer').style.display = 'block';
+            document.getElementById('audioPlayer').src = ''; // очищаем
+            // Показываем уведомление
+            const player = document.getElementById('musicPlayer');
+            player.innerHTML = `<div style="padding:12px; background:rgba(201,169,110,0.1); border-radius:16px; color:var(--accent-dark);">
+                🎵 Простая мелодия создана! Она будет играть на гостевой странице.
+                <button class="btn btn-outline" onclick="playSimpleTone()" style="margin-top:8px;">▶️ Прослушать</button>
+            </div>`;
+            // Сохраняем для возможности прослушать
+            window.simpleToneNotes = notes;
+        } catch(e) {
+            alert('Не удалось создать мелодию. Ваш браузер может не поддерживать Web Audio.');
+            console.error(e);
         }
-        // Устанавливаем источник и показываем плеер
-        currentMusic = url;
-        const player = document.getElementById('audioPlayer');
-        player.src = url;
-        player.load(); // перезагружаем
-        document.getElementById('musicPlayer').style.display = 'block';
-        // Автоматически не запускаем, даём пользователю кнопку
+    }
+
+    function playSimpleTone() {
+        if (!window.simpleToneNotes) return;
+        try {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const notes = window.simpleToneNotes;
+            const dur = 0.3;
+            const startTime = audioCtx.currentTime + 0.1;
+            notes.forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.3, startTime + i * 0.2);
+                gain.gain.exponentialRampToValueAtTime(0.01, startTime + i * 0.2 + dur);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(startTime + i * 0.2);
+                osc.stop(startTime + i * 0.2 + dur);
+            });
+        } catch(e) { alert('Ошибка воспроизведения'); }
     }
 
     function loadMusic(e) {
@@ -1099,7 +1243,14 @@
             document.getElementById('audioPlayer').src = currentMusic;
             document.getElementById('audioPlayer').load();
             document.getElementById('musicPlayer').style.display = 'block';
-            document.getElementById('presetMusic').value = '';
+            // Очищаем возможные простые тоны
+            window.simpleToneNotes = null;
+            // Пересоздаём плеер для отображения контролов
+            document.getElementById('musicPlayer').innerHTML = `
+                <audio controls style="width:100%; border-radius:30px;" id="audioPlayer" src="${currentMusic}"></audio>
+                <button class="btn btn-outline" onclick="document.getElementById('audioPlayer').pause()">⏸️ Пауза</button>
+                <button class="btn btn-outline" onclick="document.getElementById('audioPlayer').play()">▶️ Играть</button>
+            `;
         };
         reader.readAsDataURL(file);
     }
@@ -1202,7 +1353,7 @@
             showRSVP: document.getElementById('showRSVP').value === 'true',
             font: document.getElementById('fontSelect').value,
             fontSize: document.getElementById('fontSizeRange').value,
-            music: currentMusic
+            music: currentMusic // может быть 'simple-tone' или base64
         };
     }
 
@@ -1223,8 +1374,9 @@
         document.getElementById('copyBtn').style.display = 'none';
 
         const data = getData();
-        if (data.photo && data.photo.startsWith('data:')) {
-            data.photo = await compressImage(data.photo);
+        // Если музыка — это simple-tone, оставляем как строку
+        if (data.music && data.music !== 'simple-tone' && data.music.startsWith('data:')) {
+            data.music = await compressAudio(data.music);
         }
 
         const encoded = encodeData(data);
@@ -1258,6 +1410,13 @@
         });
     }
 
+    function compressAudio(base64) {
+        return new Promise((resolve) => {
+            // Для простоты не сжимаем аудио, оставляем как есть (это занимает место, но мы не можем сжать без потери качества)
+            resolve(base64);
+        });
+    }
+
     function copyLink() {
         const text = currentLink || document.getElementById('linkBox').textContent;
         if (navigator.clipboard && window.isSecureContext) {
@@ -1278,7 +1437,7 @@
         document.getElementById('linkModal').classList.remove('show');
     }
 
-    // ===== ГОСТЕВАЯ СТРАНИЦА (с исправленной музыкой) =====
+    // ===== ГОСТЕВАЯ СТРАНИЦА =====
     function previewGuestPage() {
         const data = getData();
         showGuestPage(data);
@@ -1287,6 +1446,8 @@
     function showGuestPage(data) {
         document.getElementById('guestPage').classList.add('active');
         document.body.style.overflow = 'hidden';
+        // Добавляем частицы
+        createParticles();
 
         const card = document.getElementById('guestCard');
         let dateStr = 'Дата уточняется';
@@ -1343,14 +1504,24 @@
         // === Музыка ===
         let musicHtml = '';
         if (data.music) {
-            // Добавляем кнопку для запуска (чтобы обойти автоблокировку)
-            musicHtml = `
-                <div style="margin-top:12px;">
-                    <button class="btn btn-music" onclick="playGuestMusic()" id="musicPlayBtn">▶️ Включить музыку</button>
-                    <span style="font-size:0.8rem; opacity:0.6; display:block; margin-top:4px;">(нажмите, чтобы запустить)</span>
-                    <audio id="guestAudio" style="display:none;"></audio>
-                </div>
-            `;
+            if (data.music === 'simple-tone') {
+                // Синтезированная мелодия
+                musicHtml = `
+                    <div style="margin-top:12px;">
+                        <button class="btn btn-music" onclick="playGuestSimpleTone()" id="musicPlayBtn">🎵 Включить музыку (колокольчик)</button>
+                        <span style="font-size:0.8rem; opacity:0.6; display:block; margin-top:4px;">(нажмите для запуска)</span>
+                    </div>
+                `;
+            } else {
+                // Загруженный файл
+                musicHtml = `
+                    <div style="margin-top:12px;">
+                        <button class="btn btn-music" onclick="playGuestMusic()" id="musicPlayBtn">▶️ Включить музыку</button>
+                        <span style="font-size:0.8rem; opacity:0.6; display:block; margin-top:4px;">(нажмите для запуска)</span>
+                        <audio id="guestAudio" style="display:none;"></audio>
+                    </div>
+                `;
+            }
         }
 
         let bgStyle = '';
@@ -1393,36 +1564,61 @@
         `;
         card.className = 'preview-card ' + borderClass;
 
-        // Если есть музыка, сохраняем ссылку в глобальную переменную и подготавливаем аудио
+        // Настраиваем музыку
         if (data.music) {
-            const audio = document.getElementById('guestAudio');
-            if (audio) {
-                audio.src = data.music;
-                audio.loop = true;
-                audio.preload = 'auto';
-                // Обработка ошибок
-                audio.onerror = function() {
-                    document.getElementById('musicPlayBtn').textContent = '⚠️ Ошибка загрузки';
-                    document.getElementById('musicPlayBtn').style.opacity = '0.5';
+            if (data.music === 'simple-tone') {
+                window.guestSimpleToneNotes = [523, 659, 784, 1047];
+                window.playGuestSimpleTone = function() {
+                    try {
+                        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                        const notes = window.guestSimpleToneNotes;
+                        const dur = 0.3;
+                        const startTime = audioCtx.currentTime + 0.1;
+                        notes.forEach((freq, i) => {
+                            const osc = audioCtx.createOscillator();
+                            const gain = audioCtx.createGain();
+                            osc.type = 'sine';
+                            osc.frequency.value = freq;
+                            gain.gain.setValueAtTime(0.3, startTime + i * 0.2);
+                            gain.gain.exponentialRampToValueAtTime(0.01, startTime + i * 0.2 + dur);
+                            osc.connect(gain);
+                            gain.connect(audioCtx.destination);
+                            osc.start(startTime + i * 0.2);
+                            osc.stop(startTime + i * 0.2 + dur);
+                        });
+                        const btn = document.getElementById('musicPlayBtn');
+                        btn.textContent = '🔊 Музыка играет';
+                        setTimeout(() => { btn.textContent = '🎵 Включить музыку (колокольчик)'; }, 2000);
+                    } catch(e) { alert('Не удалось запустить'); }
+                };
+            } else {
+                // Загружаем файл
+                const audio = document.getElementById('guestAudio');
+                if (audio) {
+                    audio.src = data.music;
+                    audio.loop = true;
+                    audio.preload = 'auto';
+                    audio.onerror = function() {
+                        document.getElementById('musicPlayBtn').textContent = '⚠️ Ошибка загрузки';
+                    };
+                }
+                window.playGuestMusic = function() {
+                    const audio = document.getElementById('guestAudio');
+                    const btn = document.getElementById('musicPlayBtn');
+                    if (!audio) return;
+                    if (audio.paused) {
+                        audio.play().then(() => {
+                            btn.textContent = '⏸️ Остановить музыку';
+                        }).catch((err) => {
+                            alert('Не удалось запустить музыку. Попробуйте ещё раз.');
+                            console.error(err);
+                        });
+                    } else {
+                        audio.pause();
+                        btn.textContent = '▶️ Включить музыку';
+                    }
                 };
             }
-            // Глобальная функция для кнопки
-            window.playGuestMusic = function() {
-                const audio = document.getElementById('guestAudio');
-                const btn = document.getElementById('musicPlayBtn');
-                if (!audio) return;
-                if (audio.paused) {
-                    audio.play().then(() => {
-                        btn.textContent = '⏸️ Остановить музыку';
-                    }).catch((err) => {
-                        alert('Не удалось запустить музыку. Попробуйте нажать ещё раз или загрузить другой трек.');
-                        console.error(err);
-                    });
-                } else {
-                    audio.pause();
-                    btn.textContent = '▶️ Включить музыку';
-                }
-            };
         }
 
         // Параллакс
@@ -1458,12 +1654,46 @@
         };
     }
 
+    // ===== ЧАСТИЦЫ ДЛЯ ГОСТЕВОЙ =====
+    function createParticles() {
+        const container = document.getElementById('guestPage');
+        const existing = container.querySelectorAll('.particle');
+        existing.forEach(p => p.remove());
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            const size = Math.random() * 8 + 4;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.background = `rgba(255,255,255,${Math.random() * 0.5 + 0.3})`;
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animation = `floatParticle ${Math.random() * 10 + 8}s infinite alternate`;
+            particle.style.transform = `translate(${Math.random() * 40 - 20}px, ${Math.random() * 40 - 20}px)`;
+            container.appendChild(particle);
+        }
+        // Добавляем стили анимации, если их нет
+        if (!document.getElementById('particleStyles')) {
+            const style = document.createElement('style');
+            style.id = 'particleStyles';
+            style.textContent = `
+                @keyframes floatParticle {
+                    0% { transform: translate(0,0) scale(1); opacity:0.3; }
+                    100% { transform: translate(${Math.random()*60-30}px, ${Math.random()*60-30}px) scale(1.2); opacity:0.8; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    }
+
     function closeGuestPage() {
         document.getElementById('guestPage').classList.remove('active');
         document.body.style.overflow = '';
-        // Останавливаем музыку, если играет
+        // Останавливаем музыку
         const audio = document.getElementById('guestAudio');
         if (audio) audio.pause();
+        // Удаляем частицы
+        document.querySelectorAll('.particle').forEach(p => p.remove());
     }
 
     // ===== ЧЕРНОВИК =====
@@ -1546,17 +1776,24 @@
 
             if (data.music) {
                 currentMusic = data.music;
-                document.getElementById('audioPlayer').src = data.music;
-                document.getElementById('audioPlayer').load();
-                document.getElementById('musicPlayer').style.display = 'block';
-                // Если это ссылка из пресета, подсветим в списке
-                const presetSelect = document.getElementById('presetMusic');
-                const options = presetSelect.options;
-                for (let opt of options) {
-                    if (opt.value === data.music) {
-                        presetSelect.value = data.music;
-                        break;
-                    }
+                if (data.music === 'simple-tone') {
+                    document.getElementById('musicPlayer').style.display = 'block';
+                    document.getElementById('musicPlayer').innerHTML = `
+                        <div style="padding:12px; background:rgba(201,169,110,0.1); border-radius:16px; color:var(--accent-dark);">
+                            🎵 Простая мелодия выбрана.
+                            <button class="btn btn-outline" onclick="playSimpleTone()" style="margin-top:8px;">▶️ Прослушать</button>
+                        </div>
+                    `;
+                    window.simpleToneNotes = [523, 659, 784, 1047];
+                } else {
+                    document.getElementById('audioPlayer').src = data.music;
+                    document.getElementById('audioPlayer').load();
+                    document.getElementById('musicPlayer').style.display = 'block';
+                    document.getElementById('musicPlayer').innerHTML = `
+                        <audio controls style="width:100%; border-radius:30px;" id="audioPlayer" src="${data.music}"></audio>
+                        <button class="btn btn-outline" onclick="document.getElementById('audioPlayer').pause()">⏸️ Пауза</button>
+                        <button class="btn btn-outline" onclick="document.getElementById('audioPlayer').play()">▶️ Играть</button>
+                    `;
                 }
             }
 
