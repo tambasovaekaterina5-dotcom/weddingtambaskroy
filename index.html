@@ -81,7 +81,7 @@
         }
         .btn-music:hover { background: #4a148c; transform: scale(1.03); }
 
-        /* ===== ШАПКА КОНСТРУКТОРА ===== */
+        /* ===== ШАПКА ===== */
         .app-header {
             display: flex;
             justify-content: space-between;
@@ -111,7 +111,7 @@
             align-items: center;
         }
 
-        /* ===== ОСНОВНАЯ СЕТКА КОНСТРУКТОРА ===== */
+        /* ===== ОСНОВНАЯ СЕТКА ===== */
         .main-grid {
             display: grid;
             grid-template-columns: 420px 1fr;
@@ -336,12 +336,12 @@
             width: 100%;
             max-width: 480px;
             background: #fdf8f0;
-            border-radius: 32px;
+            border-radius: var(--radius);
             padding: 40px 28px;
             text-align: center;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+            box-shadow: var(--shadow);
             transition: all 0.3s;
             margin: 0 auto;
             border: 1px solid rgba(255,255,255,0.3);
@@ -423,7 +423,7 @@
             justify-content: center;
         }
 
-        /* ===== РАМКИ ===== */
+        /* ===== РАМКИ (окантовки) ===== */
         .border-none { border: none; }
         .border-classic { border: 4px solid #d4c5a9; }
         .border-gold { border: 4px double #c9a96e; }
@@ -432,14 +432,36 @@
         .border-rustic { border: 4px solid #8b7355; border-radius: 0; }
         .border-double { border: 6px double var(--accent); }
         .border-dashed { border: 3px dashed var(--accent); }
+        .border-shadow { border: none; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+        .border-double-shadow { border: 4px double var(--accent); box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+        .border-angular { border: 4px solid var(--accent); border-radius: 0; }
+        .border-wavy { border: 3px solid var(--accent); border-radius: 40px 10px 40px 10px; }
+        .border-icon { border: 4px solid var(--accent); position: relative; }
+        .border-icon::before {
+            content: '✦';
+            position: absolute;
+            top: -16px; left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            padding: 0 10px;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
 
-        /* ===== ГОСТЕВАЯ СТРАНИЦА (полноэкранная, адаптивная) ===== */
+        /* ===== ФОРМА (для гостевой и превью) ===== */
+        .shape-rectangle { border-radius: 0; }
+        .shape-rounded { border-radius: 32px; }
+        .shape-circle { border-radius: 50%; width: 100%; aspect-ratio: 1/1; max-width: 480px; padding: 40px; }
+        .shape-pointed { border-radius: 0 40px 0 40px; }
+        .shape-fancy { border-radius: 60px 10px 60px 10px; }
+
+        /* ===== ГОСТЕВАЯ СТРАНИЦА ===== */
         .guest-page {
             display: none;
             min-height: 100vh;
             justify-content: center;
             align-items: center;
-            padding: 12px;
+            padding: 10px;
             background: linear-gradient(135deg, #f5e6d3, #e8d5c0, #f5e6d3);
             background-size: 400% 400%;
             animation: gradientShift 12s ease infinite;
@@ -462,12 +484,13 @@
 
         .guest-page.active { display: flex; }
 
+        /* Карточка на гостевой — теперь 100% ширины с отступами */
         .guest-page .preview-card {
-            max-width: 480px;
             width: 100%;
-            margin: 10px auto;
-            padding: 28px 20px;
-            border-radius: 40px;
+            max-width: 100%;
+            margin: 0;
+            padding: 24px 16px;
+            border-radius: 32px;
             background: rgba(255,255,255,0.2);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -485,11 +508,11 @@
         }
 
         .guest-page .preview-card .bg-layer {
-            border-radius: 40px;
+            border-radius: 32px;
             overflow: hidden;
         }
         .guest-page .preview-card .overlay {
-            border-radius: 40px;
+            border-radius: 32px;
             background: rgba(255,255,255,0.08);
             backdrop-filter: blur(4px);
         }
@@ -694,11 +717,11 @@
         /* Адаптив для телефона */
         @media (max-width: 480px) {
             .guest-page {
-                padding: 8px 6px 20px;
+                padding: 8px;
             }
             .guest-page .preview-card {
-                padding: 20px 14px;
-                border-radius: 32px;
+                padding: 20px 12px;
+                border-radius: 28px;
             }
             .guest-page .preview-card h2 {
                 font-size: 2.2rem;
@@ -741,7 +764,7 @@
         @media (max-width: 400px) {
             .guest-page .preview-card {
                 padding: 16px 10px;
-                border-radius: 28px;
+                border-radius: 24px;
             }
             .guest-page .preview-card h2 {
                 font-size: 1.8rem;
@@ -866,12 +889,13 @@
             <div class="tabs">
                 <button class="tab-btn active" data-tab="tab-main">📝 Основное</button>
                 <button class="tab-btn" data-tab="tab-design">🎨 Дизайн</button>
+                <button class="tab-btn" data-tab="tab-shape">🔲 Форма</button>
                 <button class="tab-btn" data-tab="tab-schedule">📋 Расписание</button>
                 <button class="tab-btn" data-tab="tab-rsvp">💌 RSVP</button>
                 <button class="tab-btn" data-tab="tab-music">🎵 Музыка</button>
             </div>
 
-            <!-- Вкладка "Основное" (без изменений) -->
+            <!-- Вкладка "Основное" -->
             <div class="tab-content active" id="tab-main">
                 <div class="section">
                     <div class="section-title">👥 Имена</div>
@@ -911,7 +935,7 @@
                 </div>
             </div>
 
-            <!-- Вкладка "Дизайн" с готовыми стилями -->
+            <!-- Вкладка "Дизайн" -->
             <div class="tab-content" id="tab-design">
                 <div class="section">
                     <div class="section-title">🎨 Готовые дизайны</div>
@@ -922,6 +946,9 @@
                         <button class="style-btn" data-preset="vintage">Винтажный</button>
                         <button class="style-btn" data-preset="nature">Природа</button>
                         <button class="style-btn" data-preset="wedding">Свадебный</button>
+                        <button class="style-btn" data-preset="minimal">Минимализм</button>
+                        <button class="style-btn" data-preset="boho">Богемный</button>
+                        <button class="style-btn" data-preset="elegant">Элегантный</button>
                     </div>
                     <p style="font-size:0.8rem; margin-top:8px; opacity:0.7;">При выборе дизайна автоматически применяются настройки фона, рамки, цвета и шрифта. Вы можете их доработать вручную ниже.</p>
                 </div>
@@ -957,6 +984,11 @@
                         <button class="style-btn" data-border="rustic">Рустик</button>
                         <button class="style-btn" data-border="double">Двойная</button>
                         <button class="style-btn" data-border="dashed">Пунктирная</button>
+                        <button class="style-btn" data-border="shadow">Тень</button>
+                        <button class="style-btn" data-border="double-shadow">Двойная+тень</button>
+                        <button class="style-btn" data-border="angular">Угловая</button>
+                        <button class="style-btn" data-border="wavy">Волнистая</button>
+                        <button class="style-btn" data-border="icon">С иконкой</button>
                     </div>
                 </div>
 
@@ -1033,7 +1065,21 @@
                 </div>
             </div>
 
-            <!-- Остальные вкладки без изменений -->
+            <!-- Вкладка "Форма" -->
+            <div class="tab-content" id="tab-shape">
+                <div class="section">
+                    <div class="section-title">🔲 Форма приглашения</div>
+                    <div class="style-grid" id="shapeGrid">
+                        <button class="style-btn active" data-shape="rounded">Скруглённая</button>
+                        <button class="style-btn" data-shape="rectangle">Прямоугольная</button>
+                        <button class="style-btn" data-shape="circle">Круглая</button>
+                        <button class="style-btn" data-shape="pointed">Заострённая</button>
+                        <button class="style-btn" data-shape="fancy">Фигурная</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вкладка "Расписание" -->
             <div class="tab-content" id="tab-schedule">
                 <div class="section">
                     <div class="section-title">📋 Расписание</div>
@@ -1057,6 +1103,7 @@
                 </div>
             </div>
 
+            <!-- Вкладка "RSVP" -->
             <div class="tab-content" id="tab-rsvp">
                 <div class="section">
                     <div class="section-title">💌 Форма RSVP</div>
@@ -1076,6 +1123,7 @@
                 </div>
             </div>
 
+            <!-- Вкладка "Музыка" -->
             <div class="tab-content" id="tab-music">
                 <div class="section">
                     <div class="section-title">🎵 Музыка</div>
@@ -1145,7 +1193,7 @@
 
 <!-- Гостевая страница -->
 <div class="guest-page" id="guestPage">
-    <div class="preview-card" id="guestCard" style="max-width:500px; margin:0 auto;"></div>
+    <div class="preview-card" id="guestCard" style="max-width:100%; margin:0;"></div>
     <button class="btn btn-outline" onclick="closeGuestPage()" style="position:fixed; bottom:20px; right:20px; background:rgba(0,0,0,0.5); color:#fff; border:none; padding:14px 24px; border-radius:60px; backdrop-filter:blur(8px); font-family:'Montserrat',sans-serif; font-weight:600; z-index:100;">✕ Закрыть</button>
 </div>
 
@@ -1158,6 +1206,7 @@
     let currentPhoto = null;
     let currentMusic = null;
     let currentLink = '';
+    let currentShape = 'rounded'; // форма
 
     const backgrounds = {
         gradient1: 'linear-gradient(160deg, #fef9f1, #fdf3e4)',
@@ -1229,68 +1278,78 @@
             fontSize: '18',
             ornament: '💐 💐 💐',
             anim: 'bounce'
+        },
+        minimal: {
+            bg: 'gradient3',
+            border: 'none',
+            color: '#6b705c',
+            font: "'Montserrat', sans-serif",
+            fontSize: '16',
+            ornament: '• • •',
+            anim: 'fade'
+        },
+        boho: {
+            bg: 'gradient5',
+            border: 'wavy',
+            color: '#d4a373',
+            font: "'Great Vibes', cursive",
+            fontSize: '20',
+            ornament: '🌾 🌾 🌾',
+            anim: 'wobble'
+        },
+        elegant: {
+            bg: 'gradient8',
+            border: 'double-shadow',
+            color: '#c9a96e',
+            font: "'Playfair Display', serif",
+            fontSize: '20',
+            ornament: '✧ ✧ ✧',
+            anim: 'glow'
         }
     };
 
-    // ===== ФУНКЦИЯ ПРИМЕНЕНИЯ ПРЕСЕТА =====
+    // ===== ПРИМЕНЕНИЕ ПРЕСЕТА =====
     function applyPreset(presetName) {
         const preset = designPresets[presetName];
         if (!preset) return;
 
-        // Применяем настройки
         currentBg = preset.bg;
         currentBorder = preset.border;
         currentColor = preset.color;
         currentAnim = preset.anim;
 
-        // Обновляем элементы интерфейса
-        // Фон
         document.querySelectorAll('#bgGrid .style-btn').forEach(b => b.classList.remove('active'));
         const bgBtn = document.querySelector(`#bgGrid .style-btn[data-bg="${preset.bg}"]`);
         if (bgBtn) bgBtn.classList.add('active');
 
-        // Рамка
         document.querySelectorAll('#borderGrid .style-btn').forEach(b => b.classList.remove('active'));
         const borderBtn = document.querySelector(`#borderGrid .style-btn[data-border="${preset.border}"]`);
         if (borderBtn) borderBtn.classList.add('active');
 
-        // Цвет
         document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
         const colorDot = document.querySelector(`.color-dot[data-color="${preset.color}"]`);
         if (colorDot) colorDot.classList.add('active');
 
-        // Шрифт
         document.getElementById('fontSelect').value = preset.font;
-
-        // Размер
         document.getElementById('fontSizeRange').value = preset.fontSize;
         document.getElementById('fontSizeLabel').textContent = preset.fontSize + 'px';
-
-        // Орнамент
         document.getElementById('ornamentSymbol').value = preset.ornament;
 
-        // Анимация
         document.querySelectorAll('#animGrid .style-btn').forEach(b => b.classList.remove('active'));
         const animBtn = document.querySelector(`#animGrid .style-btn[data-anim="${preset.anim}"]`);
         if (animBtn) animBtn.classList.add('active');
 
-        // Обновляем предпросмотр
         refreshPreview();
     }
 
-    // ===== ОБРАБОТЧИКИ КНОПОК ПРЕСЕТОВ =====
+    // ===== ОБРАБОТЧИКИ ПРЕСЕТОВ =====
     document.querySelectorAll('#presetGrid .style-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             document.querySelectorAll('#presetGrid .style-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
-            const preset = this.dataset.preset;
-            applyPreset(preset);
+            applyPreset(this.dataset.preset);
         });
     });
-
-    // ===== ОСТАЛЬНЫЕ ФУНКЦИИ (без изменений) =====
-    // ... (все функции, которые были ранее, остаются точно такими же)
-    // Я скопирую их из предыдущей версии, чтобы ничего не сломать.
 
     // ===== ВКЛАДКИ =====
     document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1302,7 +1361,17 @@
         });
     });
 
-    // ===== ДОБАВЛЕНИЕ / УДАЛЕНИЕ ИМЁН =====
+    // ===== ФОРМА =====
+    document.querySelectorAll('#shapeGrid .style-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('#shapeGrid .style-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentShape = this.dataset.shape;
+            refreshPreview();
+        });
+    });
+
+    // ===== ОСТАЛЬНЫЕ ФУНКЦИИ =====
     function addName() {
         const container = document.getElementById('namesContainer');
         const entry = document.createElement('div');
@@ -1323,7 +1392,6 @@
         else alert('Должно быть хотя бы одно имя');
     }
 
-    // ===== ДОБАВЛЕНИЕ / УДАЛЕНИЕ РАСПИСАНИЯ =====
     function addSchedule() {
         const container = document.getElementById('scheduleContainer');
         const entry = document.createElement('div');
@@ -1344,7 +1412,6 @@
         else alert('Должен быть хотя бы один пункт');
     }
 
-    // ===== ОБНОВЛЕНИЕ ПРЕДПРОСМОТРА =====
     function refreshPreview() {
         const nameEntries = document.querySelectorAll('.name-entry');
         let namesHtml = '';
@@ -1392,6 +1459,7 @@
 
         updatePreviewBg();
         applyBorderToPreview();
+        applyShapeToPreview();
     }
 
     function updatePreviewBg() {
@@ -1413,9 +1481,35 @@
 
     function applyBorderToPreview() {
         const card = document.getElementById('previewCard');
+        // Удаляем все классы рамок
         card.className = 'preview-card';
         if (currentBorder !== 'none') {
             card.classList.add('border-' + currentBorder);
+        }
+    }
+
+    function applyShapeToPreview() {
+        const card = document.getElementById('previewCard');
+        // Удаляем классы формы
+        ['shape-rectangle', 'shape-rounded', 'shape-circle', 'shape-pointed', 'shape-fancy'].forEach(cls => {
+            card.classList.remove(cls);
+        });
+        if (currentShape !== 'rounded') {
+            card.classList.add('shape-' + currentShape);
+        } else {
+            card.classList.add('shape-rounded');
+        }
+        // Для круга нужно особое поведение — задаем aspect-ratio
+        if (currentShape === 'circle') {
+            card.style.aspectRatio = '1/1';
+            card.style.width = '100%';
+            card.style.maxWidth = '480px';
+            card.style.padding = '40px';
+        } else {
+            card.style.aspectRatio = 'auto';
+            card.style.width = '100%';
+            card.style.maxWidth = '480px';
+            card.style.padding = '40px 28px';
         }
     }
 
@@ -1679,7 +1773,8 @@
             showRSVP: document.getElementById('showRSVP').value === 'true',
             font: document.getElementById('fontSelect').value,
             fontSize: document.getElementById('fontSizeRange').value,
-            music: currentMusic
+            music: currentMusic,
+            shape: currentShape
         };
     }
 
@@ -1832,6 +1927,7 @@
         const animClass = 'anim-' + (data.anim || 'slide-left');
         const fontFamily = data.font || "'Cormorant Garamond', serif";
         const fontSize = data.fontSize || '18';
+        const shapeClass = 'shape-' + (data.shape || 'rounded');
 
         card.innerHTML = `
             <div class="bg-layer" style="${bgStyle}"></div>
@@ -1857,7 +1953,21 @@
                 <div class="ornament ${animClass} shimmer pulse" style="margin-top:20px;">${data.ornament || '🌸 🌸 🌸'}</div>
             </div>
         `;
-        card.className = 'preview-card ' + borderClass;
+
+        // Применяем классы к карточке
+        card.className = 'preview-card ' + borderClass + ' ' + shapeClass;
+        // Для круга корректируем
+        if (data.shape === 'circle') {
+            card.style.aspectRatio = '1/1';
+            card.style.width = '100%';
+            card.style.maxWidth = '100%';
+            card.style.padding = '40px';
+        } else {
+            card.style.aspectRatio = 'auto';
+            card.style.width = '100%';
+            card.style.maxWidth = '100%';
+            card.style.padding = '24px 16px';
+        }
 
         // Музыка
         if (data.music) {
@@ -2030,6 +2140,12 @@
                 if (dot) { document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active')); dot.classList.add('active'); currentColor = data.color; }
             }
             if (data.photo) currentPhoto = data.photo;
+            if (data.shape) {
+                currentShape = data.shape;
+                document.querySelectorAll('#shapeGrid .style-btn').forEach(b => b.classList.remove('active'));
+                const shapeBtn = document.querySelector(`#shapeGrid .style-btn[data-shape="${data.shape}"]`);
+                if (shapeBtn) shapeBtn.classList.add('active');
+            }
 
             if (data.names && data.names.length) {
                 const container = document.getElementById('namesContainer');
@@ -2131,7 +2247,7 @@
         refreshPreview();
         renderRSVPList();
 
-        // По умолчанию выбираем классический пресет
+        // По умолчанию классический пресет
         document.querySelector('#presetGrid .style-btn[data-preset="classic"]').classList.add('active');
         applyPreset('classic');
     });
